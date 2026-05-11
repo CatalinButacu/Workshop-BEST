@@ -1,0 +1,146 @@
+% Fragment -- inclus de main.tex prin \input
+\clearpage
+\setpartlabel{themePrereq}{\faBookOpen}{Anexe}
+\setcounter{section}{0}
+\phantomsection
+\addcontentsline{toc}{part}{\protect\textbf{Anexe \textendash{} Glosar, Checklist, Erori comune}}
+\handout{Anexe}{Glosar termeni. Checklist final. Erori comune si remediere.}
+
+Sectiunea finala consolideaza referintele rapide: definitiile termenilor folositi pe parcursul manualului, lista de verificari inainte de publicarea unui site, si problemele intalnite frecvent impreuna cu solutiile lor.
+
+% =========================================================
+\section{Glosar de termeni}
+
+\begin{description}[font=\sffamily\bfseries\color{partcolor}, leftmargin=0pt, labelindent=0pt, style=nextline, itemsep=4pt]
+  \item[Accesibilitate (a11y)] Practica de a crea continut utilizabil de catre persoane cu dizabilitati. Standardul de referinta este WCAG (Web Content Accessibility Guidelines).
+  \item[API] \emph{Application Programming Interface}. Set de functii prin care componentele software interactioneaza. In context web: \code{document.querySelector}, \code{fetch}, etc.
+  \item[Arrow function] Sintaxa concisa pentru functii in JavaScript: \code{(a, b) => a + b}. Se comporta diferit fata de \code{function} privind \code{this}.
+  \item[Cascade (CSS)] Algoritmul prin care browserul determina valoarea finala a unei proprietati cand mai multe reguli o vizeaza. Foloseste specificitate, ordine si importanta.
+  \item[CDN] \emph{Content Delivery Network}. Reteaua de servere distribuite geografic pentru servirea resurselor cu latenta minima.
+  \item[CLS] \emph{Cumulative Layout Shift}. Indicator Core Web Vitals pentru stabilitatea vizuala in timpul incarcarii.
+  \item[Commit] Snapshot al starii fisierelor intr-un repository git, identificat printr-un hash unic.
+  \item[CORS] \emph{Cross-Origin Resource Sharing}. Mecanism de securitate care controleaza accesul la resurse din alte domenii.
+  \item[CSS Grid] Model de layout bidimensional, complementar lui Flexbox; util pentru aranjamente in retea.
+  \item[DOM] \emph{Document Object Model}. Reprezentarea in memorie a documentului HTML, expusa programatic prin \code{document}.
+  \item[Endpoint] URL specific care accepta cereri HTTP si returneaza un raspuns. Echivalent cu o ,,adresa'' a unui serviciu.
+  \item[Flexbox] Model de layout uni-dimensional in CSS pentru distribuirea spatiului pe o axa.
+  \item[Hosting] Servirea fisierelor unui site catre vizitatori. GitHub Pages, Netlify si Vercel sunt servicii de hosting pentru site-uri statice.
+  \item[HTTP] \emph{HyperText Transfer Protocol}. Protocolul de baza al webului, prin care browserele cer si primesc resurse.
+  \item[INP] \emph{Interaction to Next Paint}. Indicator Core Web Vitals pentru receptivitate; latenta intre interactiune si feedback vizual.
+  \item[JSON-LD] \emph{JSON for Linked Data}. Format de date structurate folosit de motoarele de cautare pentru intelegerea continutului.
+  \item[LCP] \emph{Largest Contentful Paint}. Indicator Core Web Vitals; momentul afisarii celui mai mare element vizibil.
+  \item[Lighthouse] Tool de audit automatizat dezvoltat de Google; evalueaza Performance, Accessibility, Best Practices, SEO.
+  \item[NodeList] Colectie de noduri DOM returnata de \code{querySelectorAll}; iterabila prin \code{forEach}.
+  \item[Open Graph (OGP)] Standard initiat de Facebook pentru previzualizarea paginilor pe retele sociale (\code{og:title}, \code{og:image}, etc.).
+  \item[PAT] \emph{Personal Access Token}. Token de autentificare pentru GitHub, folosit in locul parolei la operatiunile git.
+  \item[Pseudo-clasa] Selector CSS care vizeaza o stare a unui element: \code{:hover}, \code{:focus}, \code{:checked}, \code{:first-child}.
+  \item[Repository (repo)] Director versionat de git; contine codul, istoricul commit-urilor si configuratia.
+  \item[Responsive design] Abordare prin care site-ul se adapteaza dimensiunii ecranului utilizatorului.
+  \item[Schema.org] Vocabular standardizat pentru date structurate, suportat de motoarele de cautare majore.
+  \item[Selector CSS] Pattern care identifica elementele HTML asupra carora se aplica o regula CSS.
+  \item[Semantic HTML] Folosirea tag-urilor care descriu rolul continutului (\code{<header>}, \code{<nav>}) in locul \code{<div>} generic.
+  \item[Specificitate] Mecanism prin care browserul rezolva conflictele intre reguli CSS care vizeaza acelasi element.
+  \item[Static site] Site format din fisiere HTML/CSS/JS pre-generate, servite direct, fara procesare pe server.
+  \item[Viewport] Zona vizibila a paginii in browser. Meta tag-ul \code{viewport} controleaza scalarea pe dispozitive mobile.
+  \item[WCAG] \emph{Web Content Accessibility Guidelines}. Standardul international pentru accesibilitatea continutului web.
+\end{description}
+
+% =========================================================
+\section{Checklist de publicare}
+
+Lista de verificari aplicabila inainte de a considera un site finalizat. Se parcurge de sus in jos; orice item nebifat indica o lacuna remediabila.
+
+\subsection*{HTML \textendash{} structura}
+
+\begin{itemize}[leftmargin=*, label={$\square$}, itemsep=2pt]
+  \item Documentul incepe cu \code{<!DOCTYPE html>}.
+  \item \code{<html>} are atributul \code{lang}.
+  \item \code{<head>} include \code{<meta charset>}, \code{<meta viewport>}, \code{<title>} specific paginii.
+  \item Structura folosesc tag-uri semantice (\code{<header>}, \code{<main>}, \code{<section>}, \code{<footer>}, \code{<nav>}).
+  \item Un singur \code{<h1>} per pagina; ierarhia titlurilor nu sare niveluri.
+  \item Toate imaginile au \code{alt}; cele decorative au \code{alt=""}.
+  \item Toate input-urile au \code{<label for>} corespunzator.
+\end{itemize}
+
+\subsection*{CSS \textendash{} aspect}
+
+\begin{itemize}[leftmargin=*, label={$\square$}, itemsep=2pt]
+  \item Reset minimal aplicat (\code{box-sizing: border-box}, \code{margin}/\code{padding} default 0).
+  \item Variabilele CSS folosite pentru culori, spatiere, dimensiuni.
+  \item Layout-ul rezista pe ecran 320px (test in DevTools \textendash{} mobile preview).
+  \item Media queries pentru ecrane $\geq$768px.
+  \item Contrast text/background $\geq$4.5:1 pentru text normal.
+\end{itemize}
+
+\subsection*{JavaScript \textendash{} comportament}
+
+\begin{itemize}[leftmargin=*, label={$\square$}, itemsep=2pt]
+  \item \code{<script>} are atributul \code{defer}.
+  \item Niciun \code{var}; doar \code{const} si \code{let}.
+  \item Comparatii doar cu \code{===}.
+  \item Console-ul (F12) nu afiseaza erori la incarcarea paginii.
+  \item Form-urile interceptate cu \code{e.preventDefault()} (sau au \code{action} valid).
+\end{itemize}
+
+\subsection*{SEO + Open Graph}
+
+\begin{itemize}[leftmargin=*, label={$\square$}, itemsep=2pt]
+  \item \code{<title>} specific, 50\textendash{}60 caractere.
+  \item \code{<meta name="description">} 150\textendash{}160 caractere.
+  \item Cinci tag-uri \code{og:*}: type, title, description, image, url.
+  \item \code{og:image} este URL absolut, dimensiune $\geq$1200$\times$630.
+  \item \code{<meta name="twitter:card" content="summary\_large\_image">} prezent.
+  \item Favicon (\code{<link rel="icon">}) configurat.
+\end{itemize}
+
+\subsection*{Deploy + Lighthouse}
+
+\begin{itemize}[leftmargin=*, label={$\square$}, itemsep=2pt]
+  \item Site accesibil pe URL public (\code{username.github.io/repo}).
+  \item \code{.gitignore} prezent in repository.
+  \item Lighthouse Performance $\geq$90.
+  \item Lighthouse Accessibility $\geq$95.
+  \item Lighthouse Best Practices $\geq$95.
+  \item Lighthouse SEO $\geq$95.
+  \item Previzualizare validata pe opengraph.xyz.
+\end{itemize}
+
+% =========================================================
+\section{Erori comune si remediere}
+
+Lista neexhaustiva de probleme intalnite frecvent de incepatori, cu cauza si solutia.
+
+\subsection*{HTML / CSS}
+
+\begin{itemize}[itemsep=4pt]
+  \item \textbf{Diacriticele apar ca \texttt{moz\u a}.} Cauza: lipsa \code{<meta charset="UTF-8">} sau fisier salvat in alta codificare. Solutie: adaugarea meta tag-ului si salvarea fisierului in UTF-8 din editor.
+  \item \textbf{Stilurile CSS nu se aplica.} Cauze: (1) calea \code{href} incorecta in \code{<link>}; (2) numele clasei diferit fata de selector; (3) regula are specificitate mai mica decat alta. Verificare: DevTools $\to$ Inspect $\to$ tab \emph{Styles}.
+  \item \textbf{Pe mobil pagina apare mica/dezordonat.} Cauza: lipsa \code{<meta name="viewport">}.
+  \item \textbf{Flexbox-ul nu functioneaza.} Cauza: \code{display: flex} aplicat pe element gresit; trebuie pe \emph{containerul} parinte, nu pe copii.
+\end{itemize}
+
+\subsection*{JavaScript}
+
+\begin{itemize}[itemsep=4pt]
+  \item \textbf{\code{querySelector returns null}.} Cauze: (1) selectorul nu corespunde niciunui element; (2) script-ul ruleaza inainte de parsarea HTML-ului (lipseste \code{defer}); (3) typo in numele clasei/id-ului.
+  \item \textbf{\code{addEventListener is not a function}.} Cauza: rezultatul \code{querySelector} este \code{null}. Verificare: \code{console.log(el)} inainte de \code{addEventListener}.
+  \item \textbf{Form-ul reincarca pagina la submit.} Cauza: lipsa \code{e.preventDefault()} in handler.
+  \item \textbf{\code{console.log not defined}.} Foarte rar; de obicei o tipografica (\code{Console.log} cu C mare).
+\end{itemize}
+
+\subsection*{Git / Deploy}
+
+\begin{itemize}[itemsep=4pt]
+  \item \textbf{\code{git push} cere parola si o respinge.} Cauza: GitHub a inlocuit autentificarea prin parola cu PAT. Solutie: generare PAT la \url{https://github.com/settings/tokens} cu scope \code{repo}; folosirea tokenului in locul parolei.
+  \item \textbf{Pages returneaza 404 dupa push.} Cauze: (1) intervalul de propagare ($\sim$60s); (2) fisierul de pornire nu se numeste \code{index.html} (case-sensitive); (3) cache-ul browserului \textendash{} \code{Ctrl+F5} pentru hard refresh.
+  \item \textbf{\code{fatal: not a git repository}.} Cauza: comanda rulata in afara unui director versionat. Solutie: \code{cd} in directorul corect sau \code{git init -b main}.
+  \item \textbf{Modificarile nu apar pe Pages.} Cauza: nu s-a executat \code{git push} dupa \code{commit}; sau cache-ul Pages \textendash{} asteptare $\sim$60s.
+\end{itemize}
+
+\subsection*{SEO + Lighthouse}
+
+\begin{itemize}[itemsep=4pt]
+  \item \textbf{Card-ul WhatsApp nu afiseaza imaginea.} Cauza principala: \code{og:image} are URL relativ in loc de absolut. Verificare: opengraph.xyz raporteaza statusul.
+  \item \textbf{Lighthouse Performance scor mic.} Cauze frecvente: (1) imagini nedimensionate, supradimensionate; (2) script-uri sincrone in \code{<head>}; (3) format imagini neoptimizat (PNG/JPEG cu fisiere mari).
+  \item \textbf{Lighthouse Accessibility 50\textendash{}80.} Cauze frecvente: (1) \code{alt} lipsa; (2) contrast scazut; (3) lipsa \code{lang} pe \code{<html>}; (4) butoane fara nume accesibil.
+\end{itemize}

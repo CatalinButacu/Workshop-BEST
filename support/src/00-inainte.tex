@@ -1,0 +1,37 @@
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+\setpartlabel{themePrereq}{\faClipboardCheck}{Inainte de training}
+
+\begin{document}
+
+\handout{Inainte de training}{Pre-rechizite tehnice. 5 minute.}
+
+Pregatirea prealabila are scopul de a evita pierderea timpului de training pentru instalari si configurari. Verificarea celor patru elemente de mai jos asigura un setup functional din primul minut.
+
+\bigskip
+
+\textbf{\faLaptopCode\ \ Verificarea pre-rechizitelor}
+
+\begin{itemize}[leftmargin=*, itemsep=4pt]
+  \item \textbf{Visual Studio Code} cu extensia \textbf{Live Server} (Ritwick Dey, peste 50 milioane de instalari). Live Server reincarca automat browserul la fiecare salvare a fisierelor sursa, eliminand necesitatea reincarcarii manuale.
+  \item \textbf{Git} \textendash{} verificare prin comanda \code{git --version} in Git Bash. Iesirea asteptata: \code{git version 2.x}. (Programul a fost instalat la training-ul de Git; in absenta sa: \url{https://git-scm.com/downloads}.)
+  \item \textbf{Cont GitHub} \textendash{} validat prin autentificare la \url{https://github.com}. Inregistrare initiala: \url{https://github.com/signup}.
+\end{itemize}
+
+\bigskip
+
+\textbf{\faCheck\ \ Test rapid (1 minut).} Crearea unui director \code{test/}, deschiderea sa in VS Code, crearea unui fisier \code{index.html} cu continutul \code{<h1>merge</h1>}, urmata de \emph{click dreapta $\to$ Open with Live Server}. Afisarea textului ,,merge'' in browser confirma functionarea setup-ului.
+
+\bigskip
+
+\textbf{\faMagic\ \ Materiale optionale.} Folder-ul \code{kit-starter/} (distribuit alaturi de PDF-uri) contine trei demonstratii: \code{00-blank/} (canvas gol), \code{01-broken/} (pagina cu probleme documentate), \code{02-reference/} (implementare completa). Examinarea \code{02-reference/} inainte de training scurteaza curba de invatare.
+
+\bigskip
+
+\textbf{\faRocket\ \ Echipament necesar.} Laptop incarcat, incarcator, cont GitHub functional. Optional: o tema concreta pentru pagina personala (portofoliu, blog, proiect tematic), pregatita inainte de sosire.
+
+\begin{nota}
+Cunoasterea anterioara a HTML, CSS sau JavaScript nu este o cerinta. Continutul este structurat pentru a permite atingerea obiectivului final (URL public functional) si pentru participantii fara experienta de cod.
+\end{nota}
+
+\end{document}

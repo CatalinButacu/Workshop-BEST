@@ -1,0 +1,274 @@
+% Fragment -- inclus de main.tex prin \input
+\clearpage
+\setpartlabel{themeSeo}{\faShareSquare}{Faza 5: SEO + Open Graph}
+\setcounter{section}{0}
+\phantomsection
+\addcontentsline{toc}{part}{\protect\textbf{Faza 5 \textendash{} SEO + Open Graph}}
+\handout{Faza 5 \textendash{} SEO + Open Graph}{Metadate pentru motoarele de cautare si retelele sociale.}
+
+Capitolul prezinta tag-urile meta utilizate de motoarele de cautare (in principal Google) si de platformele sociale (Facebook, X, LinkedIn, WhatsApp, Discord) pentru afisarea corecta a paginilor distribuite. Acoperirea include SEO clasic, protocolul Open Graph (OGP), datele structurate Schema.org, si URL-urile canonice.
+
+\bigskip
+
+\begin{outcomes}
+Dupa capitolul asta vei \textcommabelow{s}ti:
+\begin{itemize}[itemsep=1pt]
+  \item Configureaza \code{<title>} \textcommabelow{s}i \code{<meta description>} pentru rezultatele de cautare.
+  \item Adauga cele 5 tag-uri \code{og:*} pentru previzualizare in re\textcommabelow{t}ele sociale.
+  \item Genereaza \textcommabelow{s}i valideaza imaginea \code{og:image} la dimensiunile \textcommabelow{s}i formatul corect.
+  \item Adauga date structurate (JSON-LD) pentru rich snippets in Google.
+  \item Distinge mit-urile SEO de practica actuala.
+\end{itemize}
+\end{outcomes}
+
+\begin{whymatters}
+Un site fara SEO este invizibil. Aplica\textcommabelow{t}iile sociale moderne (WhatsApp, Discord, LinkedIn) afi\textcommabelow{s}eaza by default cardul de previzualizare; un site fara meta tags arata neprofesional cand cineva il share-uieste. SEO de baza este \emph{configurare}, nu \emph{magic}: cele 7\textendash{}10 tag-uri prezentate aici acopera 80\% din optimizarea esentiala.
+\end{whymatters}
+
+\begin{nota}[Pre-rechizite]
+Capitolul presupune un site deployat (Faza 4) cu URL public accesibil. Tag-urile se valideaza pe varianta live, nu pe localhost.
+\end{nota}
+
+% =========================================================
+\section{Doua audiente, doua seturi de tag-uri}
+
+\begin{itemize}
+  \item \textbf{Motoare de cautare} (Google, Bing). Folosesc \code{<title>}, \code{<meta name="description">}, structura semantica, datele Schema.org.
+  \item \textbf{Platforme sociale} (Facebook, X, LinkedIn, WhatsApp, Discord). Folosesc protocolul Open Graph: \code{<meta property="og:*">}.
+\end{itemize}
+
+% =========================================================
+\section{Metadate pentru motoarele de cautare}
+
+Doua elemente determina aspectul paginii in rezultatele cautarii:
+
+\begin{lstlisting}[style=html, caption={Plasare in <head>}]
+<title>Maria Popescu -- Student CS, Iasi</title>
+<meta name="description" content="Pagina personala a Mariei Popescu, studenta la CS, pasionata de web development.">
+\end{lstlisting}
+
+\subsection{Calitatea \texttt{<title>}}
+
+\begin{dano}[Asa nu]
+\begin{lstlisting}[style=html, numbers=none]
+<title>Document</title>
+<title>Untitled</title>
+<title>Index</title>
+<title>Acasa</title>
+<title>web web web html portofoliu cv student iasi cs uaic</title>
+\end{lstlisting}
+\textbf{Probleme.} Generic, nesemnificativ; sau spam de cuvinte-cheie penalizat de Google.
+\end{dano}
+
+\begin{dado}[Asa da]
+\begin{lstlisting}[style=html, numbers=none]
+<title>Maria Popescu -- Portofoliu Web Developer, Iasi</title>
+<title>Despre BEST Iasi -- Asociatie studenteasca tehnica</title>
+\end{lstlisting}
+\textbf{Reguli.} 50\textendash{}60 caractere; specific paginii (nu site-ului); structura ,,Subiect \textendash{} Context''.
+\end{dado}
+
+\subsection{Calitatea \texttt{<meta description>}}
+
+\begin{dano}[Asa nu]
+\code{<meta name="description" content="Pagina mea">}\\
+\code{<meta name="description" content="Bine ati venit pe site-ul meu! Aici puteti vedea cele mai noi informatii despre activitatea mea! Va invit sa exploratati! Multumesc!">}\\
+\textbf{Probleme.} Prea scurt sau plin de fraze de umplutura.
+\end{dano}
+
+\begin{dado}[Asa da]
+\code{<meta name="description" content="Portofoliul Mariei Popescu: proiecte web (HTML, CSS, JavaScript, React), CV, contact. Studenta in anul III la UAIC.">}\\
+\textbf{Reguli.} 150\textendash{}160 caractere; expresii cheie (proiecte, CV, contact); descriere a continutului concret.
+\end{dado}
+
+% =========================================================
+\section{Protocolul Open Graph}
+
+Open Graph Protocol (OGP), specificat de Facebook in 2010, este standardul de fapt pentru previzualizarea paginilor web in retelele sociale. Implementarea consta in adaugarea a cinci tag-uri \code{<meta>} cu prefixul \code{og:}:
+
+\begin{lstlisting}[style=html, caption={Tag-uri OGP minimale}]
+<meta property="og:type" content="website">
+<meta property="og:title" content="Maria Popescu -- Student CS, Iasi">
+<meta property="og:description" content="Pagina personala. Web dev, design, open source.">
+<meta property="og:image" content="https://maria.github.io/site/og.png">
+<meta property="og:url" content="https://maria.github.io/site/">
+\end{lstlisting}
+
+\begin{itemize}
+  \item \code{og:type} \textendash{} categoria continutului. Valoarea \code{website} acopera majoritatea cazurilor; alternative: \code{article}, \code{video}, \code{book}, \code{profile}.
+  \item \code{og:title} si \code{og:description} \textendash{} pot diferi de \code{<title>} si \code{<meta description>}, fiind optimizate specific pentru context social (mai punctuale, cu CTA).
+  \item \code{og:image} \textendash{} dimensiunea recomandata 1200\,x\,630 pixeli (raport 1.91:1).
+  \item \code{og:url} \textendash{} URL-ul canonic al paginii.
+\end{itemize}
+
+\subsection{Constrangerea \texttt{og:image}: URL absolut}
+
+\begin{dano}[Asa nu \textendash{} URL relativ]
+\code{<meta property="og:image" content="og.png">}\\
+\code{<meta property="og:image" content="/images/og.png">}\\
+\textbf{Problema.} Crawler-ele platformelor sociale nu pot rezolva caile relative, intrucat nu cunosc contextul de baza al paginii sursa. Cardul afisat ramane fara imagine.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} URL absolut]
+\code{<meta property="og:image" content="https://maria.github.io/site/og.png">}\\
+\textbf{Beneficiu.} Imaginea este accesibila direct prin URL si poate fi cache-uita de Facebook, Slack, Discord.
+\end{dado}
+
+\subsection{Calitatea imaginii \texttt{og:image}}
+
+\begin{itemize}[itemsep=2pt]
+  \item Dimensiune ideala: \textbf{1200\,x\,630 px} (raport 1.91:1, formatul afisat de Facebook si LinkedIn).
+  \item Dimensiune minima: 600\,x\,315 px. Sub aceasta limita, unele platforme nu afiseaza cardul mare.
+  \item Format: JPG sau PNG; dimensiunea maxima 8 MB (Facebook), in practica $\leq$1 MB pentru incarcare rapida.
+  \item Continut lizibil la dimensiune redusa: titlul + 1\textendash{}2 elemente vizuale, nu paragrafe intregi.
+\end{itemize}
+
+% =========================================================
+\section{Twitter Card}
+
+Platforma X (anterior Twitter) suporta nativ OGP, dar accepta si tag-uri proprii pentru carduri cu imagine mare:
+
+\begin{lstlisting}[style=html]
+<meta name="twitter:card" content="summary_large_image">
+\end{lstlisting}
+
+Adaugarea acestei singure linii instruieste X sa afiseze cardul in formatul extins, folosind valorile deja prezente in tag-urile \code{og:*}.
+
+% =========================================================
+\section{Date structurate (JSON-LD)}
+
+Schema.org defineste un vocabular standardizat pentru descrierea entitatilor (persoane, organizatii, evenimente, articole) intr-un format pe care motoarele de cautare il proceseaza explicit. Implementarea recomandata: JSON-LD plasat intr-un \code{<script>} cu tipul \code{application/ld+json}.
+
+\begin{lstlisting}[style=html, caption={Schema Person pentru o pagina personala}]
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Maria Popescu",
+  "url": "https://maria.github.io/site/",
+  "jobTitle": "Student CS",
+  "alumniOf": "Universitatea Alexandru Ioan Cuza",
+  "sameAs": [
+    "https://github.com/maria",
+    "https://www.linkedin.com/in/maria"
+  ]
+}
+</script>
+\end{lstlisting}
+
+Avantajul principal: Google poate afisa pagina cu \emph{rich snippets} (foto, link-uri sociale, descriere structurata) in rezultatele cautarii. Validarea se face cu Google Rich Results Test (\url{https://search.google.com/test/rich-results}).
+
+\begin{ponturi}
+Pentru un eveniment, foloseste \code{"@type": "Event"} cu campurile \code{startDate}, \code{location}, \code{organizer}. Google poate afisa evenimentul direct intr-un panel lateral. Vocabularul complet: \url{https://schema.org}.
+\end{ponturi}
+
+% =========================================================
+\section{URL-ul canonic}
+
+Cand acelasi continut este accesibil prin mai multe URL-uri (cu si fara \code{www}, cu si fara slash final, cu parametri UTM, etc.), Google trebuie sa stie care URL este versiunea ,,oficiala''. Tag-ul canonical previne penalizarea pentru continut duplicat:
+
+\begin{lstlisting}[style=html]
+<link rel="canonical" href="https://maria.github.io/site/">
+\end{lstlisting}
+
+Indicatie: pe paginile de proiect, URL-ul canonic este URL-ul ,,curat'' al paginii, fara parametri de tracking.
+
+% =========================================================
+\section{Mituri SEO}
+
+\begin{itemize}
+  \item \textbf{Mit:} \code{<meta name="keywords">} influenteaza ranking-ul.
+  \item \textbf{Realitate:} Google a anuntat oficial in 2009 ca ignora complet acest tag. Bing si Yandex il folosesc minim. \textbf{A nu se mai folosi.}
+\end{itemize}
+
+\begin{itemize}
+  \item \textbf{Mit:} repetarea cuvintelor cheie in continut creste ranking-ul.
+  \item \textbf{Realitate:} \emph{keyword stuffing} este penalizat. Algoritmii moderni (BERT, MUM) inteleg sensul textului si premiaza scrierea naturala.
+\end{itemize}
+
+\begin{itemize}
+  \item \textbf{Mit:} site-urile noi sunt penalizate de Google.
+  \item \textbf{Realitate:} indexarea dureaza 1\textendash{}7 zile pentru un site nou. Inscrierea in Google Search Console (\url{https://search.google.com/search-console}) accelereaza procesul.
+\end{itemize}
+
+% =========================================================
+\section{Favicon}
+
+Favicon-ul (iconita afisata in tab-ul browserului si in bookmark-uri) se declara prin elementul \code{<link>}:
+
+\begin{lstlisting}[style=html]
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+\end{lstlisting}
+
+Generarea unui favicon simplu se poate face cu serviciul \url{https://favicon.io/favicon-generator/}, care produce fisierele necesare pornind de la o singura litera si o culoare. Pentru un favicon profesional din SVG, conversia automata in toate dimensiunile necesare se face cu \url{https://realfavicongenerator.net}.
+
+% =========================================================
+\section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
+
+\begin{selfcheck}
+\begin{enumerate}[itemsep=2pt]
+  \item Cate tag-uri \code{og:*} sunt minim necesare pentru un card valid de previzualizare?
+  \item De ce \code{og:image} trebuie sa fie URL absolut, nu relativ?
+  \item \emph{Spot the issue:} \code{<title>Document</title>}.
+  \item Care este diferen\textcommabelow{t}a func\textcommabelow{t}ionala intre \code{<title>} si \code{og:title}?
+  \item De ce \code{<meta name="keywords">} este considerat depasit?
+\end{enumerate}
+\end{selfcheck}
+
+% =========================================================
+\section*{Recapitulare}
+
+\begin{recap}[Faza 5 -- SEO + Open Graph]
+\begin{itemize}[itemsep=1pt]
+  \item Doua audiente: motoare de cautare (\code{<title>} + \code{<meta description>}) si retele sociale (5 \code{og:*} tags).
+  \item \code{<title>}: 50\textendash{}60 caractere, specific, structura ,,Subiect \textendash{} Context''.
+  \item \code{<meta description>}: 150\textendash{}160 caractere, descriere concreta, fara umplutura.
+  \item \code{og:image}: URL absolut, dimensiune optima 1200\,x\,630, format JPG/PNG, $\leq$1MB.
+  \item \code{<meta name="twitter:card" content="summary\_large\_image">} activeaza cardul mare pe X.
+  \item JSON-LD (Schema.org) descrie entitati: Person, Organization, Article, Event.
+  \item \code{<link rel="canonical">} previne penalizarea pentru continut duplicat.
+  \item \code{<meta name="keywords">} este ignorat de Google din 2009 \textendash{} \textbf{a nu se folosi}.
+\end{itemize}
+\end{recap}
+
+\partdivider
+
+% =========================================================
+\begin{joc}
+\textbf{Platforma:} OpenGraph.xyz (\url{https://opengraph.xyz}).
+
+\medskip
+
+\textbf{Activitatea.}
+\begin{enumerate}[itemsep=1pt]
+  \item Adaugarea celor cinci tag-uri \code{og:*} in \code{<head>}, cu valori specifice paginii personale.
+  \item Inlocuirea valorii pentru \code{og:image} cu un URL absolut catre o imagine 1200\,x\,630, accesibila public.
+  \item Commit si push: \code{git add .; git commit -m "Adauga meta tags Open Graph"; git push}.
+  \item Accesarea OpenGraph.xyz si lipirea URL-ului public al paginii.
+  \item Verificarea previzualizarilor pentru Facebook, X, LinkedIn, WhatsApp, iMessage.
+\end{enumerate}
+
+\textbf{Diagnoza problemelor:} (1) URL-ul \code{og:image} nu este absolut; (2) imaginea returneaza HTTP 404; (3) dimensiunea imaginii este sub 600 pixeli pe oricare axa.
+
+\medskip
+
+\textbf{Durata estimata:} 5 minute.
+\end{joc}
+
+% =========================================================
+\section*{\faGraduationCap\ \ Resurse pentru aprofundare}
+
+\begin{itemize}[itemsep=2pt]
+  \item Open Graph Protocol. \emph{Specificatia oficiala}. \url{https://ogp.me}
+  \item Meta Tags. \emph{Generator vizual}. \url{https://metatags.io}
+  \item Google. \emph{Rich Results Test}. \url{https://search.google.com/test/rich-results}
+  \item Google. \emph{Search Console} (indexare manuala). \url{https://search.google.com/search-console}
+  \item Google. \emph{Document metadata}. \url{https://web.dev/learn/html/metadata}
+  \item Schema.org. \emph{Structured data documentation}. \url{https://schema.org/docs/gs.html}
+  \item X Inc. \emph{Twitter Cards documentation}. \url{https://developer.x.com/en/docs/twitter-for-websites/cards}
+\end{itemize}
+
+\bigskip
+
+\bridge{Capitolul 6 (Lighthouse) ofera o masuratoare obiectiva a calita\textcommabelow{t}ii. Toate fix-urile aplicate in fazele 1\textendash{}5 sunt acum cuantificate intr-un scor 0\textendash{}100.}

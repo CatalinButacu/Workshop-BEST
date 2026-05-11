@@ -1,0 +1,282 @@
+% Documentul master: pagina de titlu + harta a celor 8 PDF-uri.
+% Compilare: pdflatex main.tex (de doua ori, pentru cuprins).
+
+\documentclass[11pt,a4paper]{article}
+\input{preamble}
+\setpartlabel{themeHtml}{\faStar}{Training Web}
+
+\begin{document}
+
+% =========================================================
+%   COPERTA
+% =========================================================
+\begin{titlepage}
+  \thispagestyle{empty}
+  \vspace*{0.5cm}
+
+  \begin{tcolorbox}[
+    enhanced,
+    colback=themeHtml,
+    colframe=themeHtml,
+    boxrule=0pt,
+    arc=14pt,
+    rounded corners,
+    drop shadow={themeHtml!40!black, opacity=0.4},
+    left=28pt, right=28pt, top=32pt, bottom=32pt,
+    interior style={
+      top color=themeHtml!85!white,
+      bottom color=themeHtml,
+    },
+    overlay={%
+      \begin{tcbclipinterior}%
+        \fill[white, opacity=0.10] ([xshift=-3cm,yshift=-2cm]frame.north east) circle (2.5cm);
+        \fill[white, opacity=0.06] ([xshift=-1cm,yshift=-0.5cm]frame.north east) circle (1.5cm);
+        \fill[white, opacity=0.08] ([xshift=2cm,yshift=2cm]frame.south west) circle (2cm);
+        \node[white, opacity=0.12, anchor=east,
+              font=\fontsize{180}{180}\selectfont]
+          at ([xshift=-1cm]frame.east) {\faCode};
+      \end{tcbclipinterior}%
+    },
+  ]
+    \begin{flushleft}
+    {\color{white!90}\sffamily\large\textbf{\faSquare\ BEST Ia\textcommabelow{s}i \,\textbullet\, Mentorat 2026}}\\[18pt]
+    {\color{white}\sffamily\fontsize{52}{60}\selectfont\textbf{Training Web}}\\[8pt]
+    {\color{white!92}\sffamily\Huge De la zero la site live in 2 ore}\\[20pt]
+    {\color{white!85}\sffamily\large\itshape HTML \,\textbullet\, CSS \,\textbullet\, JavaScript \,\textbullet\, Deploy \,\textbullet\, SEO \,\textbullet\, Lighthouse}
+    \end{flushleft}
+  \end{tcolorbox}
+
+  \vspace{2em}
+
+  \begin{center}
+    \sffamily\large\color{black!75}
+    \textbf{Suport pentru participanti \textendash{} 6 faze, fiecare cu aplicatie practica}
+  \end{center}
+
+  \vspace{1.5em}
+
+  % Cardurile celor 8 parti
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themePrereq!8, colframe=themePrereq, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themePrereq}\Large\faClipboardCheck\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themePrereq}Partea 0 \textbar{} Inainte de training} \,\textendash\, pre-rechizite tehnice (5 min)\end{minipage}
+  \end{tcolorbox}
+
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themeHtml!8, colframe=themeHtml, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themeHtml}\Large\faCode\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themeHtml}Faza 1 \textbar{} HTML} \,\textendash\, structura, semantica, accesibilitate\end{minipage}
+  \end{tcolorbox}
+
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themeCss!8, colframe=themeCss, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themeCss}\Large\faPaintBrush\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themeCss}Faza 2 \textbar{} CSS} \,\textendash\, stilizare, layout, responsivitate\end{minipage}
+  \end{tcolorbox}
+
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themeJs!8, colframe=themeJs, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themeJs}\Large\faBolt\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themeJs}Faza 3 \textbar{} JavaScript} \,\textendash\, interactivitate, manipulare DOM\end{minipage}
+  \end{tcolorbox}
+
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themeDeploy!8, colframe=themeDeploy, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themeDeploy}\Large\faRocket\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themeDeploy}Faza 4 \textbar{} Deploy} \,\textendash\, versionare git, hosting GitHub Pages\end{minipage}
+  \end{tcolorbox}
+
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themeSeo!8, colframe=themeSeo, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themeSeo}\Large\faShareSquare\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themeSeo}Faza 5 \textbar{} SEO + Open Graph} \,\textendash\, metadate pentru cautare si retele sociale\end{minipage}
+  \end{tcolorbox}
+
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themeLighthouse!8, colframe=themeLighthouse, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themeLighthouse}\Large\faChartBar\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themeLighthouse}Faza 6 \textbar{} Lighthouse} \,\textendash\, audit automatizat, Core Web Vitals\end{minipage}
+  \end{tcolorbox}
+
+  \noindent
+  \begin{tcolorbox}[
+    enhanced, colback=themeResurse!8, colframe=themeResurse, boxrule=0pt, leftrule=5pt,
+    arc=4pt, sharp corners=downhill, rounded corners=northwest, left=10pt, right=10pt, top=6pt, bottom=6pt,
+  ]
+    \begin{minipage}[c]{0.06\linewidth}\color{themeResurse}\Large\faGraduationCap\end{minipage}\hfill
+    \begin{minipage}[c]{0.92\linewidth}\textbf{\color{themeResurse}Resurse \& urmatorii pasi} \,\textendash\, aplicatii interactive, tutoriale, comunitati\end{minipage}
+  \end{tcolorbox}
+
+  \vfill
+  \begin{center}
+    \small\color{black!60}\sffamily
+    Pachetul serveste atat ca suport in timpul training-ului, cat si ca referinta de aprofundare ulterioara.
+  \end{center}
+\end{titlepage}
+
+% =========================================================
+%   PAGINA 2 -- CUM SE CITESC MATERIALELE
+% =========================================================
+
+\section*{\faBookOpen\ \ Structura manualului}
+
+Manualul prezent contine 7 capitole tematice (sase faze ale training-ului plus un capitol final cu resurse), structurate uniform pentru consultare facila. Fiecare capitol primeste o culoare distincta, vizibila in bara verticala stanga a blocurilor de cod si in numerotarea sectiunilor.
+
+\bigskip
+
+\begin{nota}[Structura unui capitol]
+\begin{itemize}
+  \item \textbf{Teorie sintetica} \textendash{} concepte, sintaxa, referinte la standarde.
+  \item \textbf{Bloc de cod} \textendash{} fragmente reutilizabile direct prin copiere.
+  \item \textbf{\faGamepad\ Aplicatie practica} \textendash{} platforma online cu sarcina de exersare (5\textendash{}10 minute).
+  \item \textbf{\faGraduationCap\ Resurse pentru aprofundare} \textendash{} bibliografie cu linkuri.
+\end{itemize}
+\end{nota}
+
+\begin{ponturi}[Conventii vizuale]
+\begin{itemize}
+  \item Blocurile de cod sunt marcate printr-o bara verticala colorata in stanga, in culoarea capitolului.
+  \item Toate URL-urile sunt clicabile in vizualizatorul PDF.
+  \item Iconitele \faCode\ \faPaintBrush\ \faBolt\ \faRocket\ \faShareSquare\ \faChartBar\ identifica vizual fiecare capitol.
+\end{itemize}
+\end{ponturi}
+
+% =========================================================
+%   PROIECTUL FIR ROSU
+% =========================================================
+\clearpage
+\setpartlabel{themeHtml}{\faMap}{Proiectul fir ro\textcommabelow{s}u}
+
+\noindent\begin{minipage}{0.04\linewidth}\color{themeHtml}\rule{4pt}{2.6em}\end{minipage}%
+\begin{minipage}{0.94\linewidth}
+  {\sffamily\fontsize{30}{34}\selectfont\textbf{\color{themeText}Proiectul fir ro\textcommabelow{s}u}}\\[4pt]
+  {\sffamily\large\color{black!55}Construim impreuna portofoliul Mariei Popescu.}
+\end{minipage}
+\par\vspace{14pt}
+{\color{themeHtml!40}\hrule height 0.5pt}
+\par\vspace{14pt}
+
+Manualul nu prezinta concepte izolate. Pe parcursul celor 6 faze, fiecare strat se adauga la o pagina concreta \textendash{} portofoliul Mariei Popescu, studenta CS in Iasi. La final, fiecare participant aplica acelasi pattern pentru pagina sa proprie.
+
+\bigskip
+
+\textbf{\sffamily Evolu\textcommabelow{t}ia paginii pe parcursul training-ului:}
+
+\bigskip
+
+\begin{tcolorbox}[
+  enhanced, colback=themeHtml!8, colframe=themeHtml, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, before skip=4pt, after skip=4pt,
+]
+\textbf{\color{themeHtml}Faza 1 \textendash{} HTML.}\quad Text negru pe fundal alb, ca un document Word minimal. Structura semantica corecta in spate.\\
+{\small\color{textDim} Pagina \emph{exista} la nivel de informa\textcommabelow{t}ie, dar arata generic.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeCss!8, colframe=themeCss, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, before skip=4pt, after skip=4pt,
+]
+\textbf{\color{themeCss}+ Faza 2 \textendash{} CSS.}\quad Pagina capata identitate vizuala: paleta de culori, layout cu flexbox, header cu logo \textcommabelow{s}i navigare, hero cu CTA, dark mode.\\
+{\small\color{textDim} Pagina \emph{arata} ca un site profesional. Nu raspunde la interac\textcommabelow{t}iuni.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeJs!8, colframe=themeJs, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, before skip=4pt, after skip=4pt,
+]
+\textbf{\color{themeJs}+ Faza 3 \textendash{} JavaScript.}\quad Hamburger menu func\textcommabelow{t}ional pe mobil, smooth scroll la link-uri, formular care nu reincarca pagina.\\
+{\small\color{textDim} Pagina \emph{raspunde} la utilizator. Ramane offline, accesibila doar local.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeDeploy!8, colframe=themeDeploy, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, before skip=4pt, after skip=4pt,
+]
+\textbf{\color{themeDeploy}+ Faza 4 \textendash{} Deploy.}\quad Site-ul devine accesibil la \code{maria.github.io/portfolio}. URL real, share-uibil oriunde.\\
+{\small\color{textDim} Pagina \emph{exista in lume}. Dar oamenii inca nu o pot gasi.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeSeo!8, colframe=themeSeo, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, before skip=4pt, after skip=4pt,
+]
+\textbf{\color{themeSeo}+ Faza 5 \textendash{} SEO.}\quad Cand cineva paste-uieste link-ul pe WhatsApp, apare card cu titlu, descriere si imagine. Google indexeaza pagina corect.\\
+{\small\color{textDim} Pagina \emph{e descoperibila}. Tehnic poate fi inca rafinata.}
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeLighthouse!8, colframe=themeLighthouse, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, before skip=4pt, after skip=4pt,
+]
+\textbf{\color{themeLighthouse}+ Faza 6 \textendash{} Lighthouse.}\quad Audit pe 4 categorii. Scor 95+ pe Performance, Accessibility, Best Practices, SEO.\\
+{\small\color{textDim} Pagina \emph{e profesionala}. Standardul pe care firmele il cer la angajare.}
+\end{tcolorbox}
+
+\bigskip
+
+\begin{recap}[Pe scurt]
+Fiecare faza adauga o capacitate noua paginii. La final, paginia ta personala (cu numele tau in URL) trece toate verificarile pe care un dezvoltator profesional le-ar face.
+\end{recap}
+
+% =========================================================
+%   CUPRINS
+% =========================================================
+\clearpage
+\setpartlabel{themePrereq}{\faBookmark}{Cuprins}
+
+\noindent\begin{minipage}{0.04\linewidth}\color{themePrereq}\rule{4pt}{2.6em}\end{minipage}%
+\begin{minipage}{0.94\linewidth}
+  {\sffamily\fontsize{30}{34}\selectfont\textbf{\color{themeText}Cuprins}}\\[4pt]
+  {\sffamily\large\color{black!55}Capitole, in ordinea recomandata.}
+\end{minipage}
+\par\vspace{14pt}
+{\color{themePrereq!40}\hrule height 0.5pt}
+\par\vspace{20pt}
+
+\begingroup
+\renewcommand{\baselinestretch}{1.4}\selectfont
+\makeatletter
+\@starttoc{toc}
+\makeatother
+\endgroup
+
+% =========================================================
+%   CAPITOLE
+% =========================================================
+\input{01-html}
+\input{02-css}
+\input{03-js}
+\input{04-deploy}
+\input{05-seo}
+\input{06-lighthouse}
+\input{07-resurse}
+\input{08-anexe}
+
+\end{document}

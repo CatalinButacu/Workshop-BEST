@@ -1,0 +1,201 @@
+% Fragment -- inclus de main.tex prin \input
+\clearpage
+\setpartlabel{themeResurse}{\faGraduationCap}{Resurse \& urmatorii pasi}
+\setcounter{section}{0}
+\phantomsection
+\addcontentsline{toc}{part}{\protect\textbf{Resurse \& urmatorii pasi}}
+\handout{Resurse \& urmatorii pasi}{Aplicatii interactive. Tutoriale. Referinte. Comunitati.}
+
+Acest capitol consolideaza resursele referentiate in capitolele anterioare si adauga sugestii pentru continuarea studiului dupa training. Materialele sunt grupate functional: aplicatii interactive (joculete), tutoriale structurate, referinte de cautare, comunitati, si tool-uri practice.
+
+\bigskip
+
+% =========================================================
+\section{Roadmap pentru consolidare}
+
+\begin{nota}[Saptamana 1]
+Reconstruirea site-ului cu o tema personala (portofoliu, blog tematic, pagina pentru un eveniment). Folder-ul \code{kit-starter/02-reference/} serveste ca exemplu de implementare, nu ca sablon copiat direct.
+\end{nota}
+
+\begin{nota}[Saptamana 2]
+Atingerea scorului 95+ pe toate cele patru categorii Lighthouse. Iteratia consta in audit \textendash{} identificare a problemelor \textendash{} remediere \textendash{} reaudit.
+\end{nota}
+
+\begin{nota}[Saptamana 3\textendash{}4]
+Adaugarea unei functionalitati non-triviale: comutator pentru tema dark/light, formular cu trimitere efectiva (\url{https://formspree.io} ofera un endpoint gratuit), galerie de imagini cu lightbox, navigare cu mai multe pagini, animatii la scroll.
+\end{nota}
+
+\begin{nota}[Luna 2 si urmatoarele]
+Inscrierea intr-un curriculum complet: \emph{The Odin Project} sau \emph{freeCodeCamp}. Ambele sunt gratuite si acopera traiectoria completa pana la dezvoltare full-stack, in 6\textendash{}12 luni de studiu sustinut.
+\end{nota}
+
+% =========================================================
+\section{\faGamepad\ \ Aplicatii interactive (joculete)}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeHtml!8, colframe=themeHtml, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt,
+]
+\textbf{\color{themeHtml}HTML / Accesibilitate}\\
+\href{https://www.w3.org/WAI/demos/bad/}{W3C \emph{Before / After Demo}} \textendash{} comparatie intre o pagina inaccesibila si echivalentul sau accesibil.
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeCss!8, colframe=themeCss, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt,
+]
+\textbf{\color{themeCss}CSS}\\
+\textbf{Flexbox Froggy} \textendash{} \url{https://flexboxfroggy.com}\\
+\textbf{Grid Garden} \textendash{} \url{https://cssgridgarden.com}\\
+\textbf{CSS Diner} \textendash{} \url{https://flukeout.github.io} (selectori)\\
+\textbf{CSS Battle} \textendash{} \url{https://cssbattle.dev} (reproducerea unei imagini cu CSS minimal)
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeJs!8, colframe=themeJs, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt,
+]
+\textbf{\color{themeJs}JavaScript}\\
+\textbf{JS Robot} \textendash{} \url{https://lifesphere.eu/jsrobot}\\
+\textbf{Coding Fantasy} \textendash{} \url{https://codingfantasy.com} (lectiile JS sunt gratuite)\\
+\textbf{Codewars} \textendash{} \url{https://codewars.com} (probleme de tip kata)
+\end{tcolorbox}
+
+\begin{tcolorbox}[
+  enhanced, colback=themeDeploy!8, colframe=themeDeploy, boxrule=0pt, leftrule=4pt,
+  arc=4pt, sharp corners=downhill, rounded corners=northwest,
+  left=12pt, right=12pt, top=8pt, bottom=8pt,
+]
+\textbf{\color{themeDeploy}Git / Deploy}\\
+\textbf{Learn Git Branching} \textendash{} \url{https://learngitbranching.js.org}\\
+\textbf{Oh My Git!} \textendash{} \url{https://ohmygit.org} (joc desktop, gratuit, open source)
+\end{tcolorbox}
+
+% =========================================================
+\section{\faBook\ \ Tutoriale structurate}
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{The Odin Project.} \url{https://www.theodinproject.com} \\
+  Curriculum complet, gratuit, parcurs estimat 6\textendash{}12 luni. Acoperire: HTML, CSS, JavaScript, Git, Node.js, Ruby on Rails sau React.
+  \item \textbf{freeCodeCamp.} \url{https://www.freecodecamp.org} \\
+  Certificari gratuite (Responsive Web Design, JavaScript Algorithms and Data Structures, Front End Development Libraries).
+  \item \textbf{web.dev/learn.} \url{https://web.dev/learn} \\
+  Cursuri scurte produse de Google, actualizate frecvent: HTML, CSS, JavaScript, Performance, Forms, Accessibility, PWA.
+  \item \textbf{javascript.info.} \url{https://javascript.info} \\
+  Manual extins pentru JavaScript, mai detaliat decat MDN, structurat didactic.
+  \item \textbf{W3Schools.} \url{https://www.w3schools.com} \\
+  Referin\textcommabelow{t}a sistematica cu \emph{,,Try it Yourself''} pe fiecare exemplu. Sec\textcommabelow{t}iuni separate: HTML, CSS, JS, TypeScript, React, SQL, Python.
+  \item \textbf{Educative \textendash{} Web Development: Unraveling HTML, CSS, JS.} \url{https://www.educative.io} \\
+  Curs comprehensiv (20h) cu pattern-ul ,,Hands-On / How it Works'' \textendash{} prezinta ac\textcommabelow{t}iunea, apoi explica.
+  \item \textbf{Educative \textendash{} HTML5 Canvas: From Noob to Ninja.} \url{https://www.educative.io} \\
+  Continuare pentru cei interesa\textcommabelow{t}i de animatii \textcommabelow{s}i grafica programatica (9h, peste 100 lec\textcommabelow{t}ii).
+\end{itemize}
+
+% =========================================================
+\section{\faTrophy\ \ Pregatire pentru interviuri}
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{GreatFrontend \textendash{} 50 must-know HTML/CSS/JS interview questions.} \\\url{https://www.greatfrontend.com/blog/50-must-know-html-css-and-javascript-interview-questions-by-ex-interviewers} \\
+  Lista celor mai frecvente intrebari tehnice la interviurile front-end, formulata de fo\textcommabelow{s}ti intervievatori.
+  \item \textbf{Frontend Interview Handbook.} \url{https://www.frontendinterviewhandbook.com} \\
+  Resursa free pentru pregatirea interviurilor front-end (sistem design, coding, comportamentale).
+  \item \textbf{LeetCode \textendash{} JavaScript track.} \url{https://leetcode.com} \\
+  Probleme algoritmice si de structuri de date in JavaScript.
+\end{itemize}
+
+% =========================================================
+\section{\faSearch\ \ Referinte de cautare}
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Mozilla Developer Network.} \url{https://developer.mozilla.org} \\
+  Sursa de referinta pentru standardele web. Cautarea se efectueaza cu pattern-ul \emph{,,X mdn''} pe orice motor de cautare.
+  \item \textbf{Can I Use.} \url{https://caniuse.com} \\
+  Tabel detaliat pe browser si versiune pentru suportul fiecarui feature web.
+  \item \textbf{CSS-Tricks.} \url{https://css-tricks.com} \\
+  Articole de detaliu pentru concepte CSS specifice; ghidul de flexbox si cel de grid sunt referinte standard.
+\end{itemize}
+
+% =========================================================
+\section{\faUsers\ \ Comunitati}
+
+\begin{itemize}[itemsep=2pt]
+  \item Subreddit-urile \emph{r/webdev}, \emph{r/learnprogramming}, \emph{r/Frontend} \textendash{} discutii zilnice si raspunsuri la intrebari concrete.
+  \item \textbf{Stack Overflow.} \url{https://stackoverflow.com} \textendash{} platforma de intrebari/raspunsuri tehnice. Primul rezultat pentru majoritatea erorilor cautate pe Google.
+  \item \textbf{Frontend Mentor.} \url{https://www.frontendmentor.io} \textendash{} provocari de tip design $\to$ implementare, cu peer review.
+  \item Canalele Discord ale comunitatii BEST Iasi \textendash{} pentru intrebari specifice contextului local.
+\end{itemize}
+
+% =========================================================
+\section{\faTools\ \ Tool-uri practice}
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{Squoosh} \textendash{} \url{https://squoosh.app} (optimizare imagini).
+  \item \textbf{TinyPNG} \textendash{} \url{https://tinypng.com} (compresie PNG / JPG).
+  \item \textbf{Coolors} \textendash{} \url{https://coolors.co} (generare palete de culori).
+  \item \textbf{Google Fonts} \textendash{} \url{https://fonts.google.com}.
+  \item \textbf{Favicon Generator} \textendash{} \url{https://favicon.io}.
+  \item \textbf{Excalidraw} \textendash{} \url{https://excalidraw.com} (diagrame, schite tehnice).
+\end{itemize}
+
+% =========================================================
+\section{\faLightbulb\ \ Idei de proiecte (pentru cand te plictise\textcommabelow{s}ti)}
+
+Cele mai bune skill-uri se invata facand ceva ce te intereseaza pe tine. Cateva idei, de la 30 minute la cateva weekenduri:
+
+\subsection*{Personale (pentru CV / share pe social)}
+
+\begin{itemize}[itemsep=2pt]
+  \item Portofoliu personal cu poza, sectiune ,,Despre'', proiecte, contact.
+  \item Blog despre orice te intereseaza (gaming, anime, gatit, drumetii, fotografie).
+  \item ,,Card de vizita'' digital (CV web stylish, share-uibil prin URL).
+  \item Pagina pentru un proiect BEST sau un eveniment universitar.
+\end{itemize}
+
+\subsection*{Distractive (1-2 ore fiecare)}
+
+\begin{itemize}[itemsep=2pt]
+  \item Tic-Tac-Toe sau Memory game in HTML/CSS/JS pur.
+  \item Quiz interactiv cu intrebari preferate (\emph{,,Ce film e asta?''}, \emph{,,Ghice\textcommabelow{s}te tara dupa steag''}).
+  \item Pomodoro timer (25 min lucru / 5 min pauza, cu sunet).
+  \item Calculator simplu, dar cu un design mi\textcommabelow{s}to.
+  \item Generator de palete de culori la apasare de buton.
+  \item Joc snake clasic, in canvas.
+\end{itemize}
+
+\subsection*{Utile (le folose\textcommabelow{s}ti tu, prietenii tai)}
+
+\begin{itemize}[itemsep=2pt]
+  \item Habit tracker (verde la zilele cand ai facut treaba, ro\textcommabelow{s}u la cand n-ai).
+  \item Lista de filme / serii / car\textcommabelow{t}i de vazut, cu rating.
+  \item Tracker de cheltuieli (carbohidra\textcommabelow{t}i, bani, ore studiate).
+  \item Pagina pentru proiectul tau de \textcommabelow{s}coala (mai stylish decat un PDF).
+\end{itemize}
+
+\subsection*{Fan / pasiune}
+
+\begin{itemize}[itemsep=2pt]
+  \item Pagina dedicata serialului / anime-ului / forma\textcommabelow{t}iei tale preferate.
+  \item Galerie cu pozele tale de la concerte / drume\textcommabelow{t}ii / vacan\textcommabelow{t}e.
+  \item Wiki personal pentru jocul tau favorit (Skyrim, Pokemon, etc.).
+\end{itemize}
+
+% =========================================================
+\section{\faTrophy\ \ Provocari pentru cand vrei sa te depa\textcommabelow{s}e\textcommabelow{s}ti}
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{,,Site in 1 ora''.} Cronometreaza-te. Pune un site decent online intr-o ora.
+  \item \textbf{,,Lighthouse 100 / 100 / 100 / 100''.} Niciun fix nu este de prisos.
+  \item \textbf{,,30 zile de cod''.} Un commit pe zi, orice marime, pe orice repo. Vezi cum se umple GitHub-ul de patrate verzi.
+  \item \textbf{,,No CSS framework''.} Refa unul dintre proiectele tale fara Bootstrap/Tailwind \textendash{} doar CSS pur.
+  \item \textbf{,,Cont GitHub cu 5 stele''.} Construie\textcommabelow{s}te ceva de care al\textcommabelow{t}ii vor sa puna stea. (Nu le cere stele \textendash{} fa-le de la sine.)
+\end{itemize}
+
+\partdivider
+
+\begin{recap}[Observatie de incheiere]
+Slide-urile prezentarii si pagina personala construita in training partajeaza acelasi set de tehnologii (HTML, CSS, JavaScript). Functionalitatea \emph{View Source} a oricarui browser ofera acces la codul sursa al oricarei pagini publice. Lectura acelui cod este, de acum inainte, accesibila.
+\end{recap}
+

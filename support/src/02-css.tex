@@ -1,0 +1,527 @@
+% Fragment -- inclus de main.tex prin \input
+\clearpage
+\setpartlabel{themeCss}{\faPaintBrush}{Faza 2: CSS}
+\setcounter{section}{0}
+\phantomsection
+\addcontentsline{toc}{part}{\protect\textbf{Faza 2 \textendash{} CSS}}
+\handout{Faza 2 \textendash{} CSS}{Stilizare. Layout. Responsivitate.}
+
+CSS (\emph{Cascading Style Sheets}) controleaza aspectul vizual al documentelor HTML. Numele provine de la \emph{cascada}: cand mai multe reguli vizeaza acelasi element, browserul aplica un algoritm de prioritate (cascada) pentru a alege valoarea finala.
+
+Capitolul prezinta selectorii, modelul de cutie, unitatile de masura, variabilele CSS, sistemele de layout flexbox si grid, abordarea \emph{mobile-first}, si suportul nativ pentru tema dark/light.
+
+\bigskip
+
+\begin{outcomes}
+Dupa capitolul asta vei \textcommabelow{s}ti:
+\begin{itemize}[itemsep=1pt]
+  \item Folose\textcommabelow{s}te selectorii CSS \textcommabelow{s}i in\textcommabelow{t}elege specificitatea ca triplet \code{(id, clasa, tag)}.
+  \item Aplica modelul de cutie cu \code{box-sizing: border-box} pentru calcule predictibile.
+  \item Define\textcommabelow{s}te variabile CSS in \code{:root} si le refolose\textcommabelow{s}te prin \code{var()}.
+  \item Construie\textcommabelow{s}te layout-uri cu flexbox (6 proprieta\textcommabelow{t}i cheie).
+  \item Scrie reguli mobile-first cu \code{@media (min-width: ...)}.
+  \item Pozitioneaza elemente cu \code{position} \textcommabelow{s}i creeaza header sticky.
+  \item Aplica anima\textcommabelow{t}ii cu \code{transition} si \code{@keyframes}, respectand \code{prefers-reduced-motion}.
+\end{itemize}
+\end{outcomes}
+
+\begin{whymatters}
+CSS face diferen\textcommabelow{t}a intre pagina-document \textcommabelow{s}i pagina-produs. Aceea\textcommabelow{s}i structura HTML poate parea neprofesionala sau profesionala, in func\textcommabelow{t}ie de stilizare. Mai mult: CSS-ul prost arhitecturat (cu \code{!important}, specificitate ridicata, valori absolute) genereaza ore de depanare. Conventiile prezentate aici (variabile, mobile-first, flexbox) sunt cele aplicate in practica industriala.
+\end{whymatters}
+
+\begin{nota}[Pre-rechizite]
+Capitolul presupune in\textcommabelow{t}elegerea tag-urilor HTML semantice \textcommabelow{s}i a structurii \code{<head>}/\code{<body>} (Faza 1).
+\end{nota}
+
+% =========================================================
+\section{Conectarea fisierului CSS la HTML}
+
+CSS poate fi inclus in trei moduri. Conventia recomandata este externalizarea intr-un fisier separat:
+
+\begin{lstlisting}[style=html, caption={Stilurile externe (recomandat)}]
+<head>
+  <link rel="stylesheet" href="style.css">
+</head>
+\end{lstlisting}
+
+\begin{dano}[Asa nu \textendash{} stiluri inline imprastiate]
+\begin{lstlisting}[style=html, numbers=none]
+<button style="background: blue; color: white; padding: 10px;">Click</button>
+\end{lstlisting}
+\textbf{Probleme.} Imposibil de reutilizat; stilul nu poate fi schimbat global; specificitatea ridicata creeaza conflicte; pagina HTML devine ilizibila.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} clasa cu stil extern]
+\begin{lstlisting}[style=html, numbers=none]
+<button class="cta">Click</button>
+\end{lstlisting}
+In \code{style.css}: \code{.cta \{ background: blue; color: white; padding: 10px; \}}
+\end{dado}
+
+% =========================================================
+\section{Selectori}
+
+Selectorii determina elementele asupra carora se aplica un set de reguli. Categoriile principale:
+
+\begin{lstlisting}[style=css, caption={Selectori uzuali}]
+/* Selector de tip: vizeaza toate elementele <h1> */
+h1 { color: navy; }
+
+/* Selector de clasa: reutilizabil, prefixat cu . */
+.cta { background: orange; }
+
+/* Selector de id: unic pe pagina, prefixat cu # */
+#contact { padding: 2rem; }
+
+/* Selector de atribut */
+input[type="email"] { border-color: blue; }
+
+/* Combinator descendent: <a> oriunde sub <nav> */
+nav a { text-decoration: none; }
+
+/* Combinator copil direct: <li> direct sub <ul> */
+ul > li { margin-bottom: 0.5rem; }
+
+/* Combinator frate adiacent: <p> imediat dupa <h2> */
+h2 + p { margin-top: 0; }
+
+/* Pseudo-clase: stari ale elementului */
+.cta:hover { background: red; }
+.cta:focus-visible { outline: 2px solid blue; }
+.cta:disabled { opacity: 0.5; }
+
+/* Pseudo-elemente: parti generate */
+p::first-letter { font-size: 2em; }
+\end{lstlisting}
+
+\subsection{Specificitate \textendash{} cum se rezolva conflictele}
+
+Cand mai multe reguli vizeaza acelasi element, browserul calculeaza o specificitate pentru fiecare si o aplica pe cea cu valoare maxima. Calculul foloseste un triplet \code{(a, b, c)}:
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{a} \textendash{} numarul de id-uri.
+  \item \code{b} \textendash{} numarul de clase, atribute, pseudo-clase.
+  \item \code{c} \textendash{} numarul de tag-uri si pseudo-elemente.
+\end{itemize}
+
+Comparatia se face lexicografic: \code{(0,1,0)} pierde fata de \code{(1,0,0)} indiferent de \code{b} si \code{c}. Stilurile inline au specificitate \code{(1,0,0,0)}, peste orice selector. Cuvantul cheie \code{!important} suprascrie tot, dar este considerat un \emph{antipattern} \textendash{} indica faptul ca arhitectura CSS este compromisa.
+
+\begin{dano}[Asa nu \textendash{} folosirea \texttt{!important} ca solutie]
+\code{.btn \{ background: red !important; \}}\\
+\textbf{Problema.} Cand alta regula are nevoie sa schimbe culoarea, va trebui si ea sa foloseasca \code{!important}, escaladand conflictul.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} specificitate proportionala]
+\code{.btn \{ background: blue; \} .btn.btn-danger \{ background: red; \}}\\
+\textbf{Solutie:} clase modificator (\code{.btn-danger}) ridica specificitatea natural cu \code{(0,2,0)} fata de \code{(0,1,0)}.
+\end{dado}
+
+% =========================================================
+\section{Modelul de cutie}
+
+Fiecare element redat de browser este o cutie compusa din patru straturi concentrice: \emph{content}, \emph{padding}, \emph{border}, \emph{margin}.
+
+\boxmodelfigure
+
+\begin{itemize}
+  \item \textbf{content} \textendash{} zona ocupata de continutul efectiv (text, imagine).
+  \item \textbf{padding} \textendash{} spatiul dintre continut si chenar.
+  \item \textbf{border} \textendash{} chenarul.
+  \item \textbf{margin} \textendash{} spatiul exterior, intre cutia curenta si elementele adiacente.
+\end{itemize}
+
+\subsection{Implicit vs \texttt{border-box}}
+
+Comportamentul implicit (\code{box-sizing: content-box}) include in \code{width} doar continutul. Adaugarea de \code{padding} sau \code{border} mareste latimea totala. Acest comportament face calculele predispuse la erori.
+
+\begin{dano}[Asa nu \textendash{} content-box, latimi imprevizibile]
+\begin{lstlisting}[style=css, numbers=none]
+.card {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  /* Latime totala: 300 + 20*2 + 1*2 = 342px (oversize) */
+}
+\end{lstlisting}
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} border-box global, latimi predictibile]
+\begin{lstlisting}[style=css, numbers=none]
+*, *::before, *::after { box-sizing: border-box; }
+
+.card {
+  width: 300px;
+  padding: 20px;
+  border: 1px solid #ccc;
+  /* Latime totala: 300px (padding si border absorbite in width) */
+}
+\end{lstlisting}
+\end{dado}
+
+% =========================================================
+\section{Unitati de masura}
+
+CSS suporta zeci de unitati. In practica, doar 5\textendash{}6 acopera majoritatea cazurilor:
+
+\begin{itemize}
+  \item \code{px} \textendash{} pixel absolut. Pentru border-uri si dimensiuni de detaliu.
+  \item \code{rem} \textendash{} relativ la font-size-ul \code{<html>} (implicit 16px). Pentru font-size si spatiere uniforma.
+  \item \code{em} \textendash{} relativ la font-size-ul elementului parinte. Util pentru padding-uri scaland cu textul.
+  \item \code{\%} \textendash{} relativ la dimensiunea parintelui pe acea axa.
+  \item \code{vw} / \code{vh} \textendash{} 1\% din latimea / inaltimea viewport-ului.
+  \item \code{ch} \textendash{} latimea unui caracter ,,0''. Util pentru \code{max-width} pe paragrafe.
+\end{itemize}
+
+\begin{ponturi}
+Pentru font-size si spatiere generala, \code{rem} este alegerea recomandata. Cand utilizatorul mareste font-size-ul implicit din browser (Settings $\to$ Appearance), tot site-ul scaleaza proportional. \code{px} pe font-size ignora aceasta preferinta.
+\end{ponturi}
+
+\begin{lstlisting}[style=css, caption={Compunere uzuala}]
+:root {
+  font-size: 100%;          /* echivalent 16px in browserele standard */
+}
+
+body { font-size: 1rem; }   /* 16px */
+h1   { font-size: 2.5rem; } /* 40px */
+.container { max-width: 64rem; }    /* 1024px */
+
+p { max-width: 65ch; }      /* lungime optima de citire */
+
+.hero {
+  min-height: 80vh;         /* 80% din inaltimea ferestrei */
+  padding: 2rem;
+}
+\end{lstlisting}
+
+% =========================================================
+\section{Variabile CSS (custom properties)}
+
+Variabilele CSS permit definirea valorilor o singura data si reutilizarea lor pe parcursul intregului document. Modificarea unei singure declaratii in \code{:root} se propaga automat in toate locurile in care variabila este folosita.
+
+\begin{lstlisting}[style=css]
+:root {
+  /* Paleta */
+  --primary: #0673BA;
+  --accent:  #FAA51E;
+  --bg:      #FFFCF6;
+  --text:    #1A1A1A;
+
+  /* Spatiere consistenta */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 2rem;
+
+  /* Layout */
+  --max-width: 64rem;
+  --radius: 0.5rem;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+h1 { color: var(--primary); }
+.cta { background: var(--accent); }
+\end{lstlisting}
+
+Variabilele CSS sunt \emph{scoped}: redefinirea intr-un selector descendent suprascrie valoarea pentru subarbore. Acest comportament permite teme contextuale fara duplicarea regulilor:
+
+\begin{lstlisting}[style=css, caption={Tema schimbata local}]
+.card-dark {
+  --bg:   #1F2937;
+  --text: #F1F5F9;
+  /* toate copiii care folosesc var(--bg) si var(--text) preiau noile valori */
+}
+\end{lstlisting}
+
+% =========================================================
+\section{Flexbox}
+
+Flexbox (\emph{Flexible Box Layout}) este un model de layout uni-dimensional, util pentru distribuirea spatiului si alinierea continutului pe o axa (orizontala sau verticala).
+
+\begin{lstlisting}[style=css, caption={Header cu logo si navigare aliniate}]
+header {
+  display: flex;                   /* activeaza flexbox */
+  flex-direction: row;             /* axa principala = orizontala (default) */
+  justify-content: space-between;  /* distribuire pe axa principala */
+  align-items: center;             /* aliniere pe axa secundara */
+  flex-wrap: wrap;                 /* trecere pe randul urmator daca nu incape */
+  gap: var(--space-2);             /* spatiu intre copii */
+}
+\end{lstlisting}
+
+\subsection{Cele 6 proprietati pe care le folosesti}
+
+\begin{itemize}[itemsep=2pt]
+  \item \code{display: flex} \textendash{} activeaza modelul.
+  \item \code{flex-direction: row | column} \textendash{} axa principala.
+  \item \code{justify-content} \textendash{} distributie pe axa principala. Valori uzuale: \code{flex-start}, \code{center}, \code{flex-end}, \code{space-between}, \code{space-around}.
+  \item \code{align-items} \textendash{} aliniere pe axa secundara. Valori uzuale: \code{stretch} (default), \code{center}, \code{flex-start}, \code{flex-end}.
+  \item \code{gap} \textendash{} spatiu uniform intre copii. Inlocuieste \code{margin} pe copii.
+  \item \code{flex: 1} (pe copii) \textendash{} permite copilului sa creasca pentru a umple spatiul disponibil.
+\end{itemize}
+
+\begin{ponturi}
+\textbf{Trick uzual:} \code{display: flex; justify-content: center; align-items: center;} centreaza orice element in containerul sau, atat orizontal cat si vertical, in 3 linii.
+\end{ponturi}
+
+% =========================================================
+\section{CSS Grid (introducere scurta)}
+
+Grid este sistemul de layout bidimensional al CSS-ului. Spre deosebire de flexbox (uni-dimensional), grid permite controlul simultan al randurilor si coloanelor.
+
+\begin{lstlisting}[style=css, caption={Galerie cu coloane responsive automat}]
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-2);
+}
+\end{lstlisting}
+
+Mecanism: \code{auto-fit} creeaza cate coloane incap; \code{minmax(240px, 1fr)} cere o latime minima de 240px si o expansiune egala (\code{1fr}) cand ramane spatiu. Rezultatul: galerie responsive fara media queries.
+
+% =========================================================
+\section{Mobile-first}
+
+Strategia \emph{mobile-first} consta in scrierea regulilor pentru ecrane mici ca valori implicite, urmata de extinderea acestora pentru ecrane mai mari prin \emph{media queries}:
+
+\begin{lstlisting}[style=css]
+/* Stiluri implicite, pentru mobil */
+.nav { display: none; }
+.nav-toggle { display: flex; }
+
+/* Adaugiri pentru ecrane >= 768px */
+@media (min-width: 768px) {
+  .nav { display: flex; }
+  .nav-toggle { display: none; }
+}
+\end{lstlisting}
+
+\begin{dano}[Asa nu \textendash{} desktop-first cu \texttt{max-width}]
+\begin{lstlisting}[style=css, numbers=none]
+.nav { display: flex; }
+@media (max-width: 767px) {
+  .nav { display: none; }
+  .nav-toggle { display: flex; }
+}
+\end{lstlisting}
+\textbf{Problema.} Mobilul descarca si proceseaza CSS conceput pentru desktop, apoi il anuleaza. Pierdere de performanta pe contextul cu cele mai limitate resurse.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} mobile-first cu \texttt{min-width}]
+\begin{lstlisting}[style=css, numbers=none]
+.nav { display: none; }
+.nav-toggle { display: flex; }
+@media (min-width: 768px) {
+  .nav { display: flex; }
+  .nav-toggle { display: none; }
+}
+\end{lstlisting}
+\textbf{Beneficiu.} Mobilul (>60\% din trafic) primeste varianta optimizata implicit; desktopul adauga incremental.
+\end{dado}
+
+% =========================================================
+\section{Suport pentru tema sistem (light / dark)}
+
+Functia \code{light-dark()} si proprietatea \code{color-scheme} permit afisarea conditionata a culorilor in functie de preferinta sistemului de operare al utilizatorului:
+
+\begin{lstlisting}[style=css]
+html { color-scheme: light dark; }
+
+:root {
+  --bg:   light-dark(#FFFCF6, #0F172A);
+  --text: light-dark(#1A1A1A, #F1F5F9);
+}
+\end{lstlisting}
+
+Browserul selecteaza prima sau a doua valoare in functie de tema activa. Suportul nativ in browserele moderne este disponibil incepand cu 2024 (Chrome 123+, Firefox 120+, Safari 17.5+).
+
+% =========================================================
+\section{Pozi\textcommabelow{t}ionarea elementelor}
+
+Proprietatea \code{position} controleaza modul in care un element se aseaza in fluxul paginii. Cinci valori principale:
+
+\begin{itemize}
+  \item \code{static} \textendash{} valoarea implicita; elementul respecta fluxul natural.
+  \item \code{relative} \textendash{} pozi\textcommabelow{t}ie raportata la pozi\textcommabelow{t}ia normala; \code{top}, \code{left} muta vizual fara sa afecteze celelalte elemente.
+  \item \code{absolute} \textendash{} scoate elementul din flux; pozitionat relativ la primul parinte cu \code{position: relative} (sau viewport).
+  \item \code{fixed} \textendash{} pozitionat relativ la viewport; ramane vizibil la scroll. Utilizat pentru header-e sticky in stil vechi.
+  \item \code{sticky} \textendash{} se comporta \code{relative} pana ajunge la o margine, apoi devine \code{fixed}. Modern, util pentru header-e \textcommabelow{s}i sidebar-uri.
+\end{itemize}
+
+\begin{lstlisting}[style=css, caption={Header sticky modern}]
+header {
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+\end{lstlisting}
+
+% =========================================================
+\section{Anima\textcommabelow{t}ii CSS}
+
+Animatiile imbunatatesc perceptia calitatii produsului \textcommabelow{s}i orienteaza aten\textcommabelow{t}ia utilizatorului. CSS suporta nativ doua mecanisme: \emph{transitions} pentru schimbari intre stari, si \emph{keyframes} pentru animatii arbitrare.
+
+\subsection{Transitions \textendash{} schimbari intre stari}
+
+\code{transition} interpoleaza fluent o proprietate cand valoarea sa se schimba (de exemplu, la \code{:hover}).
+
+\begin{lstlisting}[style=css, caption={Buton cu hover smooth}]
+.cta {
+  background: var(--primary);
+  color: white;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cta:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+\end{lstlisting}
+
+Sintaxa: \code{transition: <proprietate> <durata> <timing-function> <delay>}.
+
+\begin{dano}[Asa nu \textendash{} fara transition]
+\begin{lstlisting}[style=css, numbers=none]
+.cta { background: var(--primary); }
+.cta:hover { background: var(--accent); }
+\end{lstlisting}
+\textbf{Problema.} Schimbarea este instantanee, abrupta. Utilizatorul percepe interfa\textcommabelow{t}a ca pe un schimb de pagini, nu ca pe un raspuns.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} cu transition de 200ms]
+\begin{lstlisting}[style=css, numbers=none]
+.cta { background: var(--primary); transition: background 0.2s ease; }
+.cta:hover { background: var(--accent); }
+\end{lstlisting}
+\textbf{Beneficiu.} Schimbarea este progresiva. Senza\textcommabelow{t}ia de raspuns viu, profesional.
+\end{dado}
+
+\subsection{Transform \textendash{} scalare, rota\textcommabelow{t}ie, transla\textcommabelow{t}ie}
+
+\code{transform} aplica o transformare geometrica fara a afecta layout-ul:
+
+\begin{itemize}
+  \item \code{transform: scale(1.05)} \textendash{} marire 5\%.
+  \item \code{transform: rotate(45deg)} \textendash{} rotire 45 grade.
+  \item \code{transform: translateY(-2px)} \textendash{} mutare in sus 2 pixeli.
+  \item Combinare: \code{transform: scale(1.05) rotate(2deg)}.
+\end{itemize}
+
+\subsection{Keyframes \textendash{} animatii arbitrare}
+
+Pentru anima\textcommabelow{t}ii care nu sunt declan\textcommabelow{s}ate de o stare (loading spinner, fade-in, parallax), \code{@keyframes} defineste o secven\textcommabelow{t}a de stari:
+
+\begin{lstlisting}[style=css, caption={Spinner infinit}]
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 4px solid #E5E7EB;
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=css, caption={Fade-in pentru titlu hero}]
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero h1 {
+  animation: fadeInUp 0.6s ease-out;
+}
+\end{lstlisting}
+
+Sintaxa shorthand pentru animation: \code{animation: <nume> <durata> <timing> <delay> <iteratii> <direction> <fill-mode>}.
+
+\subsection{Accesibilitate: \texttt{prefers-reduced-motion}}
+
+Unii utilizatori (afec\textcommabelow{t}iuni vestibulare, dependente de aten\textcommabelow{t}ie) au setat in OS preferin\textcommabelow{t}a pentru anima\textcommabelow{t}ii reduse. CSS detecteaza aceasta cerere:
+
+\begin{lstlisting}[style=css]
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+\end{lstlisting}
+
+Conformitatea este o cerin\textcommabelow{t}a WCAG 2.1 (criteriul 2.3.3) \textcommabelow{s}i o practica recomandata pentru orice site cu animatii.
+
+% =========================================================
+\section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
+
+\begin{selfcheck}
+\begin{enumerate}[itemsep=2pt]
+  \item Care este specificitatea pentru selectorul \code{.btn.primary}? Comparativ, ce specificitate are \code{button\#submit}?
+  \item De ce strategia mobile-first este preferabila pentru contextul actual al traficului web?
+  \item \emph{Spot the issue:} \code{.btn \{ background: red !important; \}} repetat in trei locuri.
+  \item Care este diferen\textcommabelow{t}a func\textcommabelow{t}ionala intre \code{rem} si \code{px} pentru \code{font-size}?
+  \item Ce face \code{box-sizing: border-box} fa\textcommabelow{t}a de comportamentul implicit?
+\end{enumerate}
+\end{selfcheck}
+
+% =========================================================
+\section*{Recapitulare}
+
+\begin{recap}[Faza 2 -- CSS]
+\begin{itemize}[itemsep=1pt]
+  \item Stiluri externe in \code{<link rel="stylesheet">}; nu inline.
+  \item Specificitate: \code{(id, clasa, tag)}; \code{!important} este \emph{antipattern}.
+  \item \code{box-sizing: border-box} aplicat global pentru calcul predictibil.
+  \item Unitati: \code{rem} pentru fonturi/spatiere; \code{px} pentru border; \code{\%}/\code{vw}/\code{vh} pentru layout responsiv.
+  \item Variabilele CSS in \code{:root}; redefinire locala pentru teme contextuale.
+  \item Flexbox: 6 proprietati cheie (\code{display}, \code{flex-direction}, \code{justify-content}, \code{align-items}, \code{gap}, \code{flex: 1}).
+  \item Mobile-first cu \code{@media (min-width: ...)}, nu desktop-first cu \code{max-width}.
+  \item Pozitionare: \code{static} (default), \code{relative}, \code{absolute}, \code{fixed}, \code{sticky}.
+  \item Anima\textcommabelow{t}ii: \code{transition} pentru hover, \code{@keyframes} pentru animatii arbitrare.
+  \item Accesibilitate: respecta \code{prefers-reduced-motion}.
+\end{itemize}
+\end{recap}
+
+\partdivider
+
+% =========================================================
+\begin{joc}
+\textbf{Platforma:} Flexbox Froggy (\url{https://flexboxfroggy.com}).
+
+\medskip
+
+\textbf{Activitatea.} Aplicatia este un set de 24 de provocari care necesita pozitionarea unor obiecte pe o grila prin folosirea proprietatilor \code{justify-content}, \code{align-items}, \code{flex-direction}, \code{order}, \code{flex-wrap}.
+
+\medskip
+
+\textbf{Obiectiv:} primele 6 niveluri (acopera \code{justify-content} si \code{align-items}, cele mai folosite proprietati flexbox in practica).
+
+\medskip
+
+\textbf{Durata estimata:} 5 minute.
+\end{joc}
+
+% =========================================================
+\section*{\faGraduationCap\ \ Resurse pentru aprofundare}
+
+\begin{itemize}[itemsep=2pt]
+  \item Mozilla Developer Network. \emph{CSS reference}. \url{https://developer.mozilla.org/en-US/docs/Web/CSS}
+  \item Google. \emph{Learn CSS}. \url{https://web.dev/learn/css}
+  \item Coyier C. \emph{A Complete Guide to Flexbox}. CSS-Tricks. \\\url{https://css-tricks.com/snippets/css/a-guide-to-flexbox/}
+  \item Coyier C. \emph{A Complete Guide to Grid}. CSS-Tricks. \\\url{https://css-tricks.com/snippets/css/complete-guide-grid/}
+  \item The Odin Project. \emph{CSS Foundations}. \\\url{https://www.theodinproject.com/paths/foundations/courses/foundations\#css-foundations}
+  \item Aplicatii similare: \url{https://flukeout.github.io} (selectori), \url{https://cssgridgarden.com} (grid), \url{https://cssbattle.dev} (speedrun).
+\end{itemize}
+
+\bigskip
+
+\bridge{Capitolul 3 (JavaScript) adauga interactivitate. Pagina stilizata in Faza 2 va raspunde la click-uri, va schimba dark mode, va procesa formulare \textendash{} fara reincarcare.}

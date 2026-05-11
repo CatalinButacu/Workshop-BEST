@@ -1,0 +1,384 @@
+% Fragment -- inclus de main.tex prin \input
+\clearpage
+\setpartlabel{themeJs}{\faBolt}{Faza 3: JavaScript}
+\setcounter{section}{0}
+\phantomsection
+\addcontentsline{toc}{part}{\protect\textbf{Faza 3 \textendash{} JavaScript}}
+\handout{Faza 3 \textendash{} JavaScript}{Variabile. Functii. Pattern-ul SELECT-LISTEN-CHANGE. Manipulare DOM.}
+
+JavaScript este limbajul de programare standardizat ECMAScript (ECMA-262), interpretat nativ de toate browserele moderne. Spre deosebire de HTML (structura) si CSS (aspect), JavaScript adauga \textbf{comportament}: raspunde la actiunile utilizatorului, modifica continutul paginii dinamic, comunica cu servere prin retea.
+
+Capitolul prezinta sintaxa de baza, modelul de programare orientat-eveniment specific paginilor web statice, si interactiunea cu arborele DOM (\emph{Document Object Model}).
+
+\bigskip
+
+\begin{outcomes}
+Dupa capitolul asta vei \textcommabelow{s}ti:
+\begin{itemize}[itemsep=1pt]
+  \item Declara variabile cu \code{const} \textcommabelow{s}i \code{let}, recunoscand cand fiecare se aplica.
+  \item Aplica pattern-ul \textbf{SELECT $\to$ LISTEN $\to$ CHANGE} pentru orice interac\textcommabelow{t}iune.
+  \item Manipuleaza DOM-ul cu \code{querySelector}, \code{classList}, \code{addEventListener}.
+  \item Intercepteaza submit-ul unui formular \textcommabelow{s}i extrage valorile cu \code{FormData}.
+  \item Diagnostiheaza erorile JavaScript folosind console-ul browserului.
+\end{itemize}
+\end{outcomes}
+
+\begin{whymatters}
+HTML \textcommabelow{s}i CSS construiesc o pagina statica. JavaScript transforma pagina intr-o aplica\textcommabelow{t}ie: poate reac\textcommabelow{t}iona la click-uri, poate schimba con\textcommabelow{t}inutul fara reincarcare, poate trimite cereri catre servere. Pattern-ul SELECT-LISTEN-CHANGE prezentat aici acopera 80\% din scenariile de interactivitate \textcommabelow{s}i este aceea\textcommabelow{s}i abstrac\textcommabelow{t}ie pe care React, Vue \textcommabelow{s}i Svelte o ambala in API-uri declarative.
+\end{whymatters}
+
+\begin{nota}[Pre-rechizite]
+Capitolul presupune in\textcommabelow{t}elegerea structurii HTML (tag-uri, atribute) \textcommabelow{s}i a selectorilor CSS (clase, id-uri). Faze 1 \textcommabelow{s}i 2.
+\end{nota}
+
+% =========================================================
+\section{Conectarea fisierului JavaScript la HTML}
+
+Includerea unui fisier JavaScript se realizeaza prin elementul \code{<script>}, plasat in \code{<head>} cu atributul \code{defer}:
+
+\begin{lstlisting}[style=html]
+<script src="script.js" defer></script>
+\end{lstlisting}
+
+\subsection{\texttt{defer} vs \texttt{async} vs nimic}
+
+\begin{itemize}
+  \item \textbf{Fara atribut.} Browserul opreste parsarea HTML-ului, descarca si ruleaza scriptul, apoi continua. Blocheaza randarea \textendash{} antipattern.
+  \item \code{async} \textendash{} descarcare in paralel cu parsarea, dar executie imediat ce scriptul este disponibil (poate intrerupe parsarea). Util doar pentru scripturi independente (analytics).
+  \item \code{defer} \textendash{} descarcare in paralel, executie \textbf{dupa} parsarea HTML-ului. Garantat executat in ordinea declararii. Optiunea recomandata pentru codul propriu.
+\end{itemize}
+
+\begin{dano}[Asa nu \textendash{} script in <head> fara atribut]
+\code{<script src="script.js"></script>}\\
+\textbf{Problema.} Cand scriptul ruleaza, \code{document.querySelector('.cta')} returneaza \code{null}, fiindca \code{<body>} nu a fost inca parsat.
+\end{dano}
+
+\begin{dado}[Asa da]
+\code{<script src="script.js" defer></script>}\\
+\textbf{Beneficiu.} La momentul executiei, intregul DOM exista. Scriptul gaseste elementele cautate.
+\end{dado}
+
+% =========================================================
+\section{Declararea variabilelor}
+
+ECMAScript 2015 introduce doua cuvinte cheie pentru declararea variabilelor: \code{const} (valoare imuabila) si \code{let} (valoare mutabila). Cuvantul cheie \code{var} este considerat depasit din cauza regulilor de scope.
+
+\begin{lstlisting}[style=js, caption={Reguli de declarare}]
+const PI = 3.14;            // valoare imutabila
+let counter = 0;            // valoare mutabila
+
+counter = counter + 1;      // permis
+// PI = 3.15;               // TypeError la rulare
+\end{lstlisting}
+
+\subsection{Diferenta dintre \texttt{var} si \texttt{let} / \texttt{const}}
+
+\code{var} are \emph{function scope}: o variabila declarata in interiorul unui \code{if} sau \code{for} este accesibila in tot blocul functiei. \code{let} si \code{const} au \emph{block scope}: vizibile doar in interiorul \code{\{...\}} in care au fost declarate.
+
+\begin{dano}[Asa nu \textendash{} \texttt{var}, scope confuz]
+\begin{lstlisting}[style=js, numbers=none]
+function exemplu() {
+  if (true) {
+    var x = 10;
+  }
+  console.log(x);  // 10 -- scapa din if!
+}
+\end{lstlisting}
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} \texttt{let}, scope previzibil]
+\begin{lstlisting}[style=js, numbers=none]
+function exemplu() {
+  if (true) {
+    let x = 10;
+  }
+  console.log(x);  // ReferenceError -- nu exista in afara if-ului
+}
+\end{lstlisting}
+\end{dado}
+
+\textbf{Conventia practica:} \code{const} este valoarea implicita; \code{let} se foloseste doar cand reasignarea este necesara; \code{var} se evita complet in cod nou.
+
+% =========================================================
+\section{Tipuri primitive si compuse}
+
+\begin{lstlisting}[style=js]
+const nume      = "Maria";              // string
+const varsta    = 21;                   // number (intregi si zecimale)
+const eStudent  = true;                 // boolean
+const limbaje   = ["HTML", "CSS"];      // array (lista ordonata)
+const persoana  = {                     // object (pereche cheie-valoare)
+  nume:   "Maria",
+  varsta: 21,
+};
+
+console.log(persoana.nume);             // "Maria"
+console.log(limbaje[0]);                // "HTML"
+console.log(typeof varsta);             // "number"
+\end{lstlisting}
+
+JavaScript este un limbaj cu \emph{tipare dinamica}: tipul unei variabile este determinat de valoarea atribuita si poate fi modificat in timpul executiei.
+
+\subsection{Verificarea egalitatii: \texttt{===} vs \texttt{==}}
+
+Operatorul \code{==} efectueaza \emph{coercitie de tip}: converteste operanzii inainte de comparatie. Rezultatul este des contraintuitiv. Operatorul \code{===} compara strict valoare si tip.
+
+\begin{dano}[Asa nu \textendash{} \texttt{==}, coercitie surprinzatoare]
+\begin{lstlisting}[style=js, numbers=none]
+0 == "0"             // true
+0 == ""              // true
+"" == false          // true
+null == undefined    // true
+[] == false          // true
+\end{lstlisting}
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} \texttt{===} mereu]
+\begin{lstlisting}[style=js, numbers=none]
+0 === "0"            // false (number vs string)
+0 === ""             // false
+null === undefined   // false
+\end{lstlisting}
+\end{dado}
+
+% =========================================================
+\section{Functii: declaratie, expresie, arrow}
+
+JavaScript ofera trei sintaxe pentru definirea unei functii. Cele trei comportamente difera la nivel de \code{this} si hoisting, dar pentru cazul uzual (handler de eveniment) sunt interschimbabile.
+
+\begin{lstlisting}[style=js, caption={Trei moduri de a scrie aceeasi functie}]
+// 1. Declaratie de functie (function declaration)
+function saluta(nume) {
+  return `Salut, ${nume}!`;
+}
+
+// 2. Expresie de functie (function expression)
+const saluta2 = function(nume) {
+  return `Salut, ${nume}!`;
+};
+
+// 3. Arrow function (sintaxa concisa)
+const saluta3 = (nume) => `Salut, ${nume}!`;
+
+// Apel: identic in toate cazurile
+console.log(saluta("Maria"));
+\end{lstlisting}
+
+\textbf{Conventia practica:} arrow functions pentru handlere si callbacks; declaratii pentru functii cu nume reutilizate, definite la nivelul fisierului.
+
+% =========================================================
+\section{Pattern-ul SELECT $\to$ LISTEN $\to$ CHANGE}
+
+Majoritatea interactiunilor pe paginile statice respecta o schema in trei pasi: selectarea elementului DOM, atasarea unui ascultator de eveniment, modificarea elementului in raspuns la eveniment.
+
+\begin{lstlisting}[style=js, caption={Toggle pentru tema dark/light}]
+// 1. SELECT
+const btn = document.querySelector('.toggle-theme');
+
+// 2. LISTEN
+btn.addEventListener('click', () => {
+
+  // 3. CHANGE
+  document.body.classList.toggle('dark');
+
+});
+\end{lstlisting}
+
+\begin{ponturi}
+Pattern-ul descris reprezinta abstractizarea fundamentala pe care framework-urile moderne (React, Vue, Svelte, Angular) o ascund in spatele propriilor API-uri declarative. Intelegerea variantei \emph{vanilla} faciliteaza tranzitia ulterioara catre framework-uri.
+\end{ponturi}
+
+% =========================================================
+\section{Manipularea DOM-ului}
+
+API-ul \code{document} expune metode pentru selectia si modificarea nodurilor:
+
+\begin{lstlisting}[style=js, caption={Operatii uzuale}]
+// SELECT -- un singur element
+const el = document.querySelector('.cta');           // primul .cta
+const id = document.getElementById('contact');       // alternativa pt id
+
+// SELECT -- mai multe elemente
+const linkuri = document.querySelectorAll('nav a');
+linkuri.forEach((link) => {
+  link.addEventListener('click', () => console.log('click'));
+});
+
+// CHANGE -- continut
+el.textContent = 'Salut!';                  // text simplu (sigur)
+el.innerHTML  = '<strong>Salut!</strong>';  // HTML (atentie XSS)
+
+// CHANGE -- atribute
+el.setAttribute('aria-expanded', 'true');
+el.classList.add('active');
+el.classList.remove('hidden');
+el.classList.toggle('open');
+
+// CHANGE -- creare element nou
+const nou = document.createElement('li');
+nou.textContent = 'Element nou';
+document.querySelector('ul').appendChild(nou);
+\end{lstlisting}
+
+\begin{dano}[Asa nu \textendash{} querySelector la fiecare apel]
+\begin{lstlisting}[style=js, numbers=none]
+btn.addEventListener('click', () => {
+  document.querySelector('.modal').classList.add('open');
+  document.querySelector('.modal').focus();
+  document.querySelector('.modal').scrollIntoView();
+});
+\end{lstlisting}
+\textbf{Problema.} Trei traversari ale DOM-ului pentru aceeasi referinta.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} cache local]
+\begin{lstlisting}[style=js, numbers=none]
+const modal = document.querySelector('.modal');
+
+btn.addEventListener('click', () => {
+  modal.classList.add('open');
+  modal.focus();
+  modal.scrollIntoView();
+});
+\end{lstlisting}
+\end{dado}
+
+% =========================================================
+\section{Procesarea formularelor}
+
+Submit-ul nativ al unui formular trimite o cerere HTTP catre URL-ul declarat in \code{action} si reincarca pagina. In majoritatea cazurilor, fluxul dorit este interceptarea evenimentului si manipularea datelor in JavaScript:
+
+\begin{lstlisting}[style=js, caption={Captura datelor de formular fara reincarcarea paginii}]
+const form = document.querySelector('#contact-form');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();                                   // blocheaza reincarcarea
+
+  const data = Object.fromEntries(new FormData(form));  // {nume, email, mesaj}
+  console.log('Date primite:', data);
+
+  form.reset();                                         // goleste campurile
+  alert(`Multumesc, ${data.nume}!`);
+});
+\end{lstlisting}
+
+Fluxul: \code{e.preventDefault()} suspenda comportamentul implicit; \code{new FormData(form)} colecteaza valorile dupa atributul \code{name}; \code{Object.fromEntries(...)} le converteste intr-un obiect uzual; \code{form.reset()} reseteaza valorile in interfata.
+
+\begin{ponturi}
+Pentru transmiterea efectiva a datelor catre un endpoint extern (fara backend propriu), serviciul \href{https://formspree.io}{Formspree} ofera un endpoint gratuit. Configurarea consta intr-o singura modificare a atributului \code{action}.
+\end{ponturi}
+
+% =========================================================
+\section{Debugging si console}
+
+Console-ul browserului (F12 $\to$ tab \emph{Console}) este principalul instrument de diagnostic. Erorile JavaScript apar automat aici cu mesaj, fisier si linie.
+
+\begin{lstlisting}[style=js, caption={Trei moduri de a inspecta valorile}]
+// Cel mai uzual: log valoare cu eticheta
+console.log('Date primite:', data);
+
+// Tabel pentru obiecte / array-uri (formatare imbunatatita)
+console.table(linkuri);
+
+// Pauza in executie -- DevTools deschis
+debugger;
+\end{lstlisting}
+
+\textbf{Sfaturi practice.} Inainte de a cere ajutor, citeste mesajul de eroare din console. Numele functiei si numarul liniei sunt aproape intotdeauna corecte. \code{console.log(typeof x)} verifica tipul cand comportamentul este surprinzator.
+
+% =========================================================
+\section{Tratarea erorilor (\texttt{try}/\texttt{catch})}
+
+Codul care poate gen\-era erori la rulare (parsare JSON, apeluri \code{fetch}, acces la API-uri externe) trebuie incadrat intr-un bloc \code{try}/\code{catch} pentru ca o eroare sa nu opreasca executia restului paginii:
+
+\begin{lstlisting}[style=js, caption={Parsare JSON cu fallback}]
+const raw = localStorage.getItem('preferinte');
+
+try {
+  const config = JSON.parse(raw);
+  console.log('Preferinte incarcate:', config);
+} catch (err) {
+  console.warn('JSON invalid in localStorage; folosesc valori implicite');
+  // continuare cu valori default
+}
+\end{lstlisting}
+
+Cand eroarea este previzibila si recuperabila (utilizatorul poate continua), \code{try}/\code{catch} este abordarea corecta. Pentru erori neprevazute, evenimentul global \code{window.addEventListener('error', ...)} permite logarea catre un serviciu de monitoring.
+
+% =========================================================
+\section{Erori frecvente}
+
+\begin{itemize}
+  \item \textbf{\code{Cannot read property '...' of null}.} Cauza: \code{querySelector} a returnat \code{null} si codul a incercat sa acceseze o proprietate. Diagnostic: \code{console.log(el)} inainte de a folosi.
+  \item \textbf{\code{addEventListener is not a function}.} Aceeasi cauza: rezultatul \code{querySelector} este \code{null}.
+  \item \textbf{Hoisting.} Variabilele \code{let} si \code{const} declarate intr-un bloc nu sunt accesibile inainte de declaratie. Accesul anticipat genereaza \emph{ReferenceError: Cannot access before initialization}.
+  \item \textbf{Comparatie cu \code{undefined}.} Foloseste \code{x === undefined}, nu \code{!x} \textendash{} ultimul prinde si \code{0}, \code{""}, \code{false}, \code{null}.
+\end{itemize}
+
+% =========================================================
+\section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
+
+\begin{selfcheck}
+\begin{enumerate}[itemsep=2pt]
+  \item Ce face atributul \code{defer} pe un \code{<script>} \textcommabelow{s}i de ce este necesar?
+  \item Care sunt cei trei pa\textcommabelow{s}i ai pattern-ului \textbf{SELECT $\to$ LISTEN $\to$ CHANGE}?
+  \item De ce \code{===} este preferabil lui \code{==}? Da\textcommabelow{t}i un exemplu de coerci\textcommabelow{t}ie surprinzatoare.
+  \item Ce face \code{e.preventDefault()} apelat intr-un handler de \code{submit}?
+  \item \emph{Spot the issue:} \code{const btn = document.querySelector('.cta'); btn.addEventListener(...);} \textendash{} \code{btn} este \code{null}.
+\end{enumerate}
+\end{selfcheck}
+
+% =========================================================
+\section*{Recapitulare}
+
+\begin{recap}[Faza 3 -- JavaScript]
+\begin{itemize}[itemsep=1pt]
+  \item Includere: \code{<script src="..." defer></script>} in \code{<head>}.
+  \item \code{const} este declararea implicita; \code{let} doar cand reasignarea este necesara; nu \code{var}.
+  \item Comparatie: exclusiv \code{===}, niciodata \code{==}.
+  \item Pattern-cheie: \textbf{SELECT $\to$ LISTEN $\to$ CHANGE} acopera majoritatea interactiunilor.
+  \item DOM: \code{querySelector} (un element); \code{querySelectorAll} (NodeList iterabil cu \code{.forEach}).
+  \item Form submit: \code{e.preventDefault()} + \code{new FormData(form)} + \code{Object.fromEntries(...)}.
+  \item Cache referintele DOM in variabile; nu repeta \code{querySelector} pentru acelasi element.
+  \item Debug: \code{F12 $\to$ Console}, \code{console.log()}, \code{debugger}.
+\end{itemize}
+\end{recap}
+
+\partdivider
+
+% =========================================================
+\begin{joc}
+\textbf{Platforma:} CodePen (\url{codepen.io}). \quad \textit{URL-ul exact este distribuit de trainer in chat.}
+
+\medskip
+
+\textbf{Activitatea.} Documentul de pornire contine HTML si CSS complet, dar fisierul JavaScript este gol. Sarcina este implementarea pattern-ului SELECT-LISTEN-CHANGE: la apasarea butonului prezent in pagina, clasa \code{dark} se aplica si se scoate alternativ pe elementul \code{<body>}.
+
+\medskip
+
+\textbf{Solutia asteptata:}
+
+\begin{lstlisting}[style=js, numbers=none]
+const btn = document.querySelector('button');
+btn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
+\end{lstlisting}
+
+\textbf{Durata estimata:} 5 minute.
+\end{joc}
+
+% =========================================================
+\section*{\faGraduationCap\ \ Resurse pentru aprofundare}
+
+\begin{itemize}[itemsep=2pt]
+  \item Kantor I. \emph{The Modern JavaScript Tutorial}. \url{https://javascript.info}
+  \item Mozilla Developer Network. \emph{JavaScript reference}. \\\url{https://developer.mozilla.org/en-US/docs/Web/JavaScript}
+  \item The Odin Project. \emph{JavaScript Foundations}. \\\url{https://www.theodinproject.com/paths/foundations/courses/foundations\#javascript-basics}
+  \item Mozilla Developer Network. \emph{Document Object Model}. \\\url{https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model}
+  \item Google. \emph{Learn JavaScript}. \url{https://web.dev/learn/javascript}
+\end{itemize}
+
+\bigskip
+
+\bridge{Capitolul 4 (Deploy) muta site-ul de pe ma\textcommabelow{s}ina locala pe un URL public. Toate fazele 1\textendash{}3 sunt locale; abia dupa deploy pagina exista in lume.}

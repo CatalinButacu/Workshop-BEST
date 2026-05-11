@@ -1,0 +1,69 @@
+/* CSS deliberat simplu / fara variabile / fara mobile-first.
+   Asta nu e ce-ar fi de fixat — focus e pe HTML si meta. */
+
+body {
+  font-family: Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  color: #333;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd;
+}
+
+.header .links {
+  display: flex;
+  gap: 15px;
+}
+
+.header a {
+  color: #333;
+  text-decoration: none;
+}
+
+.hero {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.hero h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.hero img {
+  width: 100%;
+  max-width: 800px;
+  margin-top: 20px;
+}
+
+#about, #register {
+  padding: 30px 0;
+  border-top: 1px solid #ddd;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 400px;
+}
+
+input {
+  padding: 8px;
+  border: 1px solid #ccc;
+  font: inherit;
+}
+
+button {
+  padding: 10px 20px;
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+}

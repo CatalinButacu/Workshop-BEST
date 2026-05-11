@@ -1,0 +1,473 @@
+% Preambul comun pentru toate handout-urile training-ului.
+% Fiecare fisier .tex face \input{preamble} dupa \documentclass.
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+% Body font: Lato -- modern, lizibil, profesional. Fallback la TeX Gyre Heros
+% (Helvetica-like, mereu disponibil) daca Lato nu e instalat in MiKTeX.
+\IfFileExists{lato.sty}{%
+  \usepackage[default]{lato}%
+}{%
+  \usepackage{tgheros}%
+  \renewcommand{\familydefault}{\sfdefault}%
+}
+\usepackage[romanian]{babel}
+\usepackage[a4paper, margin=2.5cm, headheight=16pt, top=2.4cm, bottom=2.4cm]{geometry}
+\usepackage[final, protrusion=true, expansion=false]{microtype}
+\usepackage{setspace}
+\usepackage{xcolor}
+\usepackage{amssymb}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{parskip}
+\usepackage[most]{tcolorbox}
+\usepackage{tocloft}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{fontawesome5}
+\usepackage{lettrine}
+\usetikzlibrary{shadows.blur, shapes.geometric, positioning, calc,
+  decorations.pathmorphing, patterns, fadings, backgrounds}
+
+% =========================================================
+%   PALETA DE CULORI
+% =========================================================
+
+% Paleta finala (3 BEST + 3 derivate in acelasi ton)
+\definecolor{themePrereq}{HTML}{5C6B7A}    % slate (pre-rechizite, neutral)
+\definecolor{themeHtml}{HTML}{FAA51E}      % BEST orange
+\definecolor{themeCss}{HTML}{0673BA}       % BEST blue
+\definecolor{themeJs}{HTML}{ECC100}        % gold (analog cu orange, distinct)
+\definecolor{themeDeploy}{HTML}{75C044}    % BEST green
+\definecolor{themeSeo}{HTML}{B344C9}       % violet (analog cu blue)
+\definecolor{themeLighthouse}{HTML}{DD4444}% coral red (complementar cu green)
+\definecolor{themeResurse}{HTML}{5C6B7A}   % slate (resurse, neutral)
+% Aliasuri pentru compatibilitate (folosit in main.tex existent)
+\colorlet{themeIntro}{themeHtml}
+\colorlet{themeExercitiu}{themeLighthouse}
+
+% Background pagina si elemente -- calduros
+\definecolor{pageBg}{HTML}{FFFCF6}         % crema foarte subtila
+\definecolor{accentSoft}{HTML}{F4ECDD}     % accent cald
+\definecolor{textDim}{HTML}{64748B}        % gri pentru text secundar
+
+% Culoarea curenta a partii (suprascrisa de fiecare fisier prin \setpart)
+\colorlet{partcolor}{themeIntro}
+
+% Iconita partii curente (suprascrisa prin \setpart)
+\newcommand{\particon}{\faStar}
+\newcommand{\partlabel}{Training Web}
+
+% \setpart{culoare}{iconita}
+\newcommand{\setpart}[2]{%
+  \colorlet{partcolor}{#1}%
+  \renewcommand{\particon}{#2}%
+}
+% \setpart{culoare}{iconita}{eticheta} -- versiunea cu eticheta custom in header
+\newcommand{\setpartlabel}[3]{%
+  \colorlet{partcolor}{#1}%
+  \renewcommand{\particon}{#2}%
+  \renewcommand{\partlabel}{#3}%
+}
+
+% Culori pentru callout boxes
+\definecolor{noteBg}{HTML}{FEF9C3}        \definecolor{noteFg}{HTML}{A16207}
+\definecolor{tipBg}{HTML}{DBEAFE}         \definecolor{tipFg}{HTML}{1D4ED8}
+\definecolor{warnBg}{HTML}{FEE2E2}        \definecolor{warnFg}{HTML}{B91C1C}
+\definecolor{gameBg}{HTML}{FFEDD5}        \definecolor{gameFg}{HTML}{C2410C}
+\definecolor{recapBg}{HTML}{DCFCE7}       \definecolor{recapFg}{HTML}{15803D}
+\definecolor{exerBg}{HTML}{F3E8FF}        \definecolor{exerFg}{HTML}{7C3AED}
+\definecolor{triviaBg}{HTML}{FCE7F3}      \definecolor{triviaFg}{HTML}{BE185D}
+
+% Culori pentru cod -- ton cald, nu albastru-rece
+\definecolor{codeBg}{HTML}{FAF6EE}
+\definecolor{codeBorder}{HTML}{E8DECF}
+\definecolor{codeComment}{HTML}{64748B}
+\definecolor{codeKeyword}{HTML}{DC2626}
+\definecolor{codeString}{HTML}{0F766E}
+\definecolor{codeTag}{HTML}{166534}
+
+% =========================================================
+%   PAGINA & LIZIBILITATE (warmth)
+% =========================================================
+\pagecolor{pageBg}
+\setstretch{1.18}
+\setlength{\parskip}{0.5em}
+
+% =========================================================
+%   CUPRINS (TOC)
+% =========================================================
+\setcounter{tocdepth}{0}         % numai entry-uri \part (capitole), fara sectiuni
+\renewcommand{\contentsname}{Cuprins}
+
+% Stil cuprins -- numai capitolele, asezate elegant
+\renewcommand{\cftpartfont}{\sffamily\bfseries\color{themeText}}
+\renewcommand{\cftpartpagefont}{\sffamily\bfseries\color{themeText}}
+\renewcommand{\cftpartleader}{\hfill}
+\renewcommand{\cftpartafterpnum}{\par\addvspace{2pt}}
+\setlength{\cftbeforepartskip}{4pt}
+
+% =========================================================
+%   HYPERREF
+% =========================================================
+\hypersetup{
+  colorlinks=true,
+  linkcolor=partcolor,
+  urlcolor=partcolor,
+  citecolor=partcolor,
+  pdfborderstyle={/S/U/W 1}
+}
+
+% =========================================================
+%   HEADER & FOOTER -- minimaliste
+% =========================================================
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\footnotesize\sffamily\color{black!55}\partlabel}
+\fancyhead[R]{\footnotesize\sffamily\color{black!55}BEST Ia\textcommabelow{s}i}
+\fancyfoot[C]{\small\sffamily\color{partcolor}\textbf{\thepage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+% =========================================================
+%   STIL TITLURI -- sobru, stiintific
+% =========================================================
+\titleformat{\section}
+  {\Large\sffamily\bfseries\color{themeText}}
+  {\color{partcolor}\sffamily\bfseries\thesection.\hspace{0.5em}}
+  {0pt}{}
+\titlespacing*{\section}{0pt}{1.4em}{0.4em}
+
+\titleformat{\subsection}
+  {\normalsize\sffamily\bfseries\color{black!75}}
+  {\color{partcolor}\thesubsection\hspace{0.5em}}{0pt}{}
+\titlespacing*{\subsection}{0pt}{0.8em}{0.2em}
+
+\titleformat{\subsubsection}
+  {\normalsize\sffamily\bfseries\color{black!70}}
+  {}{0pt}{}
+
+\definecolor{themeText}{HTML}{1A1A1A}
+
+% =========================================================
+%   LISTINGS -- COD
+% =========================================================
+\lstdefinestyle{base}{
+  backgroundcolor=\color{codeBg},
+  basicstyle=\ttfamily\small,
+  commentstyle=\color{codeComment}\itshape,
+  keywordstyle=\color{codeKeyword}\bfseries,
+  stringstyle=\color{codeString},
+  numberstyle=\tiny\color{codeComment},
+  numbers=left,
+  numbersep=8pt,
+  frame=leftline,
+  framerule=2.5pt,
+  rulecolor=\color{partcolor},
+  framexleftmargin=4pt,
+  breaklines=true,
+  breakatwhitespace=true,
+  showstringspaces=false,
+  tabsize=2,
+  xleftmargin=14pt,
+  xrightmargin=4pt,
+  aboveskip=10pt,
+  belowskip=10pt,
+  literate=
+    {ă}{{\u a}}1 {Ă}{{\u A}}1
+    {â}{{\^a}}1 {Â}{{\^A}}1
+    {î}{{\^\i}}1 {Î}{{\^I}}1
+    {ș}{{\textcommabelow s}}1 {Ș}{{\textcommabelow S}}1
+    {ț}{{\textcommabelow t}}1 {Ț}{{\textcommabelow T}}1
+}
+
+\lstdefinelanguage{HTML5}{
+  morekeywords={html,head,body,title,meta,link,script,style,
+    h1,h2,h3,h4,h5,h6,p,a,img,div,span,
+    header,main,section,article,aside,nav,footer,
+    ul,ol,li,button,input,form,label,
+    strong,em,br,hr,DOCTYPE},
+  sensitive=true,
+  morecomment=[s]{<!--}{-->},
+  morestring=[b]",
+  morestring=[b]'
+}
+\lstdefinestyle{html}{style=base, language=HTML5,
+  keywordstyle=\color{codeTag}\bfseries}
+
+\lstdefinelanguage{CSSLang}{
+  morekeywords={display,flex,grid,block,inline,none,
+    color,background,background-color,
+    padding,padding-top,padding-right,padding-bottom,padding-left,
+    margin,margin-top,margin-right,margin-bottom,margin-left,
+    border,border-radius,border-color,outline,
+    width,max-width,min-width,height,max-height,min-height,
+    font-family,font-size,font-weight,line-height,text-align,
+    text-decoration,letter-spacing,
+    flex-direction,justify-content,align-items,gap,flex-wrap,flex-grow,
+    grid-template-columns,grid-template-rows,grid-column,grid-row,
+    position,top,right,bottom,left,z-index,
+    box-sizing,opacity,transition,transform,
+    cursor,overflow,visibility,
+    media,keyframes,from,to,important,root,hover,focus,active,
+    auto,solid,dashed,dotted,bold,normal,center,stretch,
+    space-between,space-around,flex-start,flex-end,column,row,wrap},
+  sensitive=true,
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]'
+}
+\lstdefinestyle{css}{style=base, language=CSSLang,
+  keywordstyle=\color{codeKeyword}\bfseries}
+
+\lstdefinelanguage{JSLang}{
+  morekeywords={let,const,var,function,return,if,else,for,while,
+    true,false,null,undefined,new,this,class,extends,
+    document,console,window,
+    addEventListener,querySelector,querySelectorAll,
+    getElementById,getElementsByClassName,
+    classList,toggle,add,remove,contains,
+    style,textContent,innerHTML,value,
+    log,warn,error},
+  sensitive=true,
+  morecomment=[l]{//},
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+  morestring=[b]',
+  morestring=[b]`
+}
+\lstdefinestyle{js}{style=base, language=JSLang,
+  keywordstyle=\color{codeKeyword}\bfseries}
+
+\lstdefinelanguage{BashLang}{
+  morekeywords={git,cd,mkdir,ls,code,echo,cat,curl,wget,sudo,
+    init,add,commit,push,pull,clone,remote,branch,checkout,merge,status,log,
+    config,fetch,rebase,reset,stash,diff,tag,
+    install,update,run,build,start,test},
+  sensitive=true,
+  morecomment=[l]{\#},
+  morestring=[b]",
+  morestring=[b]'
+}
+\lstdefinestyle{bash}{style=base, language=BashLang,
+  keywordstyle=\color{codeKeyword}\bfseries}
+
+% Inline code -- mai discret
+\newcommand{\code}[1]{\textcolor{partcolor!85!black}{\ttfamily\small #1}}
+
+% =========================================================
+%   CALLOUT BOXES -- minimaliste (bara stanga subtila + label discret)
+% =========================================================
+\tcbset{
+  calloutbase/.style={
+    enhanced,
+    breakable,
+    sharp corners,
+    boxrule=0pt,
+    leftrule=2.5pt,
+    arc=0pt,
+    colback=pageBg,
+    fonttitle=\sffamily\small\bfseries,
+    coltitle=tcbcolframe,
+    attach title to upper={\par\vspace{2pt}},
+    title after break={},
+    before skip=10pt,
+    after skip=10pt,
+    left=12pt, right=4pt, top=4pt, bottom=4pt,
+    fontupper=\small,
+  }
+}
+
+\newtcolorbox{nota}[1][NOT\u A]{
+  calloutbase,
+  colframe=noteFg,
+  title={\faInfoCircle\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{ponturi}[1][PONT]{
+  calloutbase,
+  colframe=tipFg,
+  title={\faLightbulb[regular]\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{atentie}[1][ATEN\textcommabelow{T}IE]{
+  calloutbase,
+  colframe=warnFg,
+  title={\faExclamationTriangle\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{joc}[1][APLICA\textcommabelow{T}IE PRACTIC\u A]{
+  calloutbase,
+  colframe=partcolor,
+  title={\faGamepad\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{recap}[1][RECAP]{
+  calloutbase,
+  colframe=recapFg,
+  title={\faCheckCircle\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{curiozitate}[1][\textcommabelow{S}TIAI C\u A?]{
+  calloutbase,
+  colframe=triviaFg,
+  title={\faMagic\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{exercitiu}[1][EXERCI\textcommabelow{T}IU]{
+  calloutbase,
+  colframe=exerFg,
+  title={\faPen\ \uppercase\expandafter{#1}},
+}
+
+% --- Outcome / Why / Self-check (structura tutorial) ----
+\definecolor{outBg}{HTML}{E0F2FE}        \definecolor{outFg}{HTML}{0369A1}
+\definecolor{whyBg}{HTML}{FEF3C7}        \definecolor{whyFg}{HTML}{B45309}
+\definecolor{checkBg}{HTML}{F3E8FF}      \definecolor{checkFg}{HTML}{7C3AED}
+
+\newtcolorbox{outcomes}[1][CE INVE\textcommabelow{T}I]{
+  calloutbase,
+  colframe=outFg,
+  title={\faBullseye\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{whymatters}[1][DE CE]{
+  calloutbase,
+  colframe=whyFg,
+  title={\faQuestionCircle\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{selfcheck}[1][PROVOCARE]{
+  calloutbase,
+  colframe=checkFg,
+  title={\faTasks\ \uppercase\expandafter{#1}},
+}
+
+% Bridge la finalul fiecarui capitol
+\newcommand{\bridge}[1]{%
+  \par\vspace{4pt}%
+  \begin{flushleft}%
+    {\sffamily\small\color{partcolor}$\rightarrow$\ \textbf{Urmeaza:}}\quad{\small\color{black!70}#1}%
+  \end{flushleft}%
+}
+
+% --- Asa da / Asa nu (compare bune vs rele practici) ----
+\definecolor{daBg}{HTML}{DCFCE7}        \definecolor{daFg}{HTML}{15803D}
+\definecolor{nuBg}{HTML}{FEE2E2}        \definecolor{nuFg}{HTML}{B91C1C}
+
+\newtcolorbox{dado}[1][A\textcommabelow{S}A DA]{
+  calloutbase,
+  colframe=daFg,
+  title={\faCheckCircle\ \uppercase\expandafter{#1}},
+}
+\newtcolorbox{dano}[1][A\textcommabelow{S}A NU]{
+  calloutbase,
+  colframe=nuFg,
+  title={\faTimesCircle\ \uppercase\expandafter{#1}},
+}
+
+% =========================================================
+%   BANNER MINIMALIST (\handout{titlu}{subtitlu})
+%   Eticheta sus, titlu mare, subtitlu, linie subtila colorata.
+% =========================================================
+\newcommand{\handout}[2]{%
+  \noindent\begin{minipage}{0.04\linewidth}\color{partcolor}\rule{4pt}{2.6em}\end{minipage}%
+  \begin{minipage}{0.94\linewidth}
+    {\sffamily\fontsize{30}{34}\selectfont\textbf{\color{themeText}#1}}\\[4pt]
+    {\sffamily\large\color{black!55}#2}
+  \end{minipage}
+  \par\vspace{14pt}
+  {\color{partcolor!40}\hrule height 0.5pt}
+  \par\vspace{14pt}
+}
+
+% =========================================================
+%   BULLETS COLORATI (itemize)
+% =========================================================
+\setlist[itemize,1]{label={\color{partcolor}\textbf{\textbullet}}}
+\setlist[itemize,2]{label={\color{partcolor!70}\textbf{\textendash}}}
+\setlist[enumerate,1]{label={\color{partcolor}\textbf{\arabic*.}}}
+
+% =========================================================
+%   PULL QUOTE / ACCENT
+% =========================================================
+\newcommand{\pullquote}[1]{%
+  \begin{tcolorbox}[
+    enhanced,
+    colback=partcolor!8,
+    colframe=partcolor,
+    boxrule=0pt,
+    leftrule=4pt,
+    sharp corners,
+    arc=0pt,
+    fontupper=\itshape\large,
+    left=14pt, right=14pt, top=8pt, bottom=8pt,
+    overlay={%
+      \node[partcolor!40, font=\fontsize{40}{40}\selectfont, anchor=north west]
+        at ([xshift=2pt,yshift=2pt]frame.north west) {\textbf{``}};
+    },
+  ]
+    #1
+  \end{tcolorbox}
+}
+
+% =========================================================
+%   DIVIDER DECORATIV (foloseste \partdivider in document)
+%   Atentie: NU folosi numele "\sectionbreak" -- e rezervat
+%   intern de titlesec si va aparea automat intre sectiuni.
+% =========================================================
+\newcommand{\partdivider}{%
+  \par\vspace{0.6em}
+  \begin{center}
+    \tikz[baseline=-0.5ex]{
+      \fill[partcolor] (0,0) circle (2pt);
+      \fill[partcolor!60] (10pt,0) circle (2pt);
+      \fill[partcolor!30] (20pt,0) circle (2pt);
+    }
+  \end{center}
+  \vspace{0.3em}
+}
+
+% =========================================================
+%   BOX MODEL DIAGRAM (TikZ)
+% =========================================================
+\newcommand{\boxmodelfigure}{%
+\begin{center}
+\begin{tikzpicture}[scale=1, transform shape, every node/.style={font=\sffamily\small}]
+  % Margin (outermost)
+  \fill[orange!25, rounded corners=4pt] (0,0) rectangle (8,5);
+  \node[anchor=north west] at (0.15, 4.85) {\textbf{\color{orange!70!black}\faExpand\ margin}};
+
+  % Border
+  \fill[gray!40, rounded corners=3pt] (1,0.7) rectangle (7, 4.3);
+  \draw[ultra thick, gray!70!black, rounded corners=3pt] (1,0.7) rectangle (7,4.3);
+  \node[anchor=north west] at (1.1, 4.2) {\textbf{\color{gray!50!black}\faSquare\ border}};
+
+  % Padding
+  \fill[green!25, rounded corners=2pt] (1.3, 1) rectangle (6.7, 4);
+  \node[anchor=north west] at (1.4, 3.9) {\textbf{\color{green!50!black}\faCompress\ padding}};
+
+  % Content (innermost)
+  \fill[blue!25, rounded corners=2pt] (2.2, 1.7) rectangle (5.8, 3.3);
+  \node[anchor=north west] at (2.3, 3.2) {\textbf{\color{blue!60!black}\faFile*\ content}};
+  \node at (4, 2.5) {\textit{textul, imaginea, ce e inauntru}};
+\end{tikzpicture}
+\end{center}
+}
+
+% =========================================================
+%   CARD "ICON + TEXT" (utilitate pentru handout-uri)
+% =========================================================
+\newcommand{\iconcard}[3]{%
+  \begin{tcolorbox}[
+    enhanced,
+    colback=partcolor!8,
+    colframe=partcolor!30,
+    boxrule=0.5pt,
+    arc=6pt,
+    left=12pt, right=12pt, top=8pt, bottom=8pt,
+  ]
+  \begin{minipage}[t]{0.08\linewidth}
+    \color{partcolor}\fontsize{20}{20}\selectfont #1
+  \end{minipage}%
+  \begin{minipage}[t]{0.9\linewidth}
+    \textbf{\color{partcolor!85!black}#2}\\
+    #3
+  \end{minipage}
+  \end{tcolorbox}%
+}

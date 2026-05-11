@@ -1,0 +1,274 @@
+% Fragment -- inclus de main.tex prin \input
+\clearpage
+\setpartlabel{themeDeploy}{\faRocket}{Faza 4: Deploy}
+\setcounter{section}{0}
+\phantomsection
+\addcontentsline{toc}{part}{\protect\textbf{Faza 4 \textendash{} Deploy}}
+\handout{Faza 4 \textendash{} Deploy}{Versionare cu git. Publicare prin GitHub Pages.}
+
+Capitolul descrie procesul de publicare a unui site web static prin combinatia git \textendash{} GitHub \textendash{} GitHub Pages. Acoperirea include comenzile esentiale ale fluxului de lucru, configurarea unui repository remote, activarea serviciului de hosting integrat, si convenii de scriere a mesajelor de commit.
+
+\bigskip
+
+\begin{outcomes}
+Dupa capitolul asta vei \textcommabelow{s}ti:
+\begin{itemize}[itemsep=1pt]
+  \item Executa cele 5 comenzi git pentru ini\textcommabelow{t}ializarea unui repository \textcommabelow{s}i primul push.
+  \item Configureaza GitHub Pages pe un repository pentru hosting static automat.
+  \item Folose\textcommabelow{s}te \code{git status}, \code{git diff}, \code{git log} pentru inspectarea starii.
+  \item Scrie mesaje de commit la imperativ, descriptive, sub 72 caractere.
+  \item Excludre fi\textcommabelow{s}iere sensibile prin \code{.gitignore}.
+\end{itemize}
+\end{outcomes}
+
+\begin{whymatters}
+Site-ul construit local pe ma\textcommabelow{s}ina dezvoltatorului nu este accesibil nimanui altcuiva. Deploy-ul transforma cod local in URL public. In plus, git este standardul industrial pentru versionare \textendash{} cuno\textcommabelow{s}tin\textcommabelow{t}ele dobandite aici se aplica identic in orice job de dezvoltare software. Mesajele de commit bune sunt diferen\textcommabelow{t}a intre un istoric care ajuta la debug \textcommabelow{s}i unul inutil.
+\end{whymatters}
+
+\begin{nota}[Pre-rechizite]
+Capitolul presupune un site func\textcommabelow{t}ional in localhost (Faza 1\textendash{}3) \textcommabelow{s}i un cont GitHub creat in prealabil.
+\end{nota}
+
+% =========================================================
+\section{De ce git?}
+
+Git este sistemul de control al versiunilor (\emph{Version Control System}) folosit de aproape toata industria software. Beneficiile fata de o solutie de tip ,,upload manual prin FTP'':
+
+\begin{itemize}
+  \item \textbf{Istoric.} Fiecare commit reprezinta un \emph{snapshot} al codului, identificat printr-un hash unic. Reverenta la o versiune anterioara este o operatie atomica.
+  \item \textbf{Backup distribuit.} Repository-ul exista local, pe GitHub, si pe orice copie clonata. Pierderea unei singure copii nu afecteaza istoricul.
+  \item \textbf{Colaborare.} Mai multi autori pot lucra simultan pe ramuri (\emph{branches}) separate, sincronizate prin merge.
+  \item \textbf{Standard industrial.} Cunoasterea git este o cerinta de baza in posturile de dezvoltare software.
+\end{itemize}
+
+% =========================================================
+\section{Modelul mental: trei zone}
+
+Git mentine trei zone in care fisierele pot exista la un moment dat:
+
+\begin{lstlisting}[style=base, basicstyle=\ttfamily\small, numbers=none]
+  Working dir         Staging area         Repository
+  (fisiere editate)   (pregatite pt.       (snapshot-uri
+                       commit)              salvate permanent)
+
+       |                   |                    |
+       |  git add .        |  git commit -m     |
+       |------------------>|------------------->|
+       |                   |                    |
+       |   git restore     |    git reset       |
+       |<------------------|<-------------------|
+       |                   |                    |
+                                                |
+                                                |  git push
+                                                |--------->  GitHub
+                                                |             (remote)
+                                                |<---------
+                                                |  git pull
+\end{lstlisting}
+
+\begin{itemize}
+  \item \textbf{Working directory} \textendash{} fisierele asa cum apar pe disc.
+  \item \textbf{Staging area} (sau \emph{index}) \textendash{} multimea fisierelor pregatite pentru urmatorul commit.
+  \item \textbf{Repository} \textendash{} istoricul snapshot-urilor confirmate.
+\end{itemize}
+
+Comenzile \code{add}, \code{commit}, \code{push} muta starea intre zone in directia stanga $\to$ dreapta.
+
+% =========================================================
+\section{Cele cinci comenzi de baza}
+
+Fluxul minim pentru publicarea unui director nou pe GitHub:
+
+\begin{lstlisting}[style=bash]
+git init -b main                               # 1
+git add .                                      # 2
+git commit -m "Initial commit"                 # 3
+git remote add origin URL_DE_PE_GITHUB         # 4
+git push -u origin main                        # 5
+\end{lstlisting}
+
+\begin{itemize}
+  \item \code{git init -b main} \textendash{} initializeaza un repository local cu ramura implicita \code{main}.
+  \item \code{git add .} \textendash{} include toate fisierele modificate in zona de pregatire (\emph{staging area}).
+  \item \code{git commit -m "..."} \textendash{} creeaza un snapshot al starii pregatite, cu un mesaj descriptiv.
+  \item \code{git remote add origin ...} \textendash{} asociaza repository-ul local cu un remote pe GitHub.
+  \item \code{git push -u origin main} \textendash{} trimite commit-urile locale catre remote, stabilind ramura \code{main} ca \emph{upstream}.
+\end{itemize}
+
+% =========================================================
+\section{Comenzi de inspectie (read-only)}
+
+Inainte de \code{commit}, doua comenzi confirma ce urmeaza sa fie salvat:
+
+\begin{lstlisting}[style=bash, caption={Verificare inainte de commit}]
+git status                  # Lista fisierelor modificate / pregatite
+git diff                    # Diferenta linie cu linie (working dir)
+git diff --staged           # Diferenta in staging area
+git log --oneline -10       # Ultimele 10 commit-uri, format compact
+\end{lstlisting}
+
+Aceste comenzi nu modifica nimic; pot fi rulate oricand fara risc.
+
+% =========================================================
+\section{Configurarea GitHub Pages}
+
+Procedura standard pentru activarea hosting-ului:
+
+\begin{enumerate}
+  \item Creare a unui repository public la \url{https://github.com/new}, fara fisiere implicite (README, gitignore).
+  \item Copierea URL-ului HTTPS afisat de GitHub si executarea comenzii \code{git remote add origin <URL>} urmata de \code{git push -u origin main}.
+  \item Navigare la \emph{Settings} $\to$ \emph{Pages} (in panoul lateral al repository-ului).
+  \item Selectarea ramurii \code{main} si a folder-ului \code{/ (root)} in sectiunea \emph{Branch}, urmata de \emph{Save}.
+  \item Asteptarea de 30 \textendash{} 60 secunde, dupa care URL-ul public devine accesibil in caseta verde din partea de sus.
+\end{enumerate}
+
+\textbf{Anatomia URL-ului public:} \code{https://USERNAME.github.io/REPO}
+
+% =========================================================
+\section{Workflow zilnic dupa primul push}
+
+Actualizarea continutului dupa deploy-ul initial necesita doar trei comenzi:
+
+\begin{lstlisting}[style=bash]
+git status                              # ce s-a modificat?
+git add .                               # marcare pentru commit
+git commit -m "Adauga sectiunea proiecte"
+git push                                # trimitere pe GitHub
+\end{lstlisting}
+
+GitHub Pages reconstruieste si republica pagina automat, in aproximativ 60 de secunde.
+
+% =========================================================
+\section{Convenii pentru mesajele de commit}
+
+Mesajul de commit ramane in istoricul repository-ului permanent. Calitatea acestuia este vizibila la \code{git log} si afecteaza utilitatea istoricului ca documentatie a evolutiei proiectului.
+
+\begin{dano}[Asa nu]
+\begin{lstlisting}[style=bash, numbers=none]
+git commit -m "update"
+git commit -m "fix"
+git commit -m "asdf"
+git commit -m "Modificari"
+git commit -m "."
+\end{lstlisting}
+\textbf{Probleme.} Niciun context. La revizuire, autorul nu mai stie ce contine fiecare commit. Inutilizabil pentru \code{git revert}, \code{git bisect}, code review.
+\end{dano}
+
+\begin{dado}[Asa da]
+\begin{lstlisting}[style=bash, numbers=none]
+git commit -m "Adauga sectiunea hero cu CTA"
+git commit -m "Fix overflow horizontal pe mobil < 360px"
+git commit -m "Implementeaza dark mode prin light-dark()"
+git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
+\end{lstlisting}
+\textbf{Reguli simple.} (1) Verb la imperativ in prima pozitie (\emph{Adauga}, \emph{Fix}, \emph{Implementeaza}, \emph{Reduce}). (2) Maxim 50\textendash{}72 caractere. (3) Descrie \emph{ce} si \emph{de ce}, nu \emph{cum} (codul arata cum).
+\end{dado}
+
+% =========================================================
+\section{Fisierul .gitignore}
+
+Anumite fisiere si directoare nu trebuie sa ajunga in repository: dependinte instalate (\code{node\_modules/}), fisiere temporare ale editoarelor, secretele (\code{.env}). Lista lor se declara in fisierul \code{.gitignore} la radacina proiectului:
+
+\begin{lstlisting}[style=bash, caption={Exemplu minimal pentru proiect web static}]
+# Dependinte
+node_modules/
+
+# Editoare
+.vscode/
+.idea/
+*.swp
+
+# Sistem
+.DS_Store
+Thumbs.db
+
+# Secrete
+.env
+.env.local
+
+# Build output
+dist/
+build/
+\end{lstlisting}
+
+Fisierul se commit-eaza ca orice alt fisier. Toate caile listate sunt ignorate la \code{git add}.
+
+\begin{atentie}
+\textbf{Nu commite niciodata fisiere \code{.env} cu chei API, parole, token-uri.} Odata commit-ate, raman in istoric chiar dupa stergere; pot fi recuperate de oricine cu acces la repository. Daca s-a intamplat: regenerati cheia compromisa imediat la furnizorul respectiv.
+\end{atentie}
+
+% =========================================================
+\section{Probleme frecvente}
+
+\begin{atentie}
+\textbf{Autentificare prin parola.} GitHub a renuntat la autentificarea prin parola pentru operatiunile git (din 2021). Solutia recomandata este generarea unui \emph{Personal Access Token} (PAT) la \url{https://github.com/settings/tokens} cu scope-ul \code{repo}, folosit ulterior in locul parolei. Browserul memoreaza tokenul pentru sesiunile viitoare.
+\end{atentie}
+
+\begin{atentie}
+\textbf{Eroare 404 pe pagina deployata.} Cauze posibile: (1) intervalul de propagare nu a fost respectat (60 secunde dupa \emph{Save}); (2) fisierul de pornire nu se numeste \code{index.html} (este sensibil la majuscule pe serverul GitHub); (3) cache-ul browserului afiseaza versiunea precedenta \textendash{} se rezolva cu \code{Ctrl+F5}.
+\end{atentie}
+
+% =========================================================
+\section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
+
+\begin{selfcheck}
+\begin{enumerate}[itemsep=2pt]
+  \item Care sunt cele 5 comenzi git pentru ini\textcommabelow{t}ializare \textcommabelow{s}i primul push?
+  \item De ce GitHub a renun\textcommabelow{t}at la autentificarea prin parola? Care este alternativa?
+  \item \emph{Spot the issue:} \code{git commit -m "update"}.
+  \item Diferen\textcommabelow{t}a intre \code{git status} \textcommabelow{s}i \code{git diff}?
+  \item Pentru un repository numit \code{portfolio} al utilizatorului \code{maria}, care este URL-ul GitHub Pages rezultat?
+\end{enumerate}
+\end{selfcheck}
+
+% =========================================================
+\section*{Recapitulare}
+
+\begin{recap}[Faza 4 -- Deploy]
+\begin{itemize}[itemsep=1pt]
+  \item Modelul mental: working dir $\to$ staging $\to$ repository $\to$ remote.
+  \item Cinci comenzi de baza: \code{git init -b main}, \code{git add .}, \code{git commit -m}, \code{git remote add origin}, \code{git push -u origin main}.
+  \item Comenzi de inspectie: \code{git status}, \code{git diff}, \code{git log --oneline -10}.
+  \item Activare Pages: \emph{Settings} $\to$ \emph{Pages} $\to$ branch \code{main}, folder \code{/ (root)} $\to$ \emph{Save}.
+  \item Mesaje de commit: verb la imperativ, $\leq$72 caractere, descrie \emph{ce} si \emph{de ce}.
+  \item Workflow zilnic: 3 comenzi (\code{add}, \code{commit}, \code{push}); redeploy automat in $\sim$60s.
+  \item Autentificare prin Personal Access Token (PAT), nu prin parola.
+  \item \code{.gitignore} exclude \code{node\_modules/}, \code{.env}, fisiere de editor, build artifacts.
+\end{itemize}
+\end{recap}
+
+\partdivider
+
+% =========================================================
+\begin{joc}
+\textbf{Platforma:} GitHub (\url{https://github.com}) \textendash{} aplicatia practica este deploy-ul efectiv al site-ului construit in fazele 1\textendash{}3.
+
+\medskip
+
+\textbf{Activitatea.} Procedura completa, executata sincron de toti participantii sub indrumarea trainer-ului:
+\begin{enumerate}[itemsep=1pt]
+  \item Inchiderea fisierelor in editor; navigare in \emph{Git Bash} la directorul proiectului.
+  \item Executarea celor cinci comenzi git din sectiunea ,,Cele cinci comenzi de baza''.
+  \item Crearea repository-ului public pe GitHub si conectarea remote-ului.
+  \item Activarea GitHub Pages in setari.
+  \item Verificarea URL-ului public si publicarea acestuia in canalul Discord al grupului.
+\end{enumerate}
+
+\textbf{Durata estimata:} 10 minute.
+\end{joc}
+
+% =========================================================
+\section*{\faGraduationCap\ \ Resurse pentru aprofundare}
+
+\begin{itemize}[itemsep=2pt]
+  \item GitHub Inc. \emph{GitHub Pages documentation}. \url{https://pages.github.com}
+  \item Cottle P. \emph{Learn Git Branching}. \url{https://learngitbranching.js.org}
+  \item Chacon S., Straub B. \emph{Pro Git} (editia a 2-a). \url{https://git-scm.com/book/en/v2}
+  \item GitHub Inc. \emph{Configuring a custom domain for your GitHub Pages site}. \\\url{https://docs.github.com/pages/configuring-a-custom-domain-for-your-github-pages-site}
+  \item Beams C. \emph{How to Write a Git Commit Message}. \url{https://cbea.ms/git-commit/}
+  \item Alternative: \url{https://www.netlify.com}, \url{https://vercel.com} (servicii similare cu deploy automat din git).
+\end{itemize}
+
+\bigskip
+
+\bridge{Capitolul 5 (SEO) face site-ul descoperibil. URL public exista; acum trebuie ca motoarele de cautare \textcommabelow{s}i re\textcommabelow{t}elele sociale sa-l afi\textcommabelow{s}eze corect.}

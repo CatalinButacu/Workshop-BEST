@@ -1,0 +1,1046 @@
+% =====================================================================
+%  Training Web -- Prezentare (sharescreen)
+%  BEST Iasi, Mentorat 2026
+%  Aceeasi paleta + acelasi feel ca handout-ul.
+%  Compilare: pdflatex main.tex (de doua ori)
+% =====================================================================
+
+\documentclass[aspectratio=169,11pt]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[romanian]{babel}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{tikz}
+\usepackage{fontawesome5}
+\usepackage{lmodern}
+\usepackage[most]{tcolorbox}
+\usepackage{ragged2e}
+\usepackage{setspace}
+
+\usetheme{default}
+\usefonttheme{professionalfonts}
+\useinnertheme{rectangles}
+\setbeamertemplate{navigation symbols}{}
+
+% =========================================================
+%   PALETA -- aceeasi ca in handout
+% =========================================================
+\definecolor{themeHtml}{HTML}{FAA51E}
+\definecolor{themeCss}{HTML}{0673BA}
+\definecolor{themeJs}{HTML}{ECC100}
+\definecolor{themeDeploy}{HTML}{75C044}
+\definecolor{themeSeo}{HTML}{B344C9}
+\definecolor{themeLighthouse}{HTML}{DD4444}
+\definecolor{themeNeutral}{HTML}{1F2937}
+\definecolor{themeText}{HTML}{1A1A1A}
+\definecolor{textDim}{HTML}{64748B}
+\definecolor{pageBg}{HTML}{FFFCF6}
+\definecolor{accentSoft}{HTML}{F4ECDD}
+
+\definecolor{daBg}{HTML}{DCFCE7}        \definecolor{daFg}{HTML}{15803D}
+\definecolor{nuBg}{HTML}{FEE2E2}        \definecolor{nuFg}{HTML}{B91C1C}
+
+\definecolor{codeBg}{HTML}{FAF6EE}
+\definecolor{codeKw}{HTML}{DC2626}
+\definecolor{codeStr}{HTML}{0F766E}
+\definecolor{codeCm}{HTML}{64748B}
+\definecolor{codeTag}{HTML}{166534}
+
+\colorlet{accent}{themeNeutral}
+\newcommand{\setaccent}[1]{\colorlet{accent}{#1}}
+
+% =========================================================
+%   STIL DE BAZA
+% =========================================================
+\setbeamercolor{background canvas}{bg=pageBg}
+\setbeamercolor{normal text}{fg=themeText}
+\setbeamercolor{itemize item}{fg=accent}
+\setbeamercolor{itemize subitem}{fg=accent}
+\setbeamercolor{enumerate item}{fg=accent}
+\setbeamercolor{enumerate subitem}{fg=accent}
+
+\setbeamerfont{frametitle}{size=\Large, series=\bfseries}
+\setstretch{1.15}
+
+% Frame title: icon mic + title + linie subtila DESUBT (nu sub litere)
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \begin{beamercolorbox}[wd=\paperwidth, ht=2.5em, dp=0.5em, leftskip=0.06\paperwidth]{}
+    \vbox{}\vskip4pt
+    {\color{themeNeutral}\Large\bfseries\insertframetitle}\par
+    \vskip2pt
+    \hbox{\color{accent}\rule{0.04\paperwidth}{2.8pt}}
+  \end{beamercolorbox}
+}
+
+% Footer minimalist
+\setbeamertemplate{footline}{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=0.6\paperwidth, ht=2.5em, leftskip=0.06\paperwidth]{}
+      \vfill
+      {\footnotesize\color{textDim}Training Web \,\textbullet\, BEST Ia\textcommabelow{s}i 2026}\vskip4pt
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=0.4\paperwidth, ht=2.5em, rightskip=0.06\paperwidth]{}
+      \vfill
+      \hfill{\footnotesize\color{accent}\bfseries\insertframenumber}\vskip4pt
+    \end{beamercolorbox}%
+  }
+}
+
+\setbeamertemplate{itemize item}{\color{accent}\textbullet}
+\setbeamertemplate{itemize subitem}{\color{accent!70}\textendash}
+
+\setbeamersize{text margin left=0.06\paperwidth, text margin right=0.06\paperwidth}
+
+% =========================================================
+%   LISTINGS -- COD
+% =========================================================
+\lstdefinelanguage{HTML5}{
+  morekeywords={html,head,body,title,meta,link,script,
+    h1,h2,h3,p,a,img,div,span,header,main,section,article,nav,footer,
+    ul,ol,li,button,input,form,label,DOCTYPE,textarea},
+  sensitive=true,
+  morecomment=[s]{<!--}{-->},
+  morestring=[b]",
+}
+\lstdefinelanguage{CSSLang}{
+  morekeywords={display,flex,justify-content,align-items,gap,
+    color,background,padding,margin,border,width,height,
+    font-family,font-size,media,root,hover,light-dark,color-scheme,
+    var,space-between,center,column,min-width,important,box-sizing,
+    border-box,grid,repeat,minmax,auto-fit},
+  sensitive=true,
+  morecomment=[s]{/*}{*/},
+  morestring=[b]",
+}
+\lstdefinelanguage{JSLang}{
+  morekeywords={const,let,function,return,if,else,
+    document,console,querySelector,querySelectorAll,
+    addEventListener,classList,toggle,body,true,false,
+    typeof,FormData,Object,fromEntries},
+  sensitive=true,
+  morecomment=[l]{//},
+  morestring=[b]",
+  morestring=[b]',
+}
+\lstdefinelanguage{BashLang}{
+  morekeywords={git,init,add,commit,push,remote,cd,main,status,diff,log,oneline},
+  sensitive=true,
+  morecomment=[l]{\#},
+  morestring=[b]",
+}
+\lstset{
+  backgroundcolor=\color{codeBg},
+  basicstyle=\ttfamily\footnotesize,
+  commentstyle=\color{codeCm}\itshape,
+  keywordstyle=\color{codeKw}\bfseries,
+  stringstyle=\color{codeStr},
+  frame=leftline,
+  framerule=3pt,
+  rulecolor=\color{accent},
+  framexleftmargin=8pt,
+  xleftmargin=12pt,
+  xrightmargin=4pt,
+  showstringspaces=false,
+  breaklines=true,
+  tabsize=2,
+  aboveskip=4pt,
+  belowskip=4pt,
+}
+\lstdefinestyle{html}{language=HTML5, keywordstyle=\color{codeTag}\bfseries}
+\lstdefinestyle{css}{language=CSSLang}
+\lstdefinestyle{js}{language=JSLang}
+\lstdefinestyle{bash}{language=BashLang}
+
+% =========================================================
+%   COMENZI HELPER
+% =========================================================
+\newcommand{\code}[1]{{\ttfamily\small\color{accent!85!black}#1}}
+
+% Joculet box -- vizual ca in handout
+\newtcolorbox{joculet}{%
+  enhanced, breakable,
+  colback=accent!8,
+  colframe=accent,
+  boxrule=0pt,
+  leftrule=4pt,
+  arc=4pt,
+  sharp corners=downhill, rounded corners=northwest,
+  left=14pt, right=14pt, top=10pt, bottom=10pt,
+  fontupper=\normalsize,
+  before skip=8pt, after skip=4pt,
+}
+
+% Pull quote box -- pentru "teorie" la inceputul fiecarei faze
+\newtcolorbox{teorie}{%
+  enhanced,
+  colback=pageBg,
+  colframe=accent,
+  boxrule=0pt,
+  leftrule=3pt,
+  arc=0pt,
+  sharp corners,
+  left=14pt, right=8pt, top=2pt, bottom=2pt,
+  fontupper=\normalsize,
+  before skip=4pt, after skip=4pt,
+}
+
+% Asa nu / Asa da -- header text + lstlisting cu background colorat
+\newcommand{\snuHeader}{{\color{nuFg}\bfseries\faTimesCircle\ A\textcommabelow{S}A NU}\par\vspace{1pt}}
+\newcommand{\sdaHeader}{{\color{daFg}\bfseries\faCheckCircle\ A\textcommabelow{S}A DA}\par\vspace{1pt}}
+\newcommand{\snuCaption}[1]{\par\vspace{1pt}{\footnotesize\color{themeText}#1}}
+\newcommand{\sdaCaption}[1]{\par\vspace{1pt}{\footnotesize\color{themeText}#1}}
+
+% Stiluri lstlisting per limbaj x stare (nu / da)
+\lstdefinestyle{htmlnu}{language=HTML5, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{nuBg}, frame=leftline, framerule=4pt, rulecolor=\color{nuFg},
+  keywordstyle=\color{codeTag}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+\lstdefinestyle{htmlda}{language=HTML5, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{daBg}, frame=leftline, framerule=4pt, rulecolor=\color{daFg},
+  keywordstyle=\color{codeTag}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+\lstdefinestyle{cssnu}{language=CSSLang, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{nuBg}, frame=leftline, framerule=4pt, rulecolor=\color{nuFg},
+  keywordstyle=\color{codeKw}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+\lstdefinestyle{cssda}{language=CSSLang, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{daBg}, frame=leftline, framerule=4pt, rulecolor=\color{daFg},
+  keywordstyle=\color{codeKw}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+\lstdefinestyle{jsnu}{language=JSLang, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{nuBg}, frame=leftline, framerule=4pt, rulecolor=\color{nuFg},
+  keywordstyle=\color{codeKw}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+\lstdefinestyle{jsda}{language=JSLang, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{daBg}, frame=leftline, framerule=4pt, rulecolor=\color{daFg},
+  keywordstyle=\color{codeKw}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+\lstdefinestyle{bashnu}{language=BashLang, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{nuBg}, frame=leftline, framerule=4pt, rulecolor=\color{nuFg},
+  keywordstyle=\color{codeKw}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+\lstdefinestyle{bashda}{language=BashLang, basicstyle=\ttfamily\scriptsize,
+  backgroundcolor=\color{daBg}, frame=leftline, framerule=4pt, rulecolor=\color{daFg},
+  keywordstyle=\color{codeKw}\bfseries, commentstyle=\color{codeCm}\itshape,
+  stringstyle=\color{codeStr}, framexleftmargin=8pt, xleftmargin=12pt,
+  showstringspaces=false, numbers=none, aboveskip=2pt, belowskip=2pt}
+
+% Pull quote -- pentru sloganuri / takeaways
+\newtcolorbox{takeaway}{%
+  enhanced,
+  colback=accent!8,
+  colframe=accent,
+  boxrule=0pt,
+  leftrule=5pt,
+  arc=4pt, sharp corners,
+  left=18pt, right=14pt, top=10pt, bottom=10pt,
+  fontupper=\large\itshape,
+  before skip=8pt, after skip=4pt,
+}
+
+% =========================================================
+%   META
+% =========================================================
+\title{Training Web}
+\subtitle{De la zero la site live in 2 ore}
+\author{BEST Ia\textcommabelow{s}i \,\textbullet\, Mentorat 2026}
+\date{}
+
+\begin{document}
+
+% =====================================================================
+%  TITLU -- HERO FULL-BLEED
+% =====================================================================
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[pageBg] (current page.south west) rectangle (current page.north east);
+
+    \fill[themeHtml]
+      (current page.south west) rectangle
+      ([xshift=0.42\paperwidth]current page.north east |- current page.south west);
+    \fill[themeHtml]
+      (current page.north west) rectangle
+      ([xshift=0.42\paperwidth, yshift=-\paperheight]current page.north west);
+
+    \fill[white, opacity=0.10]
+      ([xshift=0.32\paperwidth, yshift=-0.18\paperheight]current page.north west) circle (1.3cm);
+    \fill[white, opacity=0.07]
+      ([xshift=0.06\paperwidth, yshift=-0.78\paperheight]current page.north west) circle (1.6cm);
+    \fill[white, opacity=0.10]
+      ([xshift=0.20\paperwidth, yshift=-0.55\paperheight]current page.north west) circle (0.9cm);
+
+    \node[white, opacity=0.15, anchor=center, font=\fontsize{120}{120}\selectfont]
+      at ([xshift=0.21\paperwidth, yshift=-0.50\paperheight]current page.north west)
+      {\faCode};
+
+    \node[anchor=north west, white, font=\large\bfseries]
+      at ([xshift=0.04\paperwidth, yshift=-0.06\paperheight]current page.north west)
+      {\faSquare\ BEST IA\textcommabelow{S}I};
+
+    \node[anchor=north west, white, opacity=0.9, font=\small]
+      at ([xshift=0.04\paperwidth, yshift=-0.12\paperheight]current page.north west)
+      {Mentorat 2026};
+
+    \node[anchor=west, themeNeutral, font=\fontsize{38}{42}\selectfont\bfseries, align=left]
+      at ([xshift=0.46\paperwidth, yshift=-0.32\paperheight]current page.north west)
+      {Training Web};
+
+    \node[anchor=west, themeHtml, font=\Large\bfseries, align=left]
+      at ([xshift=0.46\paperwidth, yshift=-0.42\paperheight]current page.north west)
+      {De la zero la site live};
+
+    \node[anchor=west, textDim, font=\large, align=left]
+      at ([xshift=0.46\paperwidth, yshift=-0.49\paperheight]current page.north west)
+      {120 minute. 6 faze. URL public la final.};
+
+    \node[anchor=west, font=\normalsize, align=left]
+      at ([xshift=0.46\paperwidth, yshift=-0.68\paperheight]current page.north west) {
+      \color{themeHtml}\faCode\ HTML \quad
+      \color{themeCss}\faPaintBrush\ CSS \quad
+      \color{themeJs}\faBolt\ JS};
+
+    \node[anchor=west, font=\normalsize, align=left]
+      at ([xshift=0.46\paperwidth, yshift=-0.75\paperheight]current page.north west) {
+      \color{themeDeploy}\faRocket\ Deploy \quad
+      \color{themeSeo}\faShareSquare\ SEO \quad
+      \color{themeLighthouse}\faChartBar\ Lighthouse};
+
+    \node[anchor=south east, textDim, font=\small\itshape]
+      at ([xshift=-0.06\paperwidth, yshift=0.06\paperheight]current page.south east)
+      {Suport color-coded + 6 aplica\textcommabelow{t}ii practice online};
+  \end{tikzpicture}
+\end{frame}
+
+% =====================================================================
+%  AGENDA
+% =====================================================================
+\setaccent{themeNeutral}
+\begin{frame}{Cele 6 faze ale serii}
+  \vspace{6pt}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.49\textwidth}
+    \begin{tcolorbox}[
+      enhanced, colback=themeHtml!8, colframe=themeHtml, boxrule=0pt, leftrule=4pt,
+      arc=4pt, sharp corners=downhill, rounded corners=northwest,
+      left=10pt, right=10pt, top=6pt, bottom=6pt,
+      before skip=4pt, after skip=4pt,
+    ]
+      {\color{themeHtml}\large\faCode}\ \textbf{HTML}\hfill {\footnotesize\color{textDim}10t + 5j}\\
+      {\small\color{textDim}structura, semantica, accesibilitate}
+    \end{tcolorbox}
+    \begin{tcolorbox}[
+      enhanced, colback=themeCss!8, colframe=themeCss, boxrule=0pt, leftrule=4pt,
+      arc=4pt, sharp corners=downhill, rounded corners=northwest,
+      left=10pt, right=10pt, top=6pt, bottom=6pt,
+      before skip=4pt, after skip=4pt,
+    ]
+      {\color{themeCss}\large\faPaintBrush}\ \textbf{CSS}\hfill {\footnotesize\color{textDim}15t + 5j}\\
+      {\small\color{textDim}stilizare, layout, responsivitate}
+    \end{tcolorbox}
+    \begin{tcolorbox}[
+      enhanced, colback=themeJs!8, colframe=themeJs, boxrule=0pt, leftrule=4pt,
+      arc=4pt, sharp corners=downhill, rounded corners=northwest,
+      left=10pt, right=10pt, top=6pt, bottom=6pt,
+      before skip=4pt, after skip=4pt,
+    ]
+      {\color{themeJs}\large\faBolt}\ \textbf{JavaScript}\hfill {\footnotesize\color{textDim}15t + 5j}\\
+      {\small\color{textDim}interactivitate, manipulare DOM}
+    \end{tcolorbox}
+
+  \column{0.49\textwidth}
+    \begin{tcolorbox}[
+      enhanced, colback=themeDeploy!8, colframe=themeDeploy, boxrule=0pt, leftrule=4pt,
+      arc=4pt, sharp corners=downhill, rounded corners=northwest,
+      left=10pt, right=10pt, top=6pt, bottom=6pt,
+      before skip=4pt, after skip=4pt,
+    ]
+      {\color{themeDeploy}\large\faRocket}\ \textbf{Deploy}\hfill {\footnotesize\color{textDim}10t + 10j}\\
+      {\small\color{textDim}versionare git, GitHub Pages}
+    \end{tcolorbox}
+    \begin{tcolorbox}[
+      enhanced, colback=themeSeo!8, colframe=themeSeo, boxrule=0pt, leftrule=4pt,
+      arc=4pt, sharp corners=downhill, rounded corners=northwest,
+      left=10pt, right=10pt, top=6pt, bottom=6pt,
+      before skip=4pt, after skip=4pt,
+    ]
+      {\color{themeSeo}\large\faShareSquare}\ \textbf{SEO}\hfill {\footnotesize\color{textDim}7t + 5j}\\
+      {\small\color{textDim}metadate cautare \& social media}
+    \end{tcolorbox}
+    \begin{tcolorbox}[
+      enhanced, colback=themeLighthouse!8, colframe=themeLighthouse, boxrule=0pt, leftrule=4pt,
+      arc=4pt, sharp corners=downhill, rounded corners=northwest,
+      left=10pt, right=10pt, top=6pt, bottom=6pt,
+      before skip=4pt, after skip=4pt,
+    ]
+      {\color{themeLighthouse}\large\faChartBar}\ \textbf{Lighthouse}\hfill {\footnotesize\color{textDim}5t + 10j}\\
+      {\small\color{textDim}audit automatizat, Core Web Vitals}
+    \end{tcolorbox}
+  \end{columns}
+
+  \vspace{8pt}
+  \begin{center}
+  \footnotesize\color{textDim}\itshape
+  La fiecare faza: scurta teorie + aplica\textcommabelow{t}ie practica online. Suportul PDF detaliaza tot.
+  \end{center}
+\end{frame}
+
+% =====================================================================
+%  CONVENTII VIZUALE
+% =====================================================================
+\begin{frame}[fragile]{Conven\textcommabelow{t}ii vizuale}
+  \vspace{4pt}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.48\textwidth}
+
+  {\small\color{textDim}\textbf{Cod copy-paste}}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize]
+<a href="..." rel="noopener">link</a>
+\end{lstlisting}
+
+  \vspace{4pt}
+  {\small\color{textDim}\textbf{Aplica\textcommabelow{t}ie practica}}
+  \begin{joculet}
+    {\small\color{accent}\faGamepad\ \textbf{Joc / platforma}}\\
+    Sarcina, durata, criterii.
+  \end{joculet}
+
+  \column{0.48\textwidth}
+
+  {\small\color{textDim}\textbf{Compara\textcommabelow{t}ii}}\\[2pt]
+  {\color{nuFg}\bfseries\faTimesCircle\ A\textcommabelow{S}A NU} \quad practica gre\textcommabelow{s}ita -- de evitat.\\[8pt]
+  {\color{daFg}\bfseries\faCheckCircle\ A\textcommabelow{S}A DA} \quad practica corecta -- de aplicat.
+
+  \end{columns}
+
+  \vspace{6pt}
+  \begin{center}
+  \small\color{textDim}\itshape
+  Fiecare faza are propria culoare. Bara verticala stanga a blocurilor de cod arata in ce faza e\textcommabelow{s}ti.
+  \end{center}
+\end{frame}
+
+% =====================================================================
+%  SECTION DIVIDER MANUAL pentru fiecare faza
+% =====================================================================
+\newcommand{\dividerframe}[5]{%
+% #1=color, #2=icon, #3=number, #4=title, #5=subtitle
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[#1] (current page.south west) rectangle (current page.north east);
+
+    \fill[white, opacity=0.10]
+      ([xshift=-0.20\paperwidth, yshift=-0.18\paperheight]current page.north east) circle (1.4cm);
+    \fill[white, opacity=0.06]
+      ([xshift=0.16\paperwidth, yshift=0.22\paperheight]current page.south west) circle (1.8cm);
+
+    \node[white, opacity=0.14, anchor=center, font=\fontsize{180}{180}\selectfont]
+      at ([yshift=0]current page.center) {#2};
+
+    \node[anchor=west, white, opacity=0.85, font=\large\bfseries]
+      at ([xshift=-0.30\paperwidth, yshift=0.10\paperheight]current page.center)
+      {\faSquare\ FAZA #3};
+
+    \node[anchor=west, white, font=\fontsize{56}{60}\selectfont\bfseries]
+      at ([xshift=-0.30\paperwidth, yshift=0]current page.center)
+      {#4};
+
+    \node[anchor=west, white, opacity=0.85, font=\large\itshape]
+      at ([xshift=-0.30\paperwidth, yshift=-0.08\paperheight]current page.center)
+      {#5};
+  \end{tikzpicture}
+\end{frame}%
+}
+
+% =====================================================================
+%  FAZA 1 -- HTML
+% =====================================================================
+\setaccent{themeHtml}
+\dividerframe{themeHtml}{\faCode}{1}{HTML}{Structura. Semantica. Accesibilitate.}
+
+\begin{frame}{\textcolor{themeHtml}{\faCode}\ \ Faza 1 -- HTML}
+  \vspace{8pt}
+  \begin{teorie}
+    {\large\color{themeHtml}\textbf{Scheletul paginii}}\\[2pt]
+    {\small\color{textDim}\itshape Cele 6 lucruri de stiut. Tot ce vine dupa se sprijina pe asta.}
+  \end{teorie}
+
+  \vspace{6pt}
+  \begin{itemize}
+    \item Anatomia: \code{<!DOCTYPE>}, \code{<html lang>}, \code{<head>}, \code{<body>}
+    \item 3 must-have din \code{<head>}: charset, viewport, title
+    \item Tag-uri semantice vs \code{<div>} soup
+    \item Heading hierarchy (\code{<h1>} unic, \code{<h2>} per sectiune)
+    \item Forms accesibile: \code{<label for>} + \code{<input id>}
+    \item Atribute esentiale: \code{alt}, \code{lang}, \code{href}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Anatomia minimala}
+\vspace{6pt}
+\begin{lstlisting}[style=html]
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numele tau -- Student CS, Iasi</title>
+</head>
+<body>
+  <!-- continutul vizibil -->
+</body>
+</html>
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Boilerplate -- copiaza-l si pleaca de la el.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Semantic vs <div> soup}
+\vspace{2pt}
+\snuHeader
+\begin{lstlisting}[style=htmlnu]
+<div class="header">
+  <div class="logo">Site</div>
+  <div class="menu"><div><a href="/">Acasa</a></div></div>
+</div>
+<div class="content"><div class="hero"><div>Salut</div></div></div>
+\end{lstlisting}
+\snuCaption{Browserul nu \textcommabelow{s}tie ce reprezinta div-urile. Cititoarele nu pot naviga prin landmarks.}
+
+\vspace{6pt}
+\sdaHeader
+\begin{lstlisting}[style=htmlda]
+<header>
+  <a class="logo" href="/">Site</a>
+  <nav><a href="/">Acasa</a></nav>
+</header>
+<main><section class="hero"><h1>Salut</h1></section></main>
+\end{lstlisting}
+\sdaCaption{Cititoarele ofera comenzi rapide pentru sarit la \code{<header>}, \code{<main>}, \code{<nav>}.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Forms accesibile}
+\vspace{6pt}
+\begin{lstlisting}[style=html]
+<form>
+  <label for="email">Email</label>
+  <input type="email" id="email" name="email" required>
+
+  <label for="mesaj">Mesaj</label>
+  <textarea id="mesaj" name="mesaj" rows="4" required></textarea>
+
+  <button type="submit">Trimite</button>
+</form>
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Regula: \code{for="X"} pe label = \code{id="X"} pe input. Aceea\textcommabelow{s}i valoare.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeHtml}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
+  \vspace{20pt}
+  \begin{joculet}
+    {\large\color{themeHtml}\faGamepad\ \textbf{Fix the HTML}}\\[6pt]
+    Pleaca de la un cod cu \code{<div>} soup, \code{alt} lipsa si \code{<label>} deconectate.\\
+    Misiune: transforma in HTML semantic + accesibil.\\[8pt]
+    {\color{themeHtml}\faLink\ \texttt{codepen.io/[user]/pen/[id]}}
+  \end{joculet}
+
+  \vspace{16pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} MDN HTML Reference \,\textbullet\, The Odin Project HTML \,\textbullet\, web.dev/learn/html}
+\end{frame}
+
+% =====================================================================
+%  FAZA 2 -- CSS
+% =====================================================================
+\setaccent{themeCss}
+\dividerframe{themeCss}{\faPaintBrush}{2}{CSS}{Stilizare. Layout. Responsivitate.}
+
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Faza 2 -- CSS}
+  \vspace{8pt}
+  \begin{teorie}
+    {\large\color{themeCss}\textbf{Cum o imbraci}}\\[2pt]
+    {\small\color{textDim}\itshape Variabile + flex + mobile-first = 80\% din site-urile reale.}
+  \end{teorie}
+
+  \vspace{6pt}
+  \begin{itemize}
+    \item Selectori: tag, \code{.class}, \code{\#id}, descendent, \code{:hover}
+    \item Specificitate: \code{(id, clasa, tag)}; nu \code{!important}
+    \item Box model + \code{box-sizing: border-box}
+    \item Unita\textcommabelow{t}i: \code{rem} (font), \code{px} (border), \code{vw}/\code{vh} (layout)
+    \item Variabile (\code{:root}, \code{var()})
+    \item Flexbox: 6 proprieta\textcommabelow{t}i acopera 80\% din layout
+    \item Mobile-first cu \code{@media (min-width: ...)}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Variabile + Flexbox}
+\vspace{6pt}
+\begin{lstlisting}[style=css]
+:root {
+  --primary: #0673BA;
+  --bg:      #FFFCF6;
+  --space-2: 1rem;
+}
+body { background: var(--bg); }
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-2);
+}
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Schimbi \code{--primary} intr-un singur loc -- tot site-ul se rebranduieste.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ \texttt{!important} vs specificitate}
+\vspace{2pt}
+\snuHeader
+\begin{lstlisting}[style=cssnu]
+.btn { background: red !important; }
+\end{lstlisting}
+\snuCaption{Cand alta regula are nevoie sa schimbe culoarea, va trebui si ea \code{!important}. Escaladare.}
+
+\vspace{6pt}
+\sdaHeader
+\begin{lstlisting}[style=cssda]
+.btn { background: blue; }
+.btn.btn-danger { background: red; }
+\end{lstlisting}
+\sdaCaption{Clase modificator (\code{.btn-danger}) ridica specificitatea natural cu \code{(0,2,0)} fata de \code{(0,1,0)}.}
+
+\vspace{6pt}
+\begin{takeaway}
+\code{!important} = arhitectura CSS compromisa. Ridica specificitatea prin compunere de clase.
+\end{takeaway}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Mobile-first + dark mode}
+\vspace{6pt}
+\begin{lstlisting}[style=css]
+/* default: mobil */
+.nav { display: none; }
+
+@media (min-width: 768px) {
+  .nav { display: flex; }
+}
+
+/* dark mode in 2 linii */
+html { color-scheme: light dark; }
+:root {
+  --bg: light-dark(#FFFCF6, #0F172A);
+}
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Mobil = default; desktop = adaugare. Schimbi tema OS-ului $\to$ site-ul te urmeaza.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
+  \vspace{20pt}
+  \begin{joculet}
+    {\large\color{themeCss}\faGamepad\ \textbf{Flexbox Froggy}}\\[6pt]
+    Pozi\textcommabelow{t}ionezi broa\textcommabelow{s}te pe nuferi cu \code{justify-content} si \code{align-items}.\\
+    Misiune: primele 6 niveluri (acopera tot ce ai vazut).\\[8pt]
+    {\color{themeCss}\faLink\ \texttt{flexboxfroggy.com}}
+  \end{joculet}
+
+  \vspace{16pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} MDN CSS \,\textbullet\, web.dev/learn/css \,\textbullet\, CSS-Tricks Flexbox Guide}
+\end{frame}
+
+% =====================================================================
+%  FAZA 3 -- JS
+% =====================================================================
+\setaccent{themeJs}
+\dividerframe{themeJs}{\faBolt}{3}{JavaScript}{Variabile. Pattern-cheie. DOM.}
+
+\begin{frame}{\textcolor{themeJs}{\faBolt}\ \ Faza 3 -- JavaScript}
+  \vspace{8pt}
+  \begin{teorie}
+    {\large\color{themeJs}\textbf{Cum o faci sa raspunda}}\\[2pt]
+    {\small\color{textDim}\itshape Un singur pattern -- restul sunt varia\textcommabelow{t}ii.}
+  \end{teorie}
+
+  \vspace{6pt}
+  \begin{itemize}
+    \item Conectare: \code{<script src="..." defer>}
+    \item \code{const} default; \code{let} pentru reasignare; nu \code{var}
+    \item Tipuri: string, number, boolean, array, object
+    \item \textbf{Pattern-cheie:} SELECT $\to$ LISTEN $\to$ CHANGE
+    \item DOM: \code{querySelector} (1), \code{querySelectorAll} (NodeList)
+    \item Form: \code{e.preventDefault()} + \code{FormData}
+    \item Compara\textcommabelow{t}ie: exclusiv \code{===}; debug cu \code{F12 → Console}
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ Pattern: SELECT $\to$ LISTEN $\to$ CHANGE}
+\vspace{6pt}
+\begin{lstlisting}[style=js]
+// 1. SELECT
+const btn = document.querySelector('.toggle-theme');
+
+// 2. LISTEN
+btn.addEventListener('click', () => {
+
+  // 3. CHANGE
+  document.body.classList.toggle('dark');
+
+});
+\end{lstlisting}
+\vspace{4pt}
+\begin{takeaway}
+80\% din JS-ul pe site-uri statice e varia\textcommabelow{t}ie pe acest pattern. React, Vue, Svelte ascund acela\textcommabelow{s}i mecanism in spatele unui API declarativ.
+\end{takeaway}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ \texttt{==} vs \texttt{===}}
+\vspace{2pt}
+\snuHeader
+\begin{lstlisting}[style=jsnu]
+0 == "0"             // true
+0 == ""              // true
+"" == false          // true
+null == undefined    // true
+[] == false          // true
+\end{lstlisting}
+\snuCaption{\code{==} efectueaza coerci\textcommabelow{t}ie de tip. Rezultatul este des contraintuitiv. Bug-uri greu de gasit.}
+
+\vspace{6pt}
+\sdaHeader
+\begin{lstlisting}[style=jsda]
+0 === "0"            // false (number vs string)
+0 === ""             // false
+null === undefined   // false
+\end{lstlisting}
+\sdaCaption{\code{===} compara strict valoare \textbf{si} tip. Mereu folose\textcommabelow{s}te asta. Niciodata \code{==}.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ Form submit fara reload}
+\vspace{6pt}
+\begin{lstlisting}[style=js]
+const form = document.querySelector('#contact-form');
+
+form.addEventListener('submit', (e) => {
+  e.preventDefault();
+
+  const data = Object.fromEntries(new FormData(form));
+  console.log('Date primite:', data);
+
+  form.reset();
+  alert(`Multumesc, ${data.nume}!`);
+});
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape \code{preventDefault} blocheaza reincarcarea; \code{FormData} colecteaza valorile dupa \code{name}.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeJs}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
+  \vspace{20pt}
+  \begin{joculet}
+    {\large\color{themeJs}\faGamepad\ \textbf{Make the button work}}\\[6pt]
+    HTML+CSS gata. Lipse\textcommabelow{s}te JS-ul.\\
+    Misiune: 3 linii care toggle-uiesc dark mode pe \code{<body>}.\\[8pt]
+    {\color{themeJs}\faLink\ \texttt{codepen.io/[user]/pen/[id]}}
+  \end{joculet}
+
+  \vspace{16pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} javascript.info \,\textbullet\, MDN JS \,\textbullet\, The Odin Project JS}
+\end{frame}
+
+% =====================================================================
+%  FAZA 4 -- DEPLOY
+% =====================================================================
+\setaccent{themeDeploy}
+\dividerframe{themeDeploy}{\faRocket}{4}{Deploy}{Versionare git. GitHub Pages.}
+
+\begin{frame}{\textcolor{themeDeploy}{\faRocket}\ \ Faza 4 -- Deploy}
+  \vspace{8pt}
+  \begin{teorie}
+    {\large\color{themeDeploy}\textbf{Pune-o pe internet}}\\[2pt]
+    {\small\color{textDim}\itshape La final: URL real, accesibil oricui din lume.}
+  \end{teorie}
+
+  \vspace{6pt}
+  \begin{itemize}
+    \item De ce git: istoric, backup, colaborare, standard industrial
+    \item Modelul mental: working dir $\to$ staging $\to$ repo $\to$ remote
+    \item Cele 5 comenzi: \code{init}, \code{add}, \code{commit}, \code{remote add}, \code{push}
+    \item Inspec\textcommabelow{t}ie: \code{git status}, \code{git diff}, \code{git log}
+    \item GitHub Pages click-by-click
+    \item URL: \code{username.github.io/repo}
+    \item Capcana PAT, capcana 404
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeDeploy}{\faRocket}\ \ Cele 5 comenzi}
+\vspace{6pt}
+\begin{lstlisting}[style=bash]
+git init -b main
+git add .
+git commit -m "Initial commit"
+git remote add origin https://github.com/USER/REPO.git
+git push -u origin main
+\end{lstlisting}
+\vspace{6pt}
+{\small Apoi pe GitHub: \textbf{Settings $\to$ Pages $\to$ Branch: main $\to$ Save}.\\
+A\textcommabelow{s}tep\textcommabelow{t}i 60s. URL-ul apare in cutia verde.}
+\vspace{4pt}
+\begin{takeaway}
+Modificari ulterioare = doar 3 comenzi: \code{add}, \code{commit}, \code{push}.
+\end{takeaway}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeDeploy}{\faRocket}\ \ Mesajele de commit}
+\vspace{2pt}
+\snuHeader
+\begin{lstlisting}[style=bashnu]
+git commit -m "update"
+git commit -m "fix"
+git commit -m "asdf"
+git commit -m "."
+\end{lstlisting}
+\snuCaption{Niciun context. Inutilizabil pentru \code{git revert}, \code{git bisect}, code review.}
+
+\vspace{6pt}
+\sdaHeader
+\begin{lstlisting}[style=bashda]
+git commit -m "Adauga sectiunea hero cu CTA"
+git commit -m "Fix overflow horizontal pe mobil < 360px"
+git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
+\end{lstlisting}
+\sdaCaption{Verb la imperativ + \emph{ce} + \emph{de ce}. Maxim 50--72 caractere.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeDeploy}{\faGamepad}\ \ Aplica\textcommabelow{t}ie LIVE -- 10 minute}
+  \vspace{20pt}
+  \begin{joculet}
+    {\large\color{themeDeploy}\faGamepad\ \textbf{To\textcommabelow{t}i cu URL public}}\\[6pt]
+    Live-along: trainer pe ecran, voi cu el impreuna.\\
+    Misiune: la final, fiecare pune URL-ul lui in chat-ul Discord.\\[6pt]
+    {\itshape ,,Trimite link-ul pe WhatsApp la cineva. Acela e momentul.''}\\[8pt]
+    {\color{themeDeploy}\faLink\ \texttt{github.com/new}}
+  \end{joculet}
+
+  \vspace{8pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} pages.github.com \,\textbullet\, learngitbranching.js.org \,\textbullet\, Pro Git Book}
+\end{frame}
+
+% =====================================================================
+%  FAZA 5 -- SEO
+% =====================================================================
+\setaccent{themeSeo}
+\dividerframe{themeSeo}{\faShareSquare}{5}{SEO}{Open Graph. Schema.org.}
+
+\begin{frame}{\textcolor{themeSeo}{\faShareSquare}\ \ Faza 5 -- SEO + Open Graph}
+  \vspace{8pt}
+  \begin{teorie}
+    {\large\color{themeSeo}\textbf{Cum arata cand o trimi\textcommabelow{t}i}}\\[2pt]
+    {\small\color{textDim}\itshape 5 meta tags + 1 schema = link care arata profesional pe WhatsApp.}
+  \end{teorie}
+
+  \vspace{6pt}
+  \begin{itemize}
+    \item Doua audien\textcommabelow{t}e: Google + re\textcommabelow{t}ele sociale
+    \item Google: \code{<title>} + \code{<meta description>}
+    \item Social: 5 \code{og:*} tags
+    \item Capcana: \code{og:image} \textbf{trebuie} URL absolut, 1200x630
+    \item Twitter Card: \code{summary\_large\_image}
+    \item JSON-LD (Schema.org) pentru rich snippets
+    \item \code{<link rel="canonical">} previne con\textcommabelow{t}inut duplicat
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeSeo}{\faShareSquare}\ \ Open Graph -- copy-paste in <head>}
+\vspace{6pt}
+\begin{lstlisting}[style=html]
+<title>Maria Popescu -- Student CS, Iasi</title>
+<meta name="description" content="Pagina personala...">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Maria Popescu">
+<meta property="og:description" content="Web dev, design.">
+<meta property="og:image" content="https://maria.github.io/site/og.png">
+<meta property="og:url" content="https://maria.github.io/site/">
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape \code{og:image} \textbf{trebuie} URL absolut. Cu URL relativ, WhatsApp nu \textcommabelow{s}tie de unde sa-l ia.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeSeo}{\faShareSquare}\ \ Calitatea \texttt{<title>}}
+\vspace{2pt}
+\snuHeader
+\begin{lstlisting}[style=htmlnu]
+<title>Document</title>
+<title>Untitled</title>
+<title>web web html portofoliu cv student iasi cs uaic</title>
+\end{lstlisting}
+\snuCaption{Generic, gol de sens. Sau spam de cuvinte cheie -- penalizat de Google.}
+
+\vspace{6pt}
+\sdaHeader
+\begin{lstlisting}[style=htmlda]
+<title>Maria Popescu -- Portofoliu Web Developer, Iasi</title>
+<title>Despre BEST Iasi -- Asociatie studenteasca tehnica</title>
+\end{lstlisting}
+\sdaCaption{50--60 caractere. Specific paginii. Structura ,,Subiect -- Context''.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeSeo}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
+  \vspace{20pt}
+  \begin{joculet}
+    {\large\color{themeSeo}\faGamepad\ \textbf{opengraph.xyz}}\\[6pt]
+    Adauga cele 5 \code{og:*} in \code{<head>}, \code{git push}.\\
+    Apoi paste URL-ul tau pe opengraph.xyz.\\
+    Misiune: vezi cum arata pe Facebook / Twitter / LinkedIn / WhatsApp.\\[8pt]
+    {\color{themeSeo}\faLink\ \texttt{opengraph.xyz}}
+  \end{joculet}
+
+  \vspace{8pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} ogp.me \,\textbullet\, metatags.io \,\textbullet\, schema.org}
+\end{frame}
+
+% =====================================================================
+%  FAZA 6 -- LIGHTHOUSE
+% =====================================================================
+\setaccent{themeLighthouse}
+\dividerframe{themeLighthouse}{\faChartBar}{6}{Lighthouse}{Audit. Core Web Vitals.}
+
+\begin{frame}{\textcolor{themeLighthouse}{\faChartBar}\ \ Faza 6 -- Lighthouse}
+  \vspace{8pt}
+  \begin{teorie}
+    {\large\color{themeLighthouse}\textbf{Audit profesional}}\\[2pt]
+    {\small\color{textDim}\itshape Scor masurabil pe 4 axe. Acela\textcommabelow{s}i tool il folose\textcommabelow{s}te \textcommabelow{s}i firma ta viitoare.}
+  \end{teorie}
+
+  \vspace{6pt}
+  \begin{itemize}
+    \item Tool gratis Google -- noteaza orice site
+    \item \textbf{Performance \,\textbullet\, Accessibility \,\textbullet\, Best Practices \,\textbullet\, SEO}
+    \item Score: 90+ acceptabil, 95+ profesional
+    \item Lab data (lab) vs field data (CrUX, real users)
+    \item Executie: PageSpeed Insights (web) sau DevTools (local)
+    \item Core Web Vitals: LCP $<$2.5s, INP $<$200ms, CLS $<$0.1
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeLighthouse}{\faChartBar}\ \ Imagini optimizate}
+\vspace{2pt}
+\snuHeader
+\begin{lstlisting}[style=htmlnu]
+<img src="hero.jpg">
+\end{lstlisting}
+\snuCaption{Lipse\textcommabelow{s}te \code{alt} (a11y), \code{width}/\code{height} (CLS), \code{srcset} (mobil), \code{loading} (eager).}
+
+\vspace{6pt}
+\sdaHeader
+\begin{lstlisting}[style=htmlda]
+<img src="hero-800.webp"
+     srcset="hero-400.webp 400w, hero-800.webp 800w, hero-1600.webp 1600w"
+     sizes="(min-width: 768px) 50vw, 100vw"
+     width="800" height="450"
+     loading="lazy"
+     alt="Echipa BEST Iasi in fata sediului UAIC">
+\end{lstlisting}
+\sdaCaption{Browserul alege rezolu\textcommabelow{t}ia; lazy loading sub fold; rezerva spa\textcommabelow{t}iu prin \code{width}/\code{height}.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeLighthouse}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 10 minute}
+  \vspace{20pt}
+  \begin{joculet}
+    {\large\color{themeLighthouse}\faGamepad\ \textbf{Audit + fix pe site-ul tau}}\\[6pt]
+    Pas 1: ruleaza pe URL-ul tau. Vezi scorul.\\
+    Pas 2: fix 1-2 probleme. \code{git push}. Re-run.\\
+    Pas 3: ruleaza pe \code{01-broken/}. Vezi diferen\textcommabelow{t}a.\\[8pt]
+    {\color{themeLighthouse}\faLink\ \texttt{pagespeed.web.dev}}
+  \end{joculet}
+
+  \vspace{8pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} web.dev/learn/performance \,\textbullet\, Core Web Vitals \,\textbullet\, Lighthouse docs}
+\end{frame}
+
+% =====================================================================
+%  WRAP
+% =====================================================================
+\setaccent{themeNeutral}
+
+\begin{frame}{Ce ai acum}
+  \vspace{4pt}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.5\textwidth}
+    {\color{themeDeploy}\faRocket}\ \ \textbf{URL public}\\
+    {\small\color{textDim}site-ul tau, accesibil oricui in lume}\\[8pt]
+
+    {\color{themeHtml}\faBookOpen}\ \ \textbf{Manual 35+ pagini}\\
+    {\small\color{textDim}6 faze + glosar + checklist + erori comune}\\[8pt]
+
+    {\color{themeCss}\faFolderOpen}\ \ \textbf{kit-starter}\\
+    {\small\color{textDim}3 demo-uri: blank, broken, reference}\\
+
+  \column{0.5\textwidth}
+    {\color{themeJs}\faGamepad}\ \ \textbf{6 aplica\textcommabelow{t}ii practice online}\\
+    {\small\color{textDim}Flexbox Froggy, opengraph.xyz, PageSpeed, etc.}\\[8pt]
+
+    {\color{themeSeo}\faMap}\ \ \textbf{Roadmap pentru 4 saptamani}\\
+    {\small\color{textDim}in capitolul \emph{Resurse \& urmatorii pa\textcommabelow{s}i}}\\[8pt]
+
+    {\color{themeLighthouse}\faUsers}\ \ \textbf{Pe cine sa intrebi}\\
+    {\small\color{textDim}canalele Discord BEST + comunitatea wider}
+  \end{columns}
+
+  \vspace{16pt}
+  \begin{center}
+  \begin{takeaway}
+  Diferen\textcommabelow{t}a intre tine astazi \textcommabelow{s}i tine in 2 saptamani e doar practica.
+  \end{takeaway}
+  \end{center}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture, overlay]
+    \fill[pageBg] (current page.south west) rectangle (current page.north east);
+
+    % Decoratii subtile in fundal
+    \fill[themeHtml, opacity=0.08]
+      ([xshift=0.10\paperwidth, yshift=0.20\paperheight]current page.south west) circle (1.4cm);
+    \fill[themeCss, opacity=0.08]
+      ([xshift=0.85\paperwidth, yshift=0.18\paperheight]current page.south west) circle (1.0cm);
+    \fill[themeDeploy, opacity=0.08]
+      ([xshift=0.78\paperwidth, yshift=0.78\paperheight]current page.south west) circle (1.6cm);
+    \fill[themeSeo, opacity=0.08]
+      ([xshift=0.16\paperwidth, yshift=0.82\paperheight]current page.south west) circle (1.2cm);
+
+    \node[anchor=center, themeHtml, font=\fontsize{72}{72}\selectfont\bfseries]
+      at ([yshift=0.14\paperheight]current page.center) {Spor!};
+
+    \node[anchor=center, themeNeutral, font=\Large, align=center]
+      at ([yshift=0]current page.center)
+      {Slide-urile astea sunt \textcommabelow{s}i ele HTML/CSS/JS.};
+
+    \node[anchor=center, themeNeutral, font=\Large\bfseries, align=center]
+      at ([yshift=-0.08\paperheight]current page.center)
+      {View Source pe orice site din lume.};
+
+    \node[anchor=center, textDim, font=\large\itshape, align=center]
+      at ([yshift=-0.20\paperheight]current page.center)
+      {Acum \textcommabelow{s}tii cum sa cite\textcommabelow{s}ti acel cod.};
+
+    \node[anchor=south, textDim, font=\small]
+      at ([yshift=0.06\paperheight]current page.south) {%
+      \color{themeHtml}\faCode\ \color{themeCss}\faPaintBrush\ \color{themeJs}\faBolt\ \color{themeDeploy}\faRocket\ \color{themeSeo}\faShareSquare\ \color{themeLighthouse}\faChartBar};
+  \end{tikzpicture}
+\end{frame}
+
+\end{document}

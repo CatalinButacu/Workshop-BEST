@@ -1,0 +1,384 @@
+% Fragment -- inclus de main.tex prin \input
+\clearpage
+\setpartlabel{themeHtml}{\faCode}{Faza 1: HTML}
+\setcounter{section}{0}
+\phantomsection
+\addcontentsline{toc}{part}{\protect\textbf{Faza 1 \textendash{} HTML}}
+\handout{Faza 1 \textendash{} HTML}{Structura documentului. Tag-uri semantice. Accesibilitate.}
+
+HTML (\emph{HyperText Markup Language}) este limbajul de marcare folosit pentru descrierea \textbf{structurii} unui document web. Browserul citeste documentul de sus in jos, construieste in memorie un arbore de noduri (DOM-ul), si afiseaza paginea pe ecran.
+
+In arhitectura unei pagini web, responsabilitatile sunt impartite intre trei tehnologii:
+
+\begin{itemize}[itemsep=0pt]
+  \item \textbf{HTML} \textendash{} ce contine pagina (titluri, paragrafe, imagini, formulare).
+  \item \textbf{CSS} \textendash{} cum arata pagina (culori, dimensiuni, spatiere, layout).
+  \item \textbf{JavaScript} \textendash{} cum se comporta pagina (raspuns la click, animatii, validare).
+\end{itemize}
+
+Capitolul defineste anatomia minimala, tag-urile semantice principale, atributele obligatorii pentru accesibilitate, si patternurile uzuale pentru linkuri si formulare.
+
+\bigskip
+
+\begin{outcomes}
+Dupa capitolul asta vei \textcommabelow{s}ti:
+\begin{itemize}[itemsep=1pt]
+  \item Scrie boilerplate-ul HTML5 corect, cu cele 3 meta tags obligatorii.
+  \item Distinge tag-urile semantice de \code{<div>} \textcommabelow{s}i alege tag-ul potrivit per zona.
+  \item Construie\textcommabelow{s}te formulare accesibile cu \code{<label for>} \textcommabelow{s}i \code{<input id>}.
+  \item Aplica atributele \code{alt}, \code{lang}, \code{href} cu valori corecte conform WCAG.
+  \item Recunoa\textcommabelow{s}te pattern-urile pentru linkuri externe sigure (\code{rel="noopener"}).
+\end{itemize}
+\end{outcomes}
+
+\begin{whymatters}
+HTML este temelia oricarei pagini web. Browserele, cititoarele de ecran \textcommabelow{s}i motoarele de cautare interpreteaza pagina pornind de la structura HTML. O structura semantica gre\textcommabelow{s}ita conduce la trei consecin\textcommabelow{t}e directe: SEO penalizat, persoanele cu dizabilita\textcommabelow{t}i nu pot folosi pagina, codul devine ilizibil dupa cateva luni. Toate fazele urmatoare (CSS, JS, deploy, audit) presupun ca structura HTML este corecta.
+\end{whymatters}
+
+% =========================================================
+\section{Anatomia documentului}
+
+Un document HTML5 contine cinci elemente structurale obligatorii. Pe linia 1, declaratia \code{<!DOCTYPE html>} indica browserului ca documentul respecta specificatia HTML5; in absenta sa, browserul intra in modul ,,quirks'' care reproduce comportamentul browserelor din anii 2000.
+
+\begin{lstlisting}[style=html, caption={Boilerplate HTML5 conform specificatiei W3C}]
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Numele Prenumele -- Student CS, Iasi</title>
+</head>
+<body>
+  <!-- continut vizibil -->
+</body>
+</html>
+\end{lstlisting}
+
+\begin{itemize}
+  \item \code{<html lang="ro">} \textendash{} elementul radacina. Atributul \code{lang} influenteaza pronuntia in cititoare de ecran, ranking-ul in cautari localizate, si detectia limbii sursa pentru traducere automata.
+  \item \code{<head>} \textendash{} contine metadatele paginii. Continutul nu apare pe ecran, dar este consumat de browser, motoare de cautare si platforme sociale.
+  \item \code{<body>} \textendash{} contine elementele vizibile pe ecran. Tot ce vede utilizatorul se afla in interiorul acestui tag.
+\end{itemize}
+
+% =========================================================
+\section{Sintaxa tag-urilor}
+
+Un element HTML are una sau mai multe parti: tag de deschidere, continut, tag de inchidere. Atributele se declara in tag-ul de deschidere, in formatul \code{nume="valoare"}.
+
+\begin{lstlisting}[style=html, caption={Tipuri de tag-uri}]
+<!-- Tag container: are continut intre deschidere si inchidere -->
+<p>Acesta este un paragraf.</p>
+
+<!-- Tag void: nu are continut, nu se inchide -->
+<img src="poza.jpg" alt="Descriere">
+
+<!-- Tag cu atribute multiple -->
+<a href="https://best-is.ro" target="_blank" rel="noopener">BEST</a>
+\end{lstlisting}
+
+Tag-urile void cuprind: \code{<img>}, \code{<br>}, \code{<hr>}, \code{<input>}, \code{<meta>}, \code{<link>}.
+
+% =========================================================
+\section{Metadate obligatorii in <head>}
+
+Trei elemente sunt considerate obligatorii in orice pagina moderna:
+
+\begin{enumerate}
+  \item \code{<meta charset="UTF-8">} \textendash{} setul de caractere. UTF-8 acopera toate alfabetele moderne, inclusiv diacriticele romanesti.
+  \item \code{<meta name="viewport"...>} \textendash{} controleaza redarea pe dispozitive mobile. Valoarea \code{width=device-width, initial-scale=1.0} instructeaza browserul sa pastreze latimea paginii egala cu cea a ecranului si sa nu zoom-eze initial.
+  \item \code{<title>} \textendash{} apare in tab-ul browserului, in bookmark-uri, si ca titlu in rezultatele cautarii.
+\end{enumerate}
+
+\begin{atentie}
+Conform datelor StatCounter (2024), peste 60\% din traficul web global provine de pe dispozitive mobile. Lipsa meta tag-ului \code{viewport} afecteaza direct experienta majoritatii utilizatorilor, generand o pagina nescalata, cu zoom necesar pentru lectura.
+\end{atentie}
+
+% =========================================================
+\section{Tag-uri semantice vs <div> soup}
+
+Tag-urile semantice descriu \emph{rolul} continutului, nu doar aspectul vizual. Browserul, motoarele de cautare si tehnologiile asistive (cititoare de ecran, navigatoare prin tastatura) pot interpreta automat structura paginii cand tag-urile semantice sunt folosite.
+
+\begin{dano}[Asa nu \textendash{} ,,div soup'']
+\begin{lstlisting}[style=html, numbers=none]
+<div class="header">
+  <div class="logo">Site</div>
+  <div class="menu">
+    <div class="link"><a href="/">Acasa</a></div>
+  </div>
+</div>
+<div class="content">
+  <div class="hero">
+    <div class="title">Salut</div>
+  </div>
+</div>
+<div class="footer">2026</div>
+\end{lstlisting}
+\textbf{Probleme.} Browserul si cititoarele de ecran nu stiu ce reprezinta fiecare \code{<div>}. Navigatia rapida prin landmarks este imposibila. SEO penalizat pentru lipsa de structura.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} semantic]
+\begin{lstlisting}[style=html, numbers=none]
+<header>
+  <a class="logo" href="/">Site</a>
+  <nav>
+    <a href="/">Acasa</a>
+  </nav>
+</header>
+<main>
+  <section class="hero">
+    <h1>Salut</h1>
+  </section>
+</main>
+<footer>2026</footer>
+\end{lstlisting}
+\textbf{Beneficii.} Cititoarele de ecran ofera comenzi rapide pentru sarit la \code{<header>}, \code{<nav>}, \code{<main>}, \code{<footer>}. Google identifica zonele principale fara analiza euristica. Codul este mai usor de citit dupa 6 luni.
+\end{dado}
+
+\subsection{Repertoriul tag-urilor semantice}
+
+\begin{itemize}[itemsep=2pt]
+  \item \code{<header>} \textendash{} antetul unei pagini sau al unei sectiuni.
+  \item \code{<nav>} \textendash{} bara de navigatie principala.
+  \item \code{<main>} \textendash{} continutul unic al paginii (un singur \code{<main>} per pagina).
+  \item \code{<section>} \textendash{} grup tematic de continut, de obicei cu un \code{<h2>}.
+  \item \code{<article>} \textendash{} unitate de continut auto-suficienta (post de blog, comentariu, card produs).
+  \item \code{<aside>} \textendash{} continut tangential (sidebar, note de subsol vizuale).
+  \item \code{<footer>} \textendash{} subsolul unei pagini sau al unei sectiuni.
+  \item \code{<figure>} + \code{<figcaption>} \textendash{} imagine cu legenda.
+\end{itemize}
+
+% =========================================================
+\section{Ierarhia titlurilor}
+
+Specificatia HTML5 defineste sase niveluri de titluri, de la \code{<h1>} la \code{<h6>}. Cititoarele de ecran genereaza un \emph{outline} al paginii pe baza acestei ierarhii; un utilizator nevazator parcurge documentul saltand intre titluri exact ca un cititor obisnuit cand parcurge un cuprins.
+
+\begin{itemize}
+  \item Un singur \code{<h1>} per pagina, descriind tema centrala.
+  \item Subsectiunile principale folosesc \code{<h2>}; sub-subsectiunile, \code{<h3>}.
+  \item Nivelurile nu se sar (\code{<h1>} urmat direct de \code{<h3>} este o eroare structurala).
+  \item Marimea vizuala se controleaza prin CSS, nu prin alegerea unui nivel diferit.
+\end{itemize}
+
+\begin{dano}[Asa nu \textendash{} stilul ales prin nivel]
+\begin{lstlisting}[style=html, numbers=none]
+<h1>Titlul mare</h1>
+<h4>Subtitlu, am ales h4 ca arata mai mic</h4>
+<h2>Sectiune</h2>
+\end{lstlisting}
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} stilul ales prin CSS]
+\begin{lstlisting}[style=html, numbers=none]
+<h1>Titlul mare</h1>
+<h2 class="subtitle">Subtitlu</h2>
+<h2>Sectiune</h2>
+\end{lstlisting}
+\code{.subtitle \{ font-size: 1rem; font-weight: normal; \}}
+\end{dado}
+
+% =========================================================
+\section{Linkuri si navigare}
+
+Elementul \code{<a>} (anchor) creeaza un hyperlink. Atributul \code{href} accepta mai multe forme:
+
+\begin{lstlisting}[style=html, caption={Tipuri de URL-uri}]
+<!-- URL absolut -->
+<a href="https://best-is.ro">BEST Iasi</a>
+
+<!-- URL relativ -->
+<a href="contact.html">Contact</a>
+<a href="../images/logo.png">Logo</a>
+
+<!-- Ancora interna -->
+<a href="#contact">Sari la contact</a>
+
+<!-- Adresa email / numar de telefon -->
+<a href="mailto:hello@best-is.ro">Email</a>
+<a href="tel:+40123456789">Telefon</a>
+\end{lstlisting}
+
+\subsection{Linkuri externe \textendash{} target si rel}
+
+Deschiderea unui link extern intr-un tab nou se face cu \code{target="\_blank"}. Atributul aduce un risc de securitate: pagina destinatie poate manipula tab-ul sursa prin \code{window.opener}. Combinatia \code{rel="noopener noreferrer"} elimina riscul.
+
+\begin{dano}[Asa nu]
+\code{<a href="https://extern.ro" target="\_blank">Extern</a>}\\
+\textbf{Problema:} pagina externa poate redirectiona tab-ul tau initial catre o pagina de phishing.
+\end{dano}
+
+\begin{dado}[Asa da]
+\code{<a href="https://extern.ro" target="\_blank" rel="noopener noreferrer">Extern</a>}\\
+\textbf{Beneficiu:} \code{noopener} blocheaza accesul la \code{window.opener}; \code{noreferrer} ascunde URL-ul sursa.
+\end{dado}
+
+% =========================================================
+\section{Formulare accesibile}
+
+Fiecare element \code{<input>} trebuie asociat cu un \code{<label>}. Asocierea se realizeaza prin perechea atribut-valoare \code{for}/\code{id}: valoarea atributului \code{for} de pe \code{<label>} este identica cu valoarea atributului \code{id} de pe \code{<input>}.
+
+\begin{dano}[Asa nu \textendash{} placeholder ca substitut pentru label]
+\begin{lstlisting}[style=html, numbers=none]
+<input type="email" placeholder="Email">
+\end{lstlisting}
+\textbf{Probleme.} (1) Cititoarele de ecran nu anunta placeholder-ul ca eticheta. (2) Placeholder-ul dispare la tastare, lasand utilizatorul fara context. (3) Contrast scazut pe textul de placeholder.
+\end{dano}
+
+\begin{dado}[Asa da]
+\begin{lstlisting}[style=html, numbers=none]
+<label for="email">Email</label>
+<input type="email" id="email" name="email" required>
+\end{lstlisting}
+\textbf{Beneficii.} Cititoarele anunta corect; clic-ul pe text focuseaza inputul; eticheta ramane vizibila.
+\end{dado}
+
+\subsection{Tipuri de input frecvente}
+
+Atributul \code{type} controleaza interfata oferita de browser si validarea. Pe mobil, tipul determina tastatura afisata.
+
+\begin{itemize}[itemsep=2pt]
+  \item \code{type="text"} \textendash{} text generic.
+  \item \code{type="email"} \textendash{} validare format email; tastatura cu \code{@} pe mobil.
+  \item \code{type="tel"} \textendash{} tastatura numerica pe mobil; nu valideaza formatul (variaza pe tari).
+  \item \code{type="number"} \textendash{} accepta doar cifre; arrows pe desktop.
+  \item \code{type="date"} \textendash{} date picker nativ.
+  \item \code{type="password"} \textendash{} ascunde caracterele.
+  \item \code{type="url"} \textendash{} validare format URL.
+  \item \code{type="search"} \textendash{} buton clear in unele browsere.
+\end{itemize}
+
+\begin{ponturi}
+Browserul valideaza nativ inputurile: campurile cu atributul \code{required} blocheaza submit-ul daca sunt goale; \code{type="email"} respinge valori care nu contin \code{@}. Aceasta validare \textbf{nu inlocuieste} validarea pe server, dar imbunatateste experienta utilizatorului inainte de a trimite cererea.
+\end{ponturi}
+
+% =========================================================
+\section{Atribute esentiale}
+
+\begin{itemize}
+  \item \code{href} pe \code{<a>} \textendash{} URL-ul tinta.
+  \item \code{src} pe \code{<img>} \textendash{} calea catre imagine.
+  \item \code{alt} pe \code{<img>} \textendash{} text descriptiv. Obligatoriu conform WCAG 2.1 (criteriul 1.1.1 \emph{Non-text Content}).
+  \item \code{type} pe \code{<input>} \textendash{} determina validarea si interfata.
+  \item \code{required} pe \code{<input>} \textendash{} activeaza validarea nativa.
+  \item \code{lang} pe \code{<html>} \textendash{} limba documentului.
+  \item \code{title} pe orice element \textendash{} tooltip la hover (uz limitat, nu inlocuieste \code{aria-label}).
+\end{itemize}
+
+\subsection{Calitatea textului \texttt{alt}}
+
+Textul \code{alt} descrie ce \emph{vede} imaginea, in contextul paginii. Scopul: utilizatorul fara acces vizual primeste informatia echivalenta.
+
+\begin{dano}[Asa nu \textendash{} alt nesemnificativ sau spam SEO]
+\begin{lstlisting}[style=html, numbers=none]
+<img src="echipa.jpg" alt="">
+<img src="echipa.jpg" alt="poza">
+<img src="echipa.jpg" alt="best best best iasi training web html css">
+\end{lstlisting}
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} alt descriptiv si specific]
+\begin{lstlisting}[style=html, numbers=none]
+<img src="echipa.jpg" alt="Echipa BEST Iasi in fata sediului UAIC, primavara 2026">
+\end{lstlisting}
+\textbf{Exceptie:} pentru imagini pur decorative (fundal, separator, ornament), \code{alt=""} este corect \textendash{} cititorul de ecran le ignora.
+\end{dado}
+
+% =========================================================
+\section{Tag-uri suplimentare \textendash{} men\textcommabelow{t}iuni rapide}
+
+Pentru proiecte mai complexe, HTML5 ofera elemente specializate care nu intra in scopul fazei curente, dar merita cunoscute la nivel de existen\textcommabelow{t}a:
+
+\begin{itemize}[itemsep=2pt]
+  \item \code{<table>} cu \code{<thead>}, \code{<tbody>}, \code{<tfoot>}, \code{<caption>} \textendash{} pentru date tabulare reale (nu pentru layout). Atributele \code{scope}, \code{headers} asigura accesibilitatea.
+  \item \code{<video>} si \code{<audio>} \textendash{} mediafile native, fara nevoie de plugin-uri (Flash, Silverlight au murit). Atribute: \code{controls}, \code{autoplay}, \code{muted}, \code{loop}, \code{poster} (pentru video).
+  \item \code{<canvas>} \textendash{} suprafa\textcommabelow{t}a 2D pentru desenare programatica cu JavaScript. Folosit pentru jocuri, vizualizari, anima\textcommabelow{t}ii complexe.
+  \item \code{<details>} si \code{<summary>} \textendash{} accordeon nativ, fara JavaScript.
+  \item \code{<dialog>} \textendash{} modal nativ, suportat in toate browserele moderne.
+  \item \code{<picture>} \textendash{} container pentru \code{<img>} cu surse alternative pe formate sau dimensiuni.
+\end{itemize}
+
+Documenta\textcommabelow{t}ia exhaustiva: MDN \textendash{} HTML elements reference (link in resursele de la finalul capitolului).
+
+% =========================================================
+\section{Comentarii si caractere speciale}
+
+Comentariile HTML nu apar in pagina dar raman vizibile in \emph{View Source}. Sintaxa: \code{<!-- text -->}.
+
+Caracterele rezervate (\code{<}, \code{>}, \code{\&}) trebuie scrise prin entitati pentru a nu fi interpretate ca markup:
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{\&lt;} \textendash{} \code{<}
+  \item \code{\&gt;} \textendash{} \code{>}
+  \item \code{\&amp;} \textendash{} \code{\&}
+  \item \code{\&copy;} \textendash{} \code{(c)}
+  \item \code{\&nbsp;} \textendash{} spatiu nedespartibil
+\end{itemize}
+
+% =========================================================
+\section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
+
+\begin{selfcheck}
+\begin{enumerate}[itemsep=2pt]
+  \item Care este diferen\textcommabelow{t}a func\textcommabelow{t}ionala intre \code{<div class="header">} \textcommabelow{s}i \code{<header>}?
+  \item De ce este nevoie de \code{<meta name="viewport">} pentru afi\textcommabelow{s}area pe mobil?
+  \item \emph{Spot the issue:} \code{<input type="email" placeholder="Email">}.
+  \item Cate elemente \code{<h1>} pot exista intr-o pagina conform specifica\textcommabelow{t}iei HTML5?
+  \item Care sunt cele doua atribute necesare cand un link extern se deschide intr-un tab nou?
+\end{enumerate}
+\end{selfcheck}
+
+% =========================================================
+\section*{Recapitulare}
+
+\begin{recap}[Faza 1 -- HTML]
+\begin{itemize}[itemsep=1pt]
+  \item Anatomia: \code{<!DOCTYPE html>} $\rightarrow$ \code{<html lang>} $\rightarrow$ \code{<head>} (metadate) $\rightarrow$ \code{<body>} (continut).
+  \item Trei meta tags obligatorii: \code{charset}, \code{viewport}, \code{<title>}.
+  \item Tag-uri semantice in locul \code{<div>}: \code{<header>}, \code{<main>}, \code{<section>}, \code{<footer>}, \code{<nav>}, \code{<article>}, \code{<aside>}.
+  \item Un singur \code{<h1>} per pagina; ierarhia titlurilor nu admite salturi de nivel.
+  \item Forms accesibile: \code{<label for="X">} corespunde cu \code{<input id="X">}.
+  \item Atribute obligatorii pentru accesibilitate: \code{alt} pe \code{<img>}, \code{lang} pe \code{<html>}.
+  \item Linkuri externe in tab nou: combinatia \code{target="\_blank"} + \code{rel="noopener noreferrer"}.
+\end{itemize}
+\end{recap}
+
+\partdivider
+
+% =========================================================
+\begin{joc}
+\textbf{Platforma:} CodePen (\url{codepen.io}). \quad \textit{URL-ul exact este distribuit de trainer in chat.}
+
+\medskip
+
+\textbf{Activitatea.} Documentul de pornire contine o structura non-semantica (\code{<div>} folosit excesiv), atribute \code{alt} lipsa pe imagini si elemente \code{<input>} fara \code{<label>} asociat. Sarcina este de a transforma documentul intr-o varianta semantica si conformanta cu standardele de accesibilitate.
+
+\medskip
+
+\textbf{Criterii de validare:}
+\begin{itemize}[itemsep=1pt]
+  \item Folosirea tag-urilor \code{<header>}, \code{<main>}, \code{<section>}, \code{<footer>} in locul \code{<div>}.
+  \item Prezenta atributului \code{alt} pe toate elementele \code{<img>}.
+  \item Asocierea \code{<label for>} \textendash{} \code{<input id>} pentru fiecare camp de formular.
+  \item Existenta unui singur element \code{<h1>} per pagina.
+  \item Linkuri externe au \code{target="\_blank"} + \code{rel="noopener noreferrer"}.
+\end{itemize}
+
+\medskip
+
+\textbf{Durata estimata:} 5 minute.
+\end{joc}
+
+% =========================================================
+\section*{\faGraduationCap\ \ Resurse pentru aprofundare}
+
+\begin{itemize}[itemsep=2pt]
+  \item Mozilla Developer Network. \emph{HTML elements reference}. \\\url{https://developer.mozilla.org/en-US/docs/Web/HTML/Element}
+  \item The Odin Project. \emph{HTML Foundations}. \\\url{https://www.theodinproject.com/paths/foundations/courses/foundations\#html-foundations}
+  \item Google. \emph{Learn HTML}. \url{https://web.dev/learn/html}
+  \item HTML Reference. \emph{Vizual cheatsheet de tag-uri}. \url{https://htmlreference.io}
+  \item Google. \emph{Learn Forms}. \url{https://web.dev/learn/forms}
+  \item W3C. \emph{Web Accessibility Initiative \textendash{} WCAG}. \url{https://www.w3.org/WAI/standards-guidelines/wcag/}
+\end{itemize}
+
+\bigskip
+
+\bridge{Capitolul 2 (CSS) imbraca structura HTML cu stil vizual. Aspectul, layout-ul \textcommabelow{s}i responsivitatea se construiesc plecand de la pagina semantica generata aici.}

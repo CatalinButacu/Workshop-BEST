@@ -1,0 +1,25 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:moderncss.dev)",
+      "WebFetch(domain:css-tricks.com)",
+      "Bash(pdflatex --version)",
+      "Bash(pdflatex -interaction=nonstopmode -halt-on-error 00-prerechizite.tex)",
+      "Bash(pdflatex -interaction=nonstopmode -halt-on-error 02-html.tex)",
+      "Bash(pdflatex -interaction=nonstopmode -halt-on-error 03-css.tex)",
+      "Bash(rm -f *.aux *.log *.out *.toc)",
+      "Read(//d/d/Facultate/mentorate/**)",
+      "Bash(mkdir -p src pdf)",
+      "Bash(mv preamble.tex 00-prerechizite.tex 01-introducere.tex 02-html.tex 03-css.tex 04-javascript.tex 05-deployment.tex 06-resurse.tex main.tex src/)",
+      "Bash(rm -f *.pdf *.aux *.log *.out *.toc)",
+      "Bash(bash build.sh)",
+      "Bash(bash build.sh 03-css)",
+      "WebFetch(domain:web.dev)",
+      "Bash(./build.sh codex *)",
+      "Bash(./build.sh)",
+      "Bash(./build.sh 01-html)",
+      "Bash(./build.sh 05-seo)",
+      "Bash(mktexpk --mfmode=ljfour --bdpi=600 --mag=1+87/600 --dpi=525 ecsx0800)"
+    ]
+  }
+}

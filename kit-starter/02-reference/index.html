@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Maria Popescu — Student CS, Iași</title>
+  <meta name="description" content="Pagina personală a Mariei Popescu, studentă la Computer Science în Iași. Pasionată de web development și design.">
+
+  <!-- Open Graph: cum arata link-ul cand il trimiti pe WhatsApp/Discord -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Maria Popescu — Student CS, Iași">
+  <meta property="og:description" content="Pagina personală a Mariei Popescu.">
+  <meta property="og:image" content="https://maria-popescu.github.io/landing/og.png">
+  <meta property="og:url" content="https://maria-popescu.github.io/landing/">
+
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+
+  <header>
+    <a href="#" class="logo">Maria Popescu</a>
+    <button class="nav-toggle" aria-label="Deschide meniul" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+    <nav class="nav" id="nav">
+      <a href="#despre">Despre</a>
+      <a href="#contact">Contact</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>Salut, sunt Maria.</h1>
+      <p class="tagline">Student CS în Iași. Construiesc lucruri pe web.</p>
+      <a href="#contact" class="cta">Hai să vorbim</a>
+    </section>
+
+    <section id="despre" class="about">
+      <h2>Despre mine</h2>
+      <p>Sunt în anul III la Universitatea Alexandru Ioan Cuza. Mă pasionează web development, UI design și open source. În timpul liber: drumeții, cărți, podcast-uri tech.</p>
+    </section>
+
+    <section id="contact" class="contact">
+      <h2>Contact</h2>
+      <form id="contact-form">
+        <label for="nume">Nume</label>
+        <input type="text" id="nume" name="nume" required>
+
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+
+        <label for="mesaj">Mesaj</label>
+        <textarea id="mesaj" name="mesaj" rows="4" required></textarea>
+
+        <button type="submit">Trimite</button>
+      </form>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Maria Popescu &middot; <a href="https://github.com/maria">GitHub</a></p>
+  </footer>
+
+</body>
+</html>

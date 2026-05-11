@@ -1,0 +1,27 @@
+/* Variabile (paleta + spacing) — schimba aici, se schimba peste tot */
+:root {
+  --primary: #1E3A8A;
+  --bg:      #FFFCF6;
+  --text:    #1A1A1A;
+}
+
+/* Reset minimal */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  padding: 2rem;
+  max-width: 48rem;
+  margin: 0 auto;
+}
+
+h1 {
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+/* incepe sa scrii stilul aici */

@@ -1,0 +1,249 @@
+/* ============================================================
+   RESET MINIMAL — paste-and-forget
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; }
+* { margin: 0; padding: 0; }
+html { color-scheme: light dark; scroll-behavior: smooth; }
+img { display: block; max-width: 100%; height: auto; }
+a { color: inherit; }
+
+/* ============================================================
+   VARIABLE — schimbi tema in 1 loc, se schimba peste tot
+   ============================================================ */
+:root {
+  /* Paleta */
+  --primary: #1E3A8A;
+  --accent:  #FBBF24;
+  --bg:      light-dark(#FFFCF6, #0F172A);
+  --text:    light-dark(#1A1A1A, #F1F5F9);
+  --muted:   light-dark(#64748B, #94A3B8);
+  --border:  light-dark(#E5E7EB, #1E293B);
+
+  /* Spacing scale */
+  --space-1: 0.5rem;
+  --space-2: 1rem;
+  --space-3: 2rem;
+  --space-4: 4rem;
+
+  /* Layout */
+  --max-width: 64rem;
+  --radius: 0.5rem;
+}
+
+/* ============================================================
+   BODY + TIPOGRAFIE
+   ============================================================ */
+body {
+  font-family: 'Lato', system-ui, -apple-system, "Segoe UI", sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+h1, h2 {
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+/* ============================================================
+   LAYOUT — containere si padding consistent
+   ============================================================ */
+header,
+main > section,
+footer {
+  max-width: var(--max-width);
+  margin-inline: auto;
+  padding: var(--space-3) var(--space-2);
+}
+
+/* ============================================================
+   HEADER + NAV (mobile-first: hamburger + dropdown)
+   ============================================================ */
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-block: var(--space-2);
+  position: relative;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.1rem;
+  text-decoration: none;
+}
+
+.nav-toggle {
+  background: none;
+  border: 0;
+  cursor: pointer;
+  padding: var(--space-1);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nav-toggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: var(--text);
+}
+
+.nav {
+  display: none;
+  flex-direction: column;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  padding: var(--space-2);
+  gap: var(--space-1);
+  border-top: 1px solid var(--border);
+  z-index: 10;
+}
+
+.nav.open { display: flex; }
+
+.nav a {
+  text-decoration: none;
+  padding: var(--space-1) 0;
+  transition: color 0.15s;
+}
+
+.nav a:hover,
+.nav a:focus-visible { color: var(--primary); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  text-align: center;
+  padding-block: var(--space-4);
+}
+
+.hero h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: var(--space-2);
+}
+
+.tagline {
+  color: var(--muted);
+  font-size: 1.15rem;
+  margin-bottom: var(--space-3);
+}
+
+.cta {
+  display: inline-block;
+  background: var(--primary);
+  color: #FFFFFF;
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius);
+  text-decoration: none;
+  font-weight: 600;
+  transition: transform 0.15s, background 0.15s;
+}
+
+.cta:hover {
+  background: var(--accent);
+  color: #1A1A1A;
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   SECTIUNI
+   ============================================================ */
+section h2 {
+  font-size: 1.75rem;
+  margin-bottom: var(--space-2);
+}
+
+/* ============================================================
+   FORM
+   ============================================================ */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  max-width: 32rem;
+}
+
+form label {
+  font-weight: 600;
+  margin-top: var(--space-1);
+}
+
+input, textarea {
+  font: inherit;
+  padding: var(--space-1) 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--bg);
+  color: var(--text);
+}
+
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-color: var(--primary);
+}
+
+button[type="submit"] {
+  margin-top: var(--space-2);
+  background: var(--primary);
+  color: #FFFFFF;
+  border: 0;
+  padding: 0.75rem 2rem;
+  border-radius: var(--radius);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+  transition: transform 0.15s, background 0.15s;
+}
+
+button[type="submit"]:hover {
+  background: var(--accent);
+  color: #1A1A1A;
+  transform: translateY(-2px);
+}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer {
+  text-align: center;
+  color: var(--muted);
+  border-top: 1px solid var(--border);
+  margin-top: var(--space-4);
+  padding-block: var(--space-3);
+}
+
+footer a {
+  color: var(--primary);
+  text-decoration: none;
+}
+
+footer a:hover { text-decoration: underline; }
+
+/* ============================================================
+   BREAKPOINT — desktop (>= 768px)
+   Mobile-first: aici extindem peste reguli mobile
+   ============================================================ */
+@media (min-width: 768px) {
+  .nav-toggle { display: none; }
+
+  .nav {
+    display: flex;
+    flex-direction: row;
+    position: static;
+    padding: 0;
+    gap: var(--space-3);
+    background: transparent;
+    border: 0;
+  }
+
+  .hero { padding-block: 6rem; }
+}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<!-- PROBLEMA 10: lipseste lang="ro" pe <html> -->
+<html>
+<head>
+  <meta charset="UTF-8">
+  <!-- PROBLEMA 3: lipseste <meta name="viewport"> -->
+  <!-- PROBLEMA 1: title generic, ar trebui specific -->
+  <title>Document</title>
+  <!-- PROBLEMA 2: lipseste <meta name="description"> -->
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- PROBLEMA 8: script inline in <head>, fara defer, blocheaza randarea -->
+  <script>
+    console.log('Init...');
+    // Munca grea sincrona — blocheaza pagina pana se termina
+    let s = 0;
+    for (let i = 0; i < 5e6; i++) { s += Math.sqrt(i); }
+    console.log('Done', s);
+  </script>
+</head>
+<body>
+
+  <!-- PROBLEMA 9: <h2> inainte de <h1> in document (heading order rupt) -->
+  <div class="header">
+    <h2>Eveniment X</h2>
+    <div class="links">
+      <a href="#about">Despre</a>
+      <a href="#register">Inscriere</a>
+    </div>
+  </div>
+
+  <div class="hero">
+    <h1>Cel mai mare eveniment al anului</h1>
+    <p>Vino pe 15 mai la Iasi.</p>
+    <!-- PROBLEMA 4: <img> fara alt -->
+    <!-- PROBLEMA 5: imagine 2400x1600 randata la 800px -->
+    <img src="https://picsum.photos/2400/1600" width="800">
+  </div>
+
+  <div id="about">
+    <!-- PROBLEMA 9 (continuata): <h3> sare peste <h2> -->
+    <h3>Detalii</h3>
+    <p>Un eveniment despre tehnologie, design si comunitate.</p>
+  </div>
+
+  <div id="register">
+    <h3>Inscrie-te</h3>
+    <form>
+      <!-- PROBLEMA 6: input-uri fara <label> -->
+      <input type="text" placeholder="Nume">
+      <input type="email" placeholder="Email">
+      <!-- PROBLEMA 7: buton cu contrast 2.1:1 (sub 4.5 cerut de WCAG AA) -->
+      <button type="submit" style="background: #cccccc; color: #aaaaaa;">Trimite</button>
+    </form>
+  </div>
+
+</body>
+</html>
