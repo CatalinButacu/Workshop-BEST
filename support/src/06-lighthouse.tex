@@ -17,7 +17,10 @@ Dupa capitolul asta vei \textcommabelow{s}ti:
   \item Cite\textcommabelow{s}te raportul \textcommabelow{s}i identifica problemele cu impact maxim pe scor.
   \item Aplica fix-uri uzuale: \code{alt}, \code{lang}, \code{width}/\code{height} pe imagini, \code{defer} pe script.
   \item Optimizeaza imaginile cu format modern (WebP), \code{srcset}, \code{loading="lazy"}.
+  \item Optimizeaza fonturile: \code{font-display: swap}, \code{preload}, subseturi, self-hosting.
+  \item In\textcommabelow{t}elege \emph{critical rendering path}: ce blocheaza prima afi\textcommabelow{s}are si cum reduci timpul pana la LCP.
   \item Interpreteaza Core Web Vitals (LCP, INP, CLS) \textcommabelow{s}i pragurile lor.
+  \item \faRocket\ \emph{Bonus self-study:} minification, third-party scripts, service worker, Lighthouse CI, \code{content-visibility}.
 \end{itemize}
 \end{outcomes}
 
@@ -84,7 +87,7 @@ Fiecare categorie include:
   \item \textbf{Resurse care blocheaza randarea.} Adaugarea atributului \code{defer} pe \code{<script>} permite parsarea HTML in paralel.
   \item \textbf{Imagini supradimensionate.} O imagine 2400\,x\,1600 redata la 800 pixeli iroseste banda. Optimizare: \url{https://squoosh.app}.
   \item \textbf{Format imagini neoptimizat.} JPEG/PNG in locul WebP / AVIF.
-  \item \textbf{Cache lipsa.} Resursele statice (CSS, JS, imagini) ar trebui servite cu header \code{Cache-Control: max-age=31536000} (1 an). Pe GitHub Pages: cache-ul este configurat automat, fara interventie.
+  \item \textbf{Cache lipsa.} Resursele statice (CSS, JS, imagini) ar trebui servite cu header \code{Cache-Control: max-age=31536000} (1 an). \emph{Caveat GitHub Pages:} serve\textcommabelow{s}te cu \code{max-age=600} (10 minute) \textcommabelow{s}i nu poate fi modificat \textendash{} Lighthouse va afi\textcommabelow{s}a avertismentul ,,Serve static assets with an efficient cache policy''. Pentru control real al cache-ului, foloseste Netlify sau Cloudflare Pages.
 \end{itemize}
 
 \subsection{Accessibility}
@@ -161,6 +164,104 @@ Atributul \code{loading="lazy"} amana descarcarea imaginilor aflate sub \emph{fo
 
 \textbf{Exceptie:} pentru imaginea \emph{hero} (prima imagine din \emph{viewport}), se foloseste \code{loading="eager"} sau atributul lipseste; \code{loading="lazy"} aici intarzie LCP-ul.
 
+\subsection{Squoosh workflow pas cu pas}
+
+\url{https://squoosh.app} face conversia + redimensionarea intr-o singura ses\u iune, in browser (fara upload pe server). Pa\textcommabelow{s}i:
+
+\begin{enumerate}[itemsep=1pt]
+  \item Drag-and-drop imaginea originala (JPEG 4000\,x\,3000, 4MB).
+  \item In panoul \emph{Resize} (dreapta): seteaza la\textcommabelow{t}imea finala (ex. 1600px pentru hero, 800px pentru carduri).
+  \item Schimba formatul de output din PNG/JPEG in \emph{WebP} sau \emph{AVIF}.
+  \item Aju\textcommabelow{s}teaza \emph{Quality} (75 e un sweet spot pentru WebP). Compara vizual stanga vs dreapta.
+  \item Download. Repeta pentru 3\textendash{}4 dimensiuni daca folose\textcommabelow{s}ti \code{srcset}.
+\end{enumerate}
+
+Rezultat tipic: \textbf{500KB JPEG $\to$ 60KB WebP}. Diferen\textcommabelow{t}a de calitate la 75\% e impercepti\-bila pentru ochiul uman, dar Lighthouse vede economia.
+
+% =========================================================
+\section{Optimizarea fonturilor}
+
+Fonturile custom (Google Fonts, fonturi cumparate) sunt al doilea cost major dupa imagini. Un \code{<h1>} care a\textcommabelow{s}teapta sa se incarce fontul = LCP intarziat. Trei tehnici care rezolva 90\% din probleme.
+
+\subsection{\texttt{font-display: swap}}
+
+Implicit, textul cu font custom e \textbf{invizibil} pana cand fontul se descarca (\emph{Flash of Invisible Text, FOIT}). \code{font-display: swap} il afi\textcommabelow{s}eaza imediat cu fontul fallback, apoi schimba cand fontul custom e gata (\emph{Flash of Unstyled Text, FOUT}).
+
+\begin{lstlisting}[style=css, caption={Self-hosting cu \texttt{font-display}}]
+@font-face {
+  font-family: 'Lato';
+  src: url('/fonts/lato-regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+\end{lstlisting}
+
+Pentru Google Fonts, parametrul vine in URL: \code{?family=Lato\&display=swap}.
+
+\subsection{\texttt{preload} pentru fonturi critice}
+
+Browserul descopera fonturile abia dupa ce parseaza CSS-ul si gase\textcommabelow{s}te o regula care le folose\textcommabelow{s}te \textendash{} prea tarziu pentru LCP. \code{preload} le aduce in paralel cu HTML-ul:
+
+\begin{lstlisting}[style=html, numbers=none]
+<link rel="preload" href="/fonts/lato-regular.woff2" as="font" type="font/woff2" crossorigin>
+\end{lstlisting}
+
+\begin{atentie}
+Preload doar fonturile \textbf{folosite in viewport-ul ini\textcommabelow{t}ial}. Preload-ul pentru fonturi rar folosite (ex. font pentru cod, vizibil doar pe pagina de blog) face contrariul: ocupa banda inainte sa fie necesar.
+\end{atentie}
+
+\subsection{Subseturi \textcommabelow{s}i self-hosting}
+
+Fontul implicit Lato de la Google include 800+ glife (chineza, japoneza, simboluri). Daca ai nevoie doar de \textbf{latin} (engleza + romana), trimi\textcommabelow{t}i pe wire 5x mai mult decat nevoie. Solu\textcommabelow{t}ii:
+
+\begin{itemize}[itemsep=1pt]
+  \item \textbf{Google Fonts URL cu subset:} \code{?family=Lato\&subset=latin-ext\&display=swap}.
+  \item \textbf{Self-hosting} cu Google Webfonts Helper: \url{https://gwfh.mranftl.com}. Descarci fi\textcommabelow{s}ierele \code{.woff2} subsetate \textcommabelow{s}i CSS-ul gata configurat, le servesti din site-ul tau.
+\end{itemize}
+
+Benefi\textcommabelow{t}ii self-hosting: o solicitare HTTP mai pu\textcommabelow{t}in (nu mai contactezi \code{fonts.googleapis.com}), niciun cost DNS, control complet asupra cache-ului.
+
+% =========================================================
+\section{Critical rendering path \textendash{} ce blocheaza prima afi\textcommabelow{s}are}
+
+\emph{Critical rendering path} (CRP) este secven\textcommabelow{t}a de pa\textcommabelow{s}i pe care browserul ii face de la primirea HTML-ului pana la afi\textcommabelow{s}area pixelilor pe ecran. Doua resurse blocheaza vizibil acest path:
+
+\begin{itemize}[itemsep=1pt]
+  \item \textbf{CSS} \textendash{} blocheaza \emph{render}. Browserul nu deseneaza nimic pana cand nu a parsat tot CSS-ul referit in \code{<head>}. De aceea CSS-ul critic merge \code{<head>}, nu la sfar\textcommabelow{s}itul \code{<body>}.
+  \item \textbf{JavaScript fara \code{defer}/\code{async}} \textendash{} blocheaza si \emph{parsing} si \emph{render}. Browserul opre\textcommabelow{s}te totul, descarca, executa, apoi continua.
+\end{itemize}
+
+\begin{lstlisting}[style=html, caption={Tipare}]
+<head>
+  <!-- BLOCANT: dar CSS-ul e critic, e ok aici -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- NEBLOCANT: descarca paralel, executa dupa parsare -->
+  <script src="app.js" defer></script>
+
+  <!-- INDEPENDENT (analytics): paralel, executie cand vrea -->
+  <script src="https://analytics.com/script.js" async></script>
+</head>
+\end{lstlisting}
+
+\subsection{De ce \code{defer} e default-ul pentru JS-ul tau}
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{defer} \textendash{} descarca in paralel, executa \emph{dupa} parsare HTML, in \textbf{ordinea declarata}. DOM-ul exista cand ruleaza.
+  \item \code{async} \textendash{} descarca in paralel, executa \emph{imediat ce e disponibil} (poate intrerupe parsing). Ordine non-determinista. Pentru analytics da, pentru codul tau nu.
+  \item Fara nimic \textendash{} blochea\-za totul. Antipattern din 2015 incoace.
+\end{itemize}
+
+\subsection{Reducerea FCP / LCP}
+
+\begin{itemize}[itemsep=1pt]
+  \item Minimizeaza CSS-ul critic (tot ce e in viewport-ul initial). 50\,KB CSS = 2x mai lent pe 3G.
+  \item Preload pentru fontul + imaginea hero.
+  \item Inline-uiaza CSS-ul critic in \code{<style>} pe pagini cu trafic mare (landing-uri); restul \code{<link>} async.
+  \item Evita render-blocking 3rd party (chat widgets, Google Tag Manager) in \code{<head>}.
+\end{itemize}
+
 % =========================================================
 \section{Imbunatatiri suplimentare pentru Performance}
 
@@ -178,6 +279,105 @@ Resursele critice (font principal, imaginea hero) pot fi declarate cu \code{<lin
 Pentru paginile cu prima vizita prioritara (landing pages), CSS-ul critic (necesar pentru randarea zonei vizibile) poate fi inclus direct in \code{<head>} prin \code{<style>}, restul fiind incarcat asincron. Tehnica nu este necesara pentru pagini personale; merita atentie pentru site-uri comerciale.
 
 % =========================================================
+\begin{bonusbox}
+\textbf{Acest box e optional.} Daca esti la inceput, treci direct la \emph{Verificare}. Mai jos sunt optimiz\u arile pe care le faci cand vrei 100/100/100/100, nu doar 95+.
+
+\medskip
+
+\textbf{\faCompress\ Minification \textendash{} elimini spa\textcommabelow{t}iile, p\u astrezi semnifica\textcommabelow{t}ia}
+
+Codul scris pentru oameni (indentare, comentarii, spa\textcommabelow{t}ii) ocupa 30\textendash{}50\% in plus fa\textcommabelow{t}a de ce trebuie sa primeasca browserul. \emph{Minification} elimina tot ce e doar pentru lizibilitate. Rezultat: fi\textcommabelow{s}ier identic func\textcommabelow{t}ional, mai mic.
+
+Tool-uri online (zero setup):
+\begin{itemize}[itemsep=1pt]
+  \item \emph{CSS:} \url{https://www.toptal.com/developers/cssminifier}
+  \item \emph{JS:} \url{https://www.toptal.com/developers/javascript-minifier}
+  \item \emph{HTML:} \url{https://www.willpeavy.com/tools/minifier/}
+\end{itemize}
+
+Pentru proiecte reale, foloseste un build tool (Vite, esbuild, Parcel) care minifica automat la build. Pentru un portofoliu pe GitHub Pages, varianta online + commit la finalul fazei e suficient.
+
+\medskip
+
+\textbf{\faBullhorn\ Third-party scripts \textendash{} cel mai mare cost ascuns}
+
+Analytics, chat widgets, embed-uri YouTube/Twitter \textendash{} fiecare adauga 50\textendash{}500ms si penalty pe Best Practices.
+
+Strategii (in ordinea cre\textcommabelow{s}terii impactului):
+
+\begin{itemize}[itemsep=2pt]
+  \item \textbf{\code{async} pe analytics:} \code{<script async src="..."></script>}. Default deja pentru Google Analytics modern.
+  \item \textbf{Lazy load la interac\textcommabelow{t}iune:} chat widget se incarca \textbf{doar dupa ce user-ul d\u a click}. Pana atunci, un buton placeholder de 1KB.
+  \item \textbf{Facade pentru embed-uri:} YouTube embed = 500KB. Inlocuie\textcommabelow{s}te cu o imagine + buton play, incarca iframe-ul la click. Tool: \url{https://github.com/paulirish/lite-youtube-embed}.
+  \item \textbf{Self-host pentru analytics:} Plausible/Umami self-hosted in loc de Google Analytics. Zero penalty Lighthouse, GDPR-friendly.
+\end{itemize}
+
+\begin{lstlisting}[style=js, caption={Lazy load pentru chat widget}]
+const chatBtn = document.querySelector('.chat-launcher');
+chatBtn.addEventListener('click', () => {
+  const script = document.createElement('script');
+  script.src = 'https://widget.intercom.io/widget/abc123';
+  document.head.appendChild(script);
+}, { once: true });
+\end{lstlisting}
+
+\medskip
+
+\textbf{\faWifi\ \texttt{content-visibility: auto} \textendash{} skip rendering pe ce nu e vizibil}
+
+CSS modern (2023+) care permite browserului sa nu randeze elementele aflate sub fold pana cand utilizatorul scroll-eaza catre ele. Impact major pe pagini lungi (blog posts, documentari).
+
+\begin{lstlisting}[style=css, numbers=none]
+.long-section { content-visibility: auto; contain-intrinsic-size: 500px; }
+\end{lstlisting}
+
+\code{contain-intrinsic-size} e dimensiunea estimata \textendash{} previne \emph{layout shift} cand sec\textcommabelow{t}iunea devine vizibila si se randeaza real.
+
+\medskip
+
+\textbf{\faServer\ Service Worker \textendash{} cache offline (teaser)}
+
+Service Worker este un script care ruleaza in fundal si poate intercepta cererile HTTP \textendash{} il folose\textcommabelow{s}ti pentru a servi fi\textcommabelow{s}iere din cache, oferind func\textcommabelow{t}ionalitate \textbf{offline}. Combinat cu manifest.json, transforma un site in \emph{Progressive Web App} (PWA): instalabil pe telefon, deschis fara internet.
+
+Setup minimal: 30 de linii de JS. Tutorial complet: \url{https://web.dev/learn/pwa}.
+
+Pentru un portofoliu, valoarea e limitata; pentru un blog citit recurent, sau o aplicatie de productivitate, e diferen\textcommabelow{t}a intre ,,site'' si ,,app''.
+
+\medskip
+
+\textbf{\faRobot\ Lighthouse CI \textendash{} audit automat la fiecare commit}
+
+GitHub Actions poate rula Lighthouse la fiecare push si \textbf{blocheaza merge-ul} daca scorul scade sub un prag (ex. 90). Asa nu mai poti accidental regresa.
+
+\begin{lstlisting}[caption={\texttt{.github/workflows/lighthouse.yml} minimal}, basicstyle=\ttfamily\small, backgroundcolor=\color{codeBg}, frame=leftline, framerule=2.5pt, rulecolor=\color{partcolor}, framexleftmargin=4pt, xleftmargin=14pt]
+name: Lighthouse CI
+on: [pull_request]
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: treosh/lighthouse-ci-action@v11
+        with:
+          urls: 'https://voluntar-best.github.io/'
+          uploadArtifacts: true
+\end{lstlisting}
+
+Setup complet: \url{https://github.com/treosh/lighthouse-ci-action}.
+
+\medskip
+
+\textbf{\faRoute\ Unde mergi de aici}
+
+\begin{itemize}[itemsep=1pt]
+  \item \emph{web.dev Learn Performance (curs complet):} \url{https://web.dev/learn/performance}
+  \item \emph{web.dev Fast load times patterns:} \url{https://web.dev/explore/fast}
+  \item \emph{Bundle size analyzer (Webpack/Vite):} \url{https://bundlephobia.com}
+  \item \emph{Third-party impact:} \url{https://www.thirdpartyweb.today}
+\end{itemize}
+\end{bonusbox}
+
+% =========================================================
 \section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
 
 \begin{selfcheck}
@@ -187,6 +387,8 @@ Pentru paginile cu prima vizita prioritara (landing pages), CSS-ul critic (neces
   \item Care sunt cele 3 metrici Core Web Vitals \textcommabelow{s}i pragurile lor?
   \item \emph{Spot the issue:} \code{<img src="hero.jpg">} pe o pagina de productie.
   \item Cand este corect sa folose\textcommabelow{s}ti \code{loading="lazy"} \textcommabelow{s}i cand nu?
+  \item De ce \code{font-display: swap} previne ,,Flash of Invisible Text''?
+  \item Ce diferen\textcommabelow{t}a este intre \code{defer} \textcommabelow{s}i \code{async} pe un \code{<script>}?
 \end{enumerate}
 \end{selfcheck}
 
@@ -202,6 +404,10 @@ Pentru paginile cu prima vizita prioritara (landing pages), CSS-ul critic (neces
   \item Top fix-uri: \code{alt} pe imagini, \code{lang} pe \code{<html>}, contrast $\geq$4.5:1, \code{width}/\code{height} pe \code{<img>}, \code{defer} pe \code{<script>}.
   \item Core Web Vitals: LCP $<$2.5s, INP $<$200ms, CLS $<$0.1.
   \item Imagini: WebP/AVIF, \code{srcset}, \code{loading="lazy"} (cu exceptia imaginii hero), dimensiuni explicite.
+  \item Squoosh: drag $\to$ resize $\to$ format WebP $\to$ quality 75 $\to$ download. 500KB $\to$ 60KB tipic.
+  \item Fonturi: \code{font-display: swap} previne FOIT; \code{<link rel="preload">} pentru fontul critic; self-host pentru ,,o conexiune mai pu\textcommabelow{t}in''.
+  \item CRP: CSS blocheaza render; JS fara \code{defer} blocheaza tot. \code{defer} = default pentru JS-ul tau.
+  \item \faRocket\ Bonus: minification, lazy third-party, \code{content-visibility}, Service Worker (PWA), Lighthouse CI.
 \end{itemize}
 \end{recap}
 

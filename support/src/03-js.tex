@@ -19,7 +19,9 @@ Dupa capitolul asta vei \textcommabelow{s}ti:
   \item Aplica pattern-ul \textbf{SELECT $\to$ LISTEN $\to$ CHANGE} pentru orice interac\textcommabelow{t}iune.
   \item Manipuleaza DOM-ul cu \code{querySelector}, \code{classList}, \code{addEventListener}.
   \item Intercepteaza submit-ul unui formular \textcommabelow{s}i extrage valorile cu \code{FormData}.
+  \item Folose\textcommabelow{s}te \code{IntersectionObserver} pentru anima\textcommabelow{t}ii \textcommabelow{s}i lazy loading legate de scroll.
   \item Diagnostiheaza erorile JavaScript folosind console-ul browserului.
+  \item \faRocket\ \emph{Bonus self-study:} debounce/throttle, event delegation, \code{requestAnimationFrame}, \code{fetch} cu async/await, metode pe array (\code{map}/\code{filter}), \code{localStorage}.
 \end{itemize}
 \end{outcomes}
 
@@ -48,15 +50,9 @@ Includerea unui fisier JavaScript se realizeaza prin elementul \code{<script>}, 
   \item \code{defer} \textendash{} descarcare in paralel, executie \textbf{dupa} parsarea HTML-ului. Garantat executat in ordinea declararii. Optiunea recomandata pentru codul propriu.
 \end{itemize}
 
-\begin{dano}[Asa nu \textendash{} script in <head> fara atribut]
-\code{<script src="script.js"></script>}\\
-\textbf{Problema.} Cand scriptul ruleaza, \code{document.querySelector('.cta')} returneaza \code{null}, fiindca \code{<body>} nu a fost inca parsat.
-\end{dano}
-
-\begin{dado}[Asa da]
-\code{<script src="script.js" defer></script>}\\
-\textbf{Beneficiu.} La momentul executiei, intregul DOM exista. Scriptul gaseste elementele cautate.
-\end{dado}
+\begin{atentie}
+Fara \code{defer}, scriptul ruleaza inainte de parsarea \code{<body>}: \code{document.querySelector('.cta')} returneaza \code{null}. Cu \code{defer}, intregul DOM exista cand ruleaza scriptul.
+\end{atentie}
 
 % =========================================================
 \section{Declararea variabilelor}
@@ -103,16 +99,16 @@ function exemplu() {
 \section{Tipuri primitive si compuse}
 
 \begin{lstlisting}[style=js]
-const nume      = "Maria";              // string
+const nume      = "Voluntar";              // string
 const varsta    = 21;                   // number (intregi si zecimale)
 const eStudent  = true;                 // boolean
 const limbaje   = ["HTML", "CSS"];      // array (lista ordonata)
 const persoana  = {                     // object (pereche cheie-valoare)
-  nume:   "Maria",
+  nume:   "Voluntar",
   varsta: 21,
 };
 
-console.log(persoana.nume);             // "Maria"
+console.log(persoana.nume);             // "Voluntar"
 console.log(limbaje[0]);                // "HTML"
 console.log(typeof varsta);             // "number"
 \end{lstlisting}
@@ -161,7 +157,7 @@ const saluta2 = function(nume) {
 const saluta3 = (nume) => `Salut, ${nume}!`;
 
 // Apel: identic in toate cazurile
-console.log(saluta("Maria"));
+console.log(saluta("Voluntar"));
 \end{lstlisting}
 
 \textbf{Conventia practica:} arrow functions pentru handlere si callbacks; declaratii pentru functii cu nume reutilizate, definite la nivelul fisierului.
@@ -287,6 +283,70 @@ debugger;
 \textbf{Sfaturi practice.} Inainte de a cere ajutor, citeste mesajul de eroare din console. Numele functiei si numarul liniei sunt aproape intotdeauna corecte. \code{console.log(typeof x)} verifica tipul cand comportamentul este surprinzator.
 
 % =========================================================
+\section{IntersectionObserver \textendash{} anima\textcommabelow{t}ii la scroll}
+
+Cea mai uzuala cerere ,,fa o anima\textcommabelow{t}ie cand sectiunea devine vizibila'' (fade-in pe scroll, reveal pe carduri, lazy loading pentru imagini) NU se rezolva cu \code{window.addEventListener('scroll', ...)}. Browserul ofera un API dedicat, mult mai eficient: \code{IntersectionObserver}.
+
+Idea: in loc sa intrebi de 60 de ori pe secunda ,,e vizibila sectiunea?'', tu declari ,,anun\textcommabelow{t}a-ma cand starea de vizibilitate se schimba''. Browserul face restul, fara cost de performance.
+
+\begin{lstlisting}[style=js, caption={Fade-in pe scroll: pattern canonic in 10 linii}]
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);  // o singura data, nu repeti
+    }
+  });
+}, { threshold: 0.15 });  // declanseaza cand 15% e in viewport
+
+document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+\end{lstlisting}
+
+Pe CSS, partea sora:
+
+\begin{lstlisting}[style=css, numbers=none]
+.reveal { opacity: 0; transform: translateY(20px); transition: all 0.6s ease-out; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+\end{lstlisting}
+
+Cum se cite\textcommabelow{s}te API-ul:
+\begin{itemize}[itemsep=1pt]
+  \item Constructorul: \code{new IntersectionObserver(callback, optiuni)}.
+  \item \code{callback(entries)} \textendash{} se ape\-leaza cand starea de vizibilitate se schimba.
+  \item \code{entry.isIntersecting} \textendash{} \code{true} cand elementul intra in viewport.
+  \item \code{entry.target} \textendash{} elementul DOM (acela\textcommabelow{s}i pe care l-ai dat la \code{observe}).
+  \item \code{threshold} \textendash{} procent din element vizibil pentru a declan\textcommabelow{s}a (\code{0} = orice pixel, \code{1} = complet vizibil, \code{0.15} = 15\%).
+  \item \code{rootMargin} \textendash{} extinde/contracta viewport-ul (ex. \code{"0px 0px -100px 0px"} declan\textcommabelow{s}eaza cu 100px inainte sa intre real in cadru).
+  \item \code{observer.unobserve(el)} \textendash{} opre\textcommabelow{s}te monitorizarea (perfect dupa prima activare).
+\end{itemize}
+
+\begin{dano}[Asa nu \textendash{} scroll handler cu \texttt{getBoundingClientRect}]
+\begin{lstlisting}[style=js, numbers=none]
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.reveal').forEach((el) => {
+    if (el.getBoundingClientRect().top < window.innerHeight) {
+      el.classList.add('visible');
+    }
+  });
+});
+\end{lstlisting}
+\textbf{Problema.} Ruleaza la fiecare pixel de scroll (zeci \textendash{} sute de ori pe secunda), forteaza recalculare layout (\emph{layout thrashing}), scade FPS pe mobile.
+\end{dano}
+
+\begin{dado}[Asa da \textendash{} IntersectionObserver]
+Browserul observa eficient (compus pe thread separat). Callback-ul ruleaza doar cand starea se schimba. Zero impact pe performance.
+\end{dado}
+
+\begin{ponturi}[Aplica\textcommabelow{t}ii directe]
+\begin{itemize}[itemsep=1pt]
+  \item Lazy loading custom pentru con\textcommabelow{t}inut dinamic (cand nu poti folosi \code{loading="lazy"}).
+  \item Active state pentru navigare \emph{scrollspy} (eviden\textcommabelow{t}iaza link-ul activ in nav).
+  \item Infinite scroll \textendash{} cand userul ajunge aproape de jos, incarci urmatoarea pagina.
+  \item Analytics ,,a vazut sec\textcommabelow{t}iunea X'' (tracking eveniment doar cand sec\textcommabelow{t}iunea devine vizibila).
+\end{itemize}
+\end{ponturi}
+
+% =========================================================
 \section{Tratarea erorilor (\texttt{try}/\texttt{catch})}
 
 Codul care poate gen\-era erori la rulare (parsare JSON, apeluri \code{fetch}, acces la API-uri externe) trebuie incadrat intr-un bloc \code{try}/\code{catch} pentru ca o eroare sa nu opreasca executia restului paginii:
@@ -316,6 +376,222 @@ Cand eroarea este previzibila si recuperabila (utilizatorul poate continua), \co
 \end{itemize}
 
 % =========================================================
+\begin{bonusbox}
+\textbf{Acest box e optional.} Daca esti la inceput, treci direct la \emph{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}. Mai jos sunt 8 pattern-uri pe care le folose\textcommabelow{s}ti zilnic in proiecte reale.
+
+\medskip
+
+\textbf{\faClock\ Debounce \textcommabelow{s}i throttle \textendash{} st\u apane\textcommabelow{s}te evenimentele frecvente}
+
+Evenimentele \code{scroll}, \code{resize}, \code{input}, \code{mousemove} se declan\textcommabelow{s}eaza de zeci \textendash{} sute de ori pe secunda. Daca handler-ul face ceva costisitor (fetch, recalcul layout), pagina ,,inghea\textcommabelow{t}a''.
+
+\emph{Debounce} \textendash{} amana executia pana cand evenimentul nu mai apare \emph{ms} milisecunde. Bun pentru autocomplete (a\textcommabelow{s}tepta sa termini de scris).
+
+\emph{Throttle} \textendash{} executa cel mult o data la fiecare \emph{ms}. Bun pentru scroll, resize.
+
+\begin{lstlisting}[style=js, caption={Utilitar reutilizabil}]
+function debounce(fn, ms = 300) {
+  let timer;
+  return function(...args) {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn.apply(this, args), ms);
+  };
+}
+
+const search = document.querySelector('#search');
+search.addEventListener('input', debounce((e) => {
+  console.log('Cautare:', e.target.value);  // ruleaza dupa 300ms de tacere
+}, 300));
+\end{lstlisting}
+
+\begin{lstlisting}[style=js, caption={Buton ,,scroll to top'' care apare dupa 400px}]
+function throttle(fn, ms = 100) {
+  let last = 0;
+  return function(...args) {
+    const now = Date.now();
+    if (now - last >= ms) { last = now; fn.apply(this, args); }
+  };
+}
+
+const btnTop = document.querySelector('.to-top');
+window.addEventListener('scroll', throttle(() => {
+  btnTop.classList.toggle('visible', window.scrollY > 400);
+}, 100));
+\end{lstlisting}
+
+\medskip
+
+\textbf{\faSitemap\ Event delegation \textendash{} un singur listener pentru N elemente}
+
+Daca ai 50 de butoane \code{.delete-btn}, NU pune 50 de \code{addEventListener}. Pune unul pe parinte si folose\textcommabelow{s}te \code{event.target.closest()} pentru a verifica ce a fost clicat. Bonus: func\textcommabelow{t}ioneaza \textcommabelow{s}i pentru elemente adaugate dinamic dupa atasare.
+
+\begin{lstlisting}[style=js, caption={Lista de task-uri cu \u stergere}]
+const list = document.querySelector('#task-list');
+
+list.addEventListener('click', (e) => {
+  const deleteBtn = e.target.closest('.delete-btn');
+  if (!deleteBtn) return;                          // click in alta parte
+  deleteBtn.closest('li').remove();
+});
+\end{lstlisting}
+
+Cum func\textcommabelow{t}ioneaza: evenimentul \emph{bubbles} (urca de la \code{target} catre parinti). Listener-ul pe parinte vede toate click-urile copiilor.
+
+\medskip
+
+\textbf{\faCog\ Op\textcommabelow{t}iuni la \texttt{addEventListener}}
+
+Parametrul al treilea poate fi un obiect cu op\textcommabelow{t}iuni:
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{\{ once: true \}} \textendash{} executa o singura data, apoi se auto-elimina. Util pentru splash/intro animation.
+  \item \code{\{ passive: true \}} \textendash{} promiti browserului ca NU vei face \code{preventDefault()}. Pentru \code{scroll}/\code{touchmove} mai ales \textendash{} cre\textcommabelow{s}te FPS pe mobile.
+  \item \code{\{ capture: true \}} \textendash{} prinde evenimentul in faza de \emph{capture} (de sus in jos), nu \emph{bubble} (rar folosit).
+\end{itemize}
+
+\begin{lstlisting}[style=js, numbers=none]
+window.addEventListener('scroll', onScroll, { passive: true });
+btn.addEventListener('click', showWelcome, { once: true });
+\end{lstlisting}
+
+\medskip
+
+\textbf{\faPlay\ \texttt{requestAnimationFrame} \textendash{} anima\textcommabelow{t}ii fluide din JS}
+
+Cand vrei sa animezi ceva din JavaScript (nu doar prin CSS), NU folosi \code{setTimeout(..., 16)}. Folose\textcommabelow{s}te \code{requestAnimationFrame} \textendash{} se sincronizeaza cu refresh-ul ecranului (60fps natural, 120fps pe ecrane rapide).
+
+\begin{lstlisting}[style=js, caption={Counter animat de la 0 la o valoare \textcommabelow{t}int\u a}]
+function animateNumber(el, target, duration = 1000) {
+  const start = performance.now();
+
+  function tick(now) {
+    const elapsed = now - start;
+    const progress = Math.min(elapsed / duration, 1);   // 0..1
+    el.textContent = Math.floor(progress * target);
+    if (progress < 1) requestAnimationFrame(tick);
+  }
+
+  requestAnimationFrame(tick);
+}
+
+animateNumber(document.querySelector('.stat-projects'), 42);
+\end{lstlisting}
+
+\medskip
+
+\textbf{\faGlobe\ Async / await + fetch \textendash{} apeluri spre API-uri}
+
+Functiile \code{async} permit scrierea codului asincron in stil sincron. \code{await} pauzeaza pana cand un \code{Promise} se rezolva.
+
+\begin{lstlisting}[style=js, caption={Voluntar afi\textcommabelow{s}eaz\u a stats GitHub live pe portofoliu}]
+async function loadGitHubStats(username) {
+  try {
+    const response = await fetch(`https://api.github.com/users/${username}`);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+
+    const data = await response.json();
+
+    document.querySelector('.gh-repos').textContent     = data.public_repos;
+    document.querySelector('.gh-followers').textContent = data.followers;
+    document.querySelector('.gh-avatar').src            = data.avatar_url;
+  } catch (err) {
+    console.warn('Nu am putut incarca stats GitHub:', err);
+  }
+}
+
+loadGitHubStats('voluntar-best');
+\end{lstlisting}
+
+Trei reguli:
+\begin{itemize}[itemsep=1pt]
+  \item \code{async} inainte de \code{function} \textendash{} func\textcommabelow{t}ia returneaza un \code{Promise}.
+  \item \code{await} func\textcommabelow{t}ioneaza doar in interiorul unei func\textcommabelow{t}ii \code{async}.
+  \item Erorile asincrone se prind cu \code{try}/\code{catch} la fel ca cele sincrone.
+\end{itemize}
+
+\medskip
+
+\textbf{\faList\ Metode pe array \textendash{} \texttt{map}, \texttt{filter}, \texttt{find}}
+
+In loc de \code{for} cu indice si \code{array.push()}, JavaScript ofera metode care returneaza un array nou (imuabilitate). Mult mai citibile pentru transformari de date.
+
+\begin{lstlisting}[style=js, caption={Lista de proiecte randat\u a din date}]
+const proiecte = [
+  { titlu: 'Portfolio',   link: '/portfolio',   tag: 'web' },
+  { titlu: 'Game of Life', link: '/gol',         tag: 'algo' },
+  { titlu: 'Calculator',   link: '/calc',        tag: 'web' },
+];
+
+// map -- transforma fiecare element
+const html = proiecte
+  .filter((p) => p.tag === 'web')                      // doar proiectele web
+  .map((p) => `<li><a href="${p.link}">${p.titlu}</a></li>`)
+  .join('');
+
+document.querySelector('.projects').innerHTML = html;
+
+// find -- gase\textcommabelow{s}te primul element care satisface
+const portfolio = proiecte.find((p) => p.titlu === 'Portfolio');
+\end{lstlisting}
+
+\code{reduce} (mai rar in front-end de inceput) acumuleaza un singur rezultat din array (suma, grup\u ari, statistici).
+
+\medskip
+
+\textbf{\faPuzzlePiece\ Destructuring + template literals}
+
+Doua sintaxe pe care le vezi peste tot. Destructuring extrage valori din obiecte/array-uri intr-un singur pas:
+
+\begin{lstlisting}[style=js, numbers=none]
+const { nume, varsta } = persoana;       // in loc de persoana.nume, persoana.varsta
+const [primul, al_doilea] = limbaje;     // in loc de limbaje[0], limbaje[1]
+
+// Aplicat in parametri de functie
+function saluta({ nume, varsta }) {
+  return `${nume}, ${varsta} ani`;
+}
+saluta({ nume: 'Voluntar', varsta: 21 });
+\end{lstlisting}
+
+Template literals (backtick) permit interpolare \code{\$\{...\}} \textcommabelow{s}i string-uri multi-linie. Le-ai folosit deja in exemplul GitHub si in HTML-ul generat din \code{map}.
+
+\medskip
+
+\textbf{\faSave\ \texttt{localStorage} \textendash{} salveaza preferin\textcommabelow{t}ele user-ului}
+
+\code{localStorage} este un dictionar persistent intre vizite. Stocheaza doar string-uri \textendash{} pentru obiecte folose\textcommabelow{s}ti \code{JSON.stringify}/\code{JSON.parse}.
+
+\begin{lstlisting}[style=js, caption={Tema dark se p\u astreaz\u a intre vizite}]
+const toggle = document.querySelector('.toggle-theme');
+
+// La incarcare: aplica tema salvata
+if (localStorage.getItem('theme') === 'dark') {
+  document.body.classList.add('dark');
+}
+
+// La click: schimba si salveaza
+toggle.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+  const tema = document.body.classList.contains('dark') ? 'dark' : 'light';
+  localStorage.setItem('theme', tema);
+});
+\end{lstlisting}
+
+\code{sessionStorage} e identic, dar se sterge cand userul inchide tab-ul. Ambele au limita ~5MB per origin.
+
+\medskip
+
+\textbf{\faRoute\ Unde mergi de aici}
+
+\begin{itemize}[itemsep=1pt]
+  \item \emph{MDN IntersectionObserver:} \url{https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API}
+  \item \emph{javascript.info \textendash{} Promises, async/await:} \url{https://javascript.info/async}
+  \item \emph{web.dev Event handling best practices:} \url{https://web.dev/articles/optimize-input-delay}
+  \item \emph{Free public APIs pentru exersat:} \url{https://github.com/public-apis/public-apis}
+\end{itemize}
+\end{bonusbox}
+
+% =========================================================
 \section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
 
 \begin{selfcheck}
@@ -325,6 +601,8 @@ Cand eroarea este previzibila si recuperabila (utilizatorul poate continua), \co
   \item De ce \code{===} este preferabil lui \code{==}? Da\textcommabelow{t}i un exemplu de coerci\textcommabelow{t}ie surprinzatoare.
   \item Ce face \code{e.preventDefault()} apelat intr-un handler de \code{submit}?
   \item \emph{Spot the issue:} \code{const btn = document.querySelector('.cta'); btn.addEventListener(...);} \textendash{} \code{btn} este \code{null}.
+  \item De ce este \code{IntersectionObserver} preferabil lui \code{scroll} listener pentru anima\textcommabelow{t}ii la scroll?
+  \item Ce face \code{observer.unobserve(el)} \textcommabelow{s}i cand il folose\textcommabelow{s}ti?
 \end{enumerate}
 \end{selfcheck}
 
@@ -340,7 +618,9 @@ Cand eroarea este previzibila si recuperabila (utilizatorul poate continua), \co
   \item DOM: \code{querySelector} (un element); \code{querySelectorAll} (NodeList iterabil cu \code{.forEach}).
   \item Form submit: \code{e.preventDefault()} + \code{new FormData(form)} + \code{Object.fromEntries(...)}.
   \item Cache referintele DOM in variabile; nu repeta \code{querySelector} pentru acelasi element.
+  \item \code{IntersectionObserver} pentru anima\textcommabelow{t}ii la scroll: zero cost de performance, callback doar cand vizibilitatea se schimba.
   \item Debug: \code{F12 $\to$ Console}, \code{console.log()}, \code{debugger}.
+  \item \faRocket\ Bonus: debounce/throttle, event delegation, \code{requestAnimationFrame}, \code{fetch} cu async/await, \code{map}/\code{filter}/\code{find}, destructuring, \code{localStorage}.
 \end{itemize}
 \end{recap}
 

@@ -22,6 +22,8 @@ Dupa capitolul asta vei \textcommabelow{s}ti:
   \item Scrie reguli mobile-first cu \code{@media (min-width: ...)}.
   \item Pozitioneaza elemente cu \code{position} \textcommabelow{s}i creeaza header sticky.
   \item Aplica anima\textcommabelow{t}ii cu \code{transition} si \code{@keyframes}, respectand \code{prefers-reduced-motion}.
+  \item Combina \code{transform}, \code{transition} si \code{cubic-bezier()} pentru micro-interactiuni profesionale (hover-lift, fade-in, spinner).
+  \item \faRocket\ \emph{Bonus self-study:} transformari 3D (flip-card), \code{animation-timeline} pentru scroll-driven, \code{filter}/\code{backdrop-filter}, \code{clip-path}, container queries.
 \end{itemize}
 \end{outcomes}
 
@@ -236,6 +238,32 @@ Variabilele CSS sunt \emph{scoped}: redefinirea intr-un selector descendent supr
 \end{lstlisting}
 
 % =========================================================
+\section{Proprietatea \texttt{display} \textendash{} valori}
+
+\code{display} controleaza modul fundamental in care elementul se aseaza in pagina. Cele 6 valori pe care le intalnesti in 99\% din cazuri:
+
+\begin{tcolorbox}[
+  enhanced, breakable, sharp corners, arc=0pt,
+  colback=accentSoft, colframe=partcolor, boxrule=0pt, leftrule=3pt,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, fontupper=\small,
+]
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}p{0.22\linewidth}@{\hspace{8pt}}p{0.74\linewidth}@{}}
+{\sffamily\bfseries\color{partcolor} Valoare} & {\sffamily\bfseries\color{partcolor} Efect} \\
+\code{block}        & Element pe linie noua, ocupa toata latimea disponibila. Default pentru \code{<div>}, \code{<p>}, \code{<h1>...<h6>}, \code{<section>}. \\
+\code{inline}       & Curge in textul din jur, ignora \code{width}/\code{height}. Default pentru \code{<span>}, \code{<a>}, \code{<strong>}, \code{<em>}. \\
+\code{inline-block} & Curge in text ca inline, dar accepta \code{width}/\code{height} ca un block. Util pentru butoane in text. \\
+\code{flex}         & Activeaza modelul Flexbox (uni-dimensional) pe \emph{copii}i elementului. Cel mai folosit pentru header-uri, navigatie, alinieri. \\
+\code{grid}         & Activeaza modelul CSS Grid (bi-dimensional) pe copii. Pentru galerii, dashboard-uri, layout-uri complexe. \\
+\code{none}         & Ascunde complet elementul (nu ocupa spatiu). Util pentru meniuri mobile inchise, modale ascunse. \\
+\end{tabular}
+\end{tcolorbox}
+
+\begin{atentie}
+\code{display: none} \textbf{ascunde complet} elementul (cititoarele de ecran il sar). Daca vrei doar sa-l faci invizibil dar accesibil, foloseste \code{visibility: hidden} sau \code{opacity: 0; pointer-events: none}.
+\end{atentie}
+
+% =========================================================
 \section{Flexbox}
 
 Flexbox (\emph{Flexible Box Layout}) este un model de layout uni-dimensional, util pentru distribuirea spatiului si alinierea continutului pe o axa (orizontala sau verticala).
@@ -254,13 +282,49 @@ header {
 \subsection{Cele 6 proprietati pe care le folosesti}
 
 \begin{itemize}[itemsep=2pt]
-  \item \code{display: flex} \textendash{} activeaza modelul.
-  \item \code{flex-direction: row | column} \textendash{} axa principala.
-  \item \code{justify-content} \textendash{} distributie pe axa principala. Valori uzuale: \code{flex-start}, \code{center}, \code{flex-end}, \code{space-between}, \code{space-around}.
-  \item \code{align-items} \textendash{} aliniere pe axa secundara. Valori uzuale: \code{stretch} (default), \code{center}, \code{flex-start}, \code{flex-end}.
-  \item \code{gap} \textendash{} spatiu uniform intre copii. Inlocuieste \code{margin} pe copii.
-  \item \code{flex: 1} (pe copii) \textendash{} permite copilului sa creasca pentru a umple spatiul disponibil.
+  \item \code{display: flex} \textendash{} activeaza modelul (pe parinte).
+  \item \code{flex-direction} \textendash{} axa principala: \code{row} (default, orizontal), \code{column} (vertical), \code{row-reverse}, \code{column-reverse}.
+  \item \code{justify-content} \textendash{} distributie pe axa principala. Vezi tabelul de mai jos.
+  \item \code{align-items} \textendash{} aliniere pe axa secundara. Vezi tabelul de mai jos.
+  \item \code{gap} \textendash{} spatiu uniform intre copii (in unitati: \code{1rem}, \code{16px}). Inlocuieste \code{margin}.
+  \item \code{flex-wrap} \textendash{} \code{nowrap} (default, totul pe o linie), \code{wrap} (trece pe linia urmatoare).
+  \item \code{flex: 1} (pe copil) \textendash{} cre\textcommabelow{s}te pentru a umple spatiul disponibil.
 \end{itemize}
+
+\subsubsection{Valorile pentru \texttt{justify-content} (axa principala)}
+
+\begin{tcolorbox}[
+  enhanced, breakable, sharp corners, arc=0pt,
+  colback=accentSoft, colframe=partcolor, boxrule=0pt, leftrule=3pt,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, fontupper=\small,
+]
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.30\linewidth}@{\hspace{8pt}}p{0.66\linewidth}@{}}
+\code{flex-start} (default) & Toate copii lipiti la inceputul axei. \\
+\code{center}               & Grupate la mijlocul axei. \\
+\code{flex-end}             & Lipiti la finalul axei. \\
+\code{space-between}        & Primul/ultimul la margini, spa\textcommabelow{t}iu egal intre restul. \\
+\code{space-around}         & Spa\textcommabelow{t}iu egal in jurul fiecaruia (margine = jumatate). \\
+\code{space-evenly}         & Spa\textcommabelow{t}iu absolut egal peste tot (inclusiv la margini). \\
+\end{tabular}
+\end{tcolorbox}
+
+\subsubsection{Valorile pentru \texttt{align-items} (axa secundara)}
+
+\begin{tcolorbox}[
+  enhanced, breakable, sharp corners, arc=0pt,
+  colback=accentSoft, colframe=partcolor, boxrule=0pt, leftrule=3pt,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, fontupper=\small,
+]
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.30\linewidth}@{\hspace{8pt}}p{0.66\linewidth}@{}}
+\code{stretch} (default) & Copii se intind pe toata latimea axei secundare. \\
+\code{center}            & Centrate pe axa secundara. \\
+\code{flex-start}        & Lipiti la inceputul axei (sus pentru row, stanga pentru column). \\
+\code{flex-end}          & Lipiti la final (jos / dreapta). \\
+\code{baseline}          & Aliniati dupa linia de baza a textului (util pentru fonturi de marimi diferite). \\
+\end{tabular}
+\end{tcolorbox}
 
 \begin{ponturi}
 \textbf{Trick uzual:} \code{display: flex; justify-content: center; align-items: center;} centreaza orice element in containerul sau, atat orizontal cat si vertical, in 3 linii.
@@ -340,15 +404,27 @@ Browserul selecteaza prima sau a doua valoare in functie de tema activa. Suportu
 % =========================================================
 \section{Pozi\textcommabelow{t}ionarea elementelor}
 
-Proprietatea \code{position} controleaza modul in care un element se aseaza in fluxul paginii. Cinci valori principale:
+Proprietatea \code{position} controleaza modul in care un element se aseaza in fluxul paginii. Cinci valori, cu reper de cand le folose\textcommabelow{s}ti:
 
-\begin{itemize}
-  \item \code{static} \textendash{} valoarea implicita; elementul respecta fluxul natural.
-  \item \code{relative} \textendash{} pozi\textcommabelow{t}ie raportata la pozi\textcommabelow{t}ia normala; \code{top}, \code{left} muta vizual fara sa afecteze celelalte elemente.
-  \item \code{absolute} \textendash{} scoate elementul din flux; pozitionat relativ la primul parinte cu \code{position: relative} (sau viewport).
-  \item \code{fixed} \textendash{} pozitionat relativ la viewport; ramane vizibil la scroll. Utilizat pentru header-e sticky in stil vechi.
-  \item \code{sticky} \textendash{} se comporta \code{relative} pana ajunge la o margine, apoi devine \code{fixed}. Modern, util pentru header-e \textcommabelow{s}i sidebar-uri.
-\end{itemize}
+\begin{tcolorbox}[
+  enhanced, breakable, sharp corners, arc=0pt,
+  colback=accentSoft, colframe=partcolor, boxrule=0pt, leftrule=3pt,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, fontupper=\small,
+]
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}p{0.20\linewidth}@{\hspace{6pt}}p{0.50\linewidth}@{\hspace{6pt}}p{0.24\linewidth}@{}}
+{\sffamily\bfseries\color{partcolor} Valoare} & {\sffamily\bfseries\color{partcolor} Comportament} & {\sffamily\bfseries\color{partcolor} Cand foloseste} \\
+\code{static} (default) & Respecta fluxul natural; \code{top}/\code{left} ignorate. & implicit, nu il setezi \\
+\code{relative}         & Stay-in-place pana il mu\textcommabelow{t}i cu \code{top}/\code{left}; pastreaza spa\textcommabelow{t}iul. & ancora pentru \code{absolute} \\
+\code{absolute}         & Scos din flux; pozi\textcommabelow{t}ionat fa\textcommabelow{t}a de primul parinte \code{relative}. & tooltip-uri, badge-uri \\
+\code{fixed}            & Fixat pe viewport; ramane la scroll. & modal, buton ,,scroll-to-top'' \\
+\code{sticky}           & \code{relative} pana ajunge la o margine, apoi \code{fixed}. & header sticky, sidebar \\
+\end{tabular}
+\end{tcolorbox}
+
+\begin{atentie}
+\code{absolute} are nevoie de un parinte \code{relative} (sau cade pana la viewport). Daca elementul ,,sare in lume'', verifica daca containerul are \code{position: relative}.
+\end{atentie}
 
 \begin{lstlisting}[style=css, caption={Header sticky modern}]
 header {
@@ -358,6 +434,34 @@ header {
   z-index: 10;
 }
 \end{lstlisting}
+
+% =========================================================
+\section{Cheatsheet \textendash{} alte proprieta\textcommabelow{t}i cu enum-uri}
+
+Cele patru cele mai uzuale dupa cele de mai sus. Le intalne\textcommabelow{s}ti zilnic.
+
+\begin{tcolorbox}[
+  enhanced, breakable, sharp corners, arc=0pt,
+  colback=accentSoft, colframe=partcolor, boxrule=0pt, leftrule=3pt,
+  left=12pt, right=12pt, top=8pt, bottom=8pt, fontupper=\small,
+]
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.22\linewidth}@{\hspace{6pt}}p{0.34\linewidth}@{\hspace{6pt}}p{0.40\linewidth}@{}}
+{\sffamily\bfseries\color{partcolor} Proprietate} & {\sffamily\bfseries\color{partcolor} Valori} & {\sffamily\bfseries\color{partcolor} Cand foloseste} \\
+\code{box-sizing}     & \code{content-box} (default), \code{border-box} & \emph{Mereu border-box} \textendash{} aplicat global. \\
+\code{overflow}       & \code{visible} (default), \code{hidden}, \code{scroll}, \code{auto} & \code{hidden} pentru a tunde, \code{auto} pentru scroll doar la nevoie. \\
+\code{text-align}     & \code{left} (default), \code{center}, \code{right}, \code{justify} & Aliniere text in container. \\
+\code{cursor}         & \code{auto}, \code{pointer}, \code{default}, \code{text}, \code{grab}, \code{not-allowed}, \code{wait} & \code{pointer} pe elemente clicabile non-link. \\
+\code{font-weight}    & \code{normal} (400), \code{bold} (700), 100\textendash{}900 in pa\textcommabelow{s}i de 100 & \code{500} pentru \emph{medium}, \code{600} pentru \emph{semibold}. \\
+\code{text-transform} & \code{none} (default), \code{uppercase}, \code{lowercase}, \code{capitalize} & In CSS, nu in HTML \textendash{} pastrezi semantica. \\
+\code{visibility}     & \code{visible} (default), \code{hidden} & Ascunde dar pastreaza spa\textcommabelow{t}iul; \code{display: none} il scoate complet. \\
+\code{pointer-events} & \code{auto} (default), \code{none} & \code{none} dezactiveaza click \textcommabelow{s}i hover (overlay-uri inactive). \\
+\end{tabular}
+\end{tcolorbox}
+
+\begin{ponturi}
+\textbf{Regula generala:} valori unitare ca \code{cursor: pointer}, \code{text-align: center}, \code{overflow: hidden} arata exact ca in tooltip-ul autocomplete al VS Code. \code{Ctrl+Space} dupa numele proprieta\textcommabelow{t}ii afi\textcommabelow{s}eaza lista completa.
+\end{ponturi}
 
 % =========================================================
 \section{Anima\textcommabelow{t}ii CSS}
@@ -385,32 +489,66 @@ Animatiile imbunatatesc perceptia calitatii produsului \textcommabelow{s}i orien
 
 Sintaxa: \code{transition: <proprietate> <durata> <timing-function> <delay>}.
 
-\begin{dano}[Asa nu \textendash{} fara transition]
-\begin{lstlisting}[style=css, numbers=none]
-.cta { background: var(--primary); }
-.cta:hover { background: var(--accent); }
-\end{lstlisting}
-\textbf{Problema.} Schimbarea este instantanee, abrupta. Utilizatorul percepe interfa\textcommabelow{t}a ca pe un schimb de pagini, nu ca pe un raspuns.
-\end{dano}
+\subsubsection{Timing function \textendash{} cum se simte miscarea}
 
-\begin{dado}[Asa da \textendash{} cu transition de 200ms]
-\begin{lstlisting}[style=css, numbers=none]
-.cta { background: var(--primary); transition: background 0.2s ease; }
-.cta:hover { background: var(--accent); }
+Durata spune \emph{cat} dureaza animatia; \emph{timing function} spune \emph{cum} se distribuie miscarea in timp. Valorile predefinite sunt suficiente pentru 90\% din cazuri:
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{linear} \textendash{} viteza constanta. Util pentru spinner-e si bare de progres.
+  \item \code{ease} (default) \textendash{} accelereaza la inceput, decelereaza la final.
+  \item \code{ease-in} \textendash{} porneste lent, se incheie rapid. Folosit pentru iesiri (\emph{exit}).
+  \item \code{ease-out} \textendash{} porneste rapid, se incheie lent. Folosit pentru intrari (\emph{enter}); senzatie de aterizare lina.
+  \item \code{ease-in-out} \textendash{} simetric. Folosit pentru tranzitii reversibile (toggle).
+\end{itemize}
+
+\begin{ponturi}[Regula UX rapida]
+Pentru micro-interactiuni (hover, click): \code{ease-out 150ms\textendash{}250ms}. Sub 150ms se simte abrupt; peste 300ms se simte lent.
+\end{ponturi}
+
+\subsubsection{Cubic-bezier \textendash{} curba personalizata}
+
+Cele 5 valori predefinite sunt scurtaturi pentru curbe Bezier de gradul 3. Cand vrei o curba personalizata (ex. \emph{bounce}, \emph{overshoot}), o defines\textcommabelow{t}i prin 4 numere care reprezinta cele doua puncte de control:
+
+\begin{lstlisting}[style=css, caption={Easing personalizat cu overshoot subtil}]
+.cta {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.cta:hover { transform: scale(1.05); }
 \end{lstlisting}
-\textbf{Beneficiu.} Schimbarea este progresiva. Senza\textcommabelow{t}ia de raspuns viu, profesional.
-\end{dado}
+
+\begin{ponturi}
+\textbf{Tool recomandat:} \url{https://cubic-bezier.com} \textendash{} editor vizual cu preview. Copiezi cele 4 valori si le lipesti in CSS.
+\end{ponturi}
 
 \subsection{Transform \textendash{} scalare, rota\textcommabelow{t}ie, transla\textcommabelow{t}ie}
 
-\code{transform} aplica o transformare geometrica fara a afecta layout-ul:
+\code{transform} aplica o transformare geometrica fara a afecta layout-ul (alte elemente nu se mut\u a). Operatiile uzuale:
 
 \begin{itemize}
-  \item \code{transform: scale(1.05)} \textendash{} marire 5\%.
-  \item \code{transform: rotate(45deg)} \textendash{} rotire 45 grade.
-  \item \code{transform: translateY(-2px)} \textendash{} mutare in sus 2 pixeli.
-  \item Combinare: \code{transform: scale(1.05) rotate(2deg)}.
+  \item \code{translate(x, y)} / \code{translateX} / \code{translateY} \textendash{} mutare pe axe (px, \%, rem). Mai performant decat \code{top}/\code{left}.
+  \item \code{scale(n)} \textendash{} marire/micsorare proportionala. \code{scaleX}/\code{scaleY} pe o singura axa.
+  \item \code{rotate(deg)} \textendash{} rotire in plan; pozitiv = sensul acelor de ceas.
+  \item \code{skew(deg)} \textendash{} forfecare (rar folosit, util pentru efecte oblique).
+  \item Combinare \emph{ordonata}: \code{transform: translateY(-2px) scale(1.05) rotate(2deg)} \textendash{} ordinea conteaza, se aplica de la dreapta la stanga.
 \end{itemize}
+
+\subsubsection{Transform-origin \textendash{} punctul de pivot}
+
+Implicit, transformarile se aplica fata de centrul elementului. \code{transform-origin} schimba acest pivot:
+
+\begin{lstlisting}[style=css, caption={Card care se ,,deschide'' din coltul stanga-sus}]
+.card {
+  transform-origin: top left;
+  transition: transform 0.3s ease-out;
+}
+.card:hover { transform: scale(1.05); }
+\end{lstlisting}
+
+Valori uzuale: \code{center} (default), \code{top}, \code{bottom}, \code{left}, \code{right}, combinatii (\code{top left}, \code{50\% 0\%}), sau coordonate explicite in px/\%.
+
+\begin{ponturi}[Performance]
+Browserul accelereaza pe GPU doar \code{transform} si \code{opacity}. Anima\textcommabelow{t}ia altor proprieta\textcommabelow{t}i (ex. \code{width}, \code{margin}, \code{top}) declan\textcommabelow{s}eaza reflow \textcommabelow{s}i scade FPS. Regula: pentru mi\textcommabelow{s}care, folose\textcommabelow{s}te \code{transform: translate(...)}, nu \code{top}/\code{left}.
+\end{ponturi}
 
 \subsection{Keyframes \textendash{} animatii arbitrare}
 
@@ -445,6 +583,75 @@ Pentru anima\textcommabelow{t}ii care nu sunt declan\textcommabelow{s}ate de o s
 
 Sintaxa shorthand pentru animation: \code{animation: <nume> <durata> <timing> <delay> <iteratii> <direction> <fill-mode>}.
 
+\subsubsection{Keyframes multi-step}
+
+\code{@keyframes} accepta procente intermediare, nu doar \code{from} si \code{to}. Astfel po\textcommabelow{t}i descrie traiectorii complexe intr-o singura anima\textcommabelow{t}ie:
+
+\begin{lstlisting}[style=css, caption={Buton care ,,pulseaz\u a'' atragator}]
+@keyframes pulse {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(250, 165, 30, 0.7); }
+  50%  { transform: scale(1.05); box-shadow: 0 0 0 12px rgba(250, 165, 30, 0); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 0 rgba(250, 165, 30, 0); }
+}
+
+.cta-featured { animation: pulse 2s ease-in-out infinite; }
+\end{lstlisting}
+
+\subsubsection{Animation-fill-mode \textendash{} ce ramane dupa anima\textcommabelow{t}ie}
+
+Implicit, dupa ce animatia se termina, elementul revine la starea CSS originala. \code{animation-fill-mode} controleaza acest comportament:
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{none} (default) \textendash{} elementul revine la stilul original.
+  \item \code{forwards} \textendash{} pastreaza valorile din ultimul keyframe. \textbf{Cel mai folosit} pentru fade-in / slide-in (vrei sa ramana la \code{opacity: 1}).
+  \item \code{backwards} \textendash{} aplica primul keyframe inainte de start (in timpul \code{animation-delay}).
+  \item \code{both} \textendash{} combinatie \code{forwards + backwards}.
+\end{itemize}
+
+\begin{lstlisting}[style=css, caption={Fade-in care r\u amane vizibil}]
+.hero h1 {
+  opacity: 0;
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+\end{lstlisting}
+
+\subsubsection{Animation-play-state \textendash{} pauz\u a \textcommabelow{s}i reluare}
+
+\code{animation-play-state} permite punerea pe pauza a unei animatii \textendash{} util pentru carusele care se opresc la hover:
+
+\begin{lstlisting}[style=css, numbers=none]
+.carousel { animation: scroll 30s linear infinite; }
+.carousel:hover { animation-play-state: paused; }
+\end{lstlisting}
+
+\subsection{Pattern complet: card cu hover-lift}
+
+Combinatia transition + transform + box-shadow produce efectul de ,,ridicare'' pe care il vezi pe orice landing page modern:
+
+\begin{lstlisting}[style=css, caption={Hover-lift, pattern de baz\u a pentru carduri}]
+.card {
+  background: var(--bg);
+  padding: var(--space-3);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease-out, box-shadow 0.25s ease-out;
+  cursor: pointer;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+\end{lstlisting}
+
+Detalii care fac diferenta:
+\begin{itemize}[itemsep=1pt]
+  \item \code{ease-out} pe enter \textendash{} senzatie de aterizare lina.
+  \item Umbra cre\textcommabelow{s}te si se ,,rasfira'' (offset Y mai mare, blur mai mare) \textendash{} simuleaza distan\textcommabelow{t}a fa\textcommabelow{t}a de fundal.
+  \item Tranzi\textcommabelow{t}ie pe ambele proprieta\textcommabelow{t}i simultan, nu doar \code{transform}.
+  \item Cursor \code{pointer} \textendash{} afi\textcommabelow{s}eaza inten\textcommabelow{t}ia ca elementul e clicabil.
+\end{itemize}
+
 \subsection{Accesibilitate: \texttt{prefers-reduced-motion}}
 
 Unii utilizatori (afec\textcommabelow{t}iuni vestibulare, dependente de aten\textcommabelow{t}ie) au setat in OS preferin\textcommabelow{t}a pentru anima\textcommabelow{t}ii reduse. CSS detecteaza aceasta cerere:
@@ -461,6 +668,137 @@ Unii utilizatori (afec\textcommabelow{t}iuni vestibulare, dependente de aten\tex
 Conformitatea este o cerin\textcommabelow{t}a WCAG 2.1 (criteriul 2.3.3) \textcommabelow{s}i o practica recomandata pentru orice site cu animatii.
 
 % =========================================================
+\begin{bonusbox}
+\textbf{Acest box e optional.} Daca esti la inceput, treci direct la \emph{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}. Sec\textcommabelow{t}iunile de mai jos sunt pentru cand vrei sa ridici stacheta.
+
+\medskip
+
+\textbf{\faCube\ Transform\u ari 3D \textendash{} flip-card}
+
+CSS suporta nativ transformari in spatiu, nu doar in plan. Trei piese:
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{perspective} (pe parinte) \textendash{} ,,distan\textcommabelow{t}a'' fata de plan. Valori uzuale 600\textendash{}1500px.
+  \item \code{transform-style: preserve-3d} (pe parinte) \textendash{} permite copiilor sa existe in spatiu 3D.
+  \item \code{backface-visibility: hidden} (pe fete) \textendash{} ascunde fa\textcommabelow{t}a din spate.
+\end{itemize}
+
+\begin{lstlisting}[style=css, caption={Card care se intoarce la hover (flip-card)}]
+.flip-card { perspective: 1000px; }
+.flip-card-inner {
+  position: relative;
+  width: 100%; height: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+.flip-card:hover .flip-card-inner { transform: rotateY(180deg); }
+.flip-card-front, .flip-card-back {
+  position: absolute; inset: 0;
+  backface-visibility: hidden;
+}
+.flip-card-back { transform: rotateY(180deg); }
+\end{lstlisting}
+
+\medskip
+
+\textbf{\faScroll\ Anima\textcommabelow{t}ii legate de scroll \textendash{} \texttt{animation-timeline}}
+
+CSS modern (Chrome 115+, 2023) permite legarea unei animatii de pozitia scroll-ului, fara JavaScript:
+
+\begin{lstlisting}[style=css, caption={Bara de progres care urmare\textcommabelow{s}te scroll-ul}]
+@keyframes growProgress {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+.progress-bar {
+  position: fixed; top: 0; left: 0;
+  height: 4px; width: 100%;
+  background: var(--accent);
+  transform-origin: left;
+  animation: growProgress linear;
+  animation-timeline: scroll(root);  /* legat de scroll-ul paginii */
+}
+\end{lstlisting}
+
+\code{view-timeline} este varianta complementar\u a: anima\textcommabelow{t}ia avanseaza pe masura ce un element intra in viewport. Util pentru fade-in la scroll, dar fara cost JavaScript.
+
+\begin{nota}
+Suportul pentru \code{animation-timeline} este partial in 2026: Chrome/Edge da, Firefox in spatele unui flag, Safari in pregatire. Foloseste cu fallback (animatia pur si simplu nu ruleaza in browserele vechi \textendash{} progressive enhancement OK).
+\end{nota}
+
+\medskip
+
+\textbf{\faMagic\ \texttt{filter} \textcommabelow{s}i \texttt{backdrop-filter} \textendash{} efecte de imagine}
+
+\code{filter} aplica un efect vizual pe element. \code{backdrop-filter} aplica acela\textcommabelow{s}i efect pe ce este \emph{in spate}: a\textcommabelow{s}a se face glassmorphism-ul (efect ,,sticla mata'').
+
+\begin{lstlisting}[style=css, caption={Header transparent cu blur pe continutul dedesubt}]
+header {
+  background: rgba(255, 252, 246, 0.7);
+  backdrop-filter: blur(12px) saturate(180%);
+  -webkit-backdrop-filter: blur(12px) saturate(180%);  /* Safari */
+}
+\end{lstlisting}
+
+Functii utile: \code{blur(8px)}, \code{brightness(1.2)}, \code{contrast(1.1)}, \code{grayscale(80\%)}, \code{hue-rotate(15deg)}, \code{drop-shadow(0 4px 8px rgba(0,0,0,0.2))}. Pot fi combinate prin spatiere.
+
+\medskip
+
+\textbf{\faCut\ \texttt{clip-path} \textendash{} forme custom \textcommabelow{s}i reveal effects}
+
+\code{clip-path} ,,decupeaza'' elementul dupa o forma. Util pentru hero-uri oblice, butoane in forma de chevron, anima\textcommabelow{t}ii de tip ,,revelare'':
+
+\begin{lstlisting}[style=css, caption={Imagine cu margine diagonala}]
+.hero-image {
+  clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[style=css, caption={Reveal animat: pagina se ,,deschide'' la load}]
+@keyframes reveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+.hero h1 { animation: reveal 0.8s ease-out forwards; }
+\end{lstlisting}
+
+\begin{ponturi}
+\textbf{Tool vizual:} \url{https://bennettfeely.com/clippy/} \textendash{} editor SVG-like care genereaza valoarea \code{clip-path} pentru orice forma desenata.
+\end{ponturi}
+
+\medskip
+
+\textbf{\faMobile*\ Container queries \textendash{} ,,media queries'' pentru componente}
+
+Problema cu \code{@media}: depinde de viewport, nu de containerul real al componentei. Un card de \code{300px} se comporta diferit intr-o coloana ingusta vs pe ecran lat, dar \code{@media} nu vede asta.
+
+\code{@container} (CSS 2023, suport stabil) rezolva exact asta:
+
+\begin{lstlisting}[style=css, caption={Card responsive in functie de container, nu de viewport}]
+.card-wrapper { container-type: inline-size; }
+
+.card { display: block; }
+
+@container (min-width: 400px) {
+  .card { display: flex; gap: var(--space-2); }
+}
+\end{lstlisting}
+
+Acela\textcommabelow{s}i card devine ,,horizontal'' cand are spatiu, ,,vertical'' cand nu \textendash{} fara sa-i pese de marimea ecranului. Standardul modern pentru design system-uri.
+
+\medskip
+
+\textbf{\faRoute\ Unde mergi de aici}
+
+\begin{itemize}[itemsep=1pt]
+  \item \emph{Animatable properties:} \url{https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animated_properties}
+  \item \emph{Scroll-driven animations:} \url{https://developer.chrome.com/docs/css-ui/scroll-driven-animations}
+  \item \emph{Container queries:} \url{https://web.dev/learn/design/container-queries}
+\end{itemize}
+\end{bonusbox}
+
+% =========================================================
 \section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
 
 \begin{selfcheck}
@@ -470,6 +808,9 @@ Conformitatea este o cerin\textcommabelow{t}a WCAG 2.1 (criteriul 2.3.3) \textco
   \item \emph{Spot the issue:} \code{.btn \{ background: red !important; \}} repetat in trei locuri.
   \item Care este diferen\textcommabelow{t}a func\textcommabelow{t}ionala intre \code{rem} si \code{px} pentru \code{font-size}?
   \item Ce face \code{box-sizing: border-box} fa\textcommabelow{t}a de comportamentul implicit?
+  \item Pentru un hover smooth pe un buton, ce duration si timing-function alegi? Argumenteaza.
+  \item De ce \code{transform: translateY(-2px)} pe hover este preferabil fa\textcommabelow{t}a de \code{top: -2px}?
+  \item Cand folose\textcommabelow{s}ti \code{animation-fill-mode: forwards}? Da un exemplu concret.
 \end{enumerate}
 \end{selfcheck}
 
@@ -486,8 +827,13 @@ Conformitatea este o cerin\textcommabelow{t}a WCAG 2.1 (criteriul 2.3.3) \textco
   \item Flexbox: 6 proprietati cheie (\code{display}, \code{flex-direction}, \code{justify-content}, \code{align-items}, \code{gap}, \code{flex: 1}).
   \item Mobile-first cu \code{@media (min-width: ...)}, nu desktop-first cu \code{max-width}.
   \item Pozitionare: \code{static} (default), \code{relative}, \code{absolute}, \code{fixed}, \code{sticky}.
-  \item Anima\textcommabelow{t}ii: \code{transition} pentru hover, \code{@keyframes} pentru animatii arbitrare.
+  \item Anima\textcommabelow{t}ii: \code{transition} pentru schimbari de stare (hover/focus), \code{@keyframes} pentru animatii arbitrare.
+  \item Timing function: \code{ease-out} pentru intrari, \code{ease-in} pentru iesiri, \code{cubic-bezier()} pentru curbe custom.
+  \item Performance: anima doar \code{transform} \textcommabelow{s}i \code{opacity} (accelerate GPU). Evita \code{top}/\code{left}/\code{width} \textendash{} declan\textcommabelow{s}eaza reflow.
+  \item Pattern hover-lift: \code{transform: translateY(-4px) + box-shadow} cu \code{transition} pe ambele.
+  \item \code{animation-fill-mode: forwards} pastreaza ultimul keyframe (esential pentru fade-in care ramane vizibil).
   \item Accesibilitate: respecta \code{prefers-reduced-motion}.
+  \item \faRocket\ Bonus: 3D transforms, scroll-driven animations, \code{filter}, \code{clip-path}, container queries.
 \end{itemize}
 \end{recap}
 

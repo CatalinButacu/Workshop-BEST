@@ -21,26 +21,36 @@ Sectiunea finala consolideaza referintele rapide: definitiile termenilor folosit
   \item[Commit] Snapshot al starii fisierelor intr-un repository git, identificat printr-un hash unic.
   \item[CORS] \emph{Cross-Origin Resource Sharing}. Mecanism de securitate care controleaza accesul la resurse din alte domenii.
   \item[CSS Grid] Model de layout bidimensional, complementar lui Flexbox; util pentru aranjamente in retea.
+  \item[Cubic-bezier] Func\textcommabelow{t}ie de timing CSS care define\textcommabelow{s}te o curba de accelerare prin patru numere (doua puncte de control), pentru anima\textcommabelow{t}ii personalizate.
+  \item[Debounce] Tehnica JS care amana executia unei func\textcommabelow{t}ii pana cand evenimentul nu se mai declan\textcommabelow{s}eaza \emph{N} ms. Folosit pentru input/autocomplete.
   \item[DOM] \emph{Document Object Model}. Reprezentarea in memorie a documentului HTML, expusa programatic prin \code{document}.
   \item[Endpoint] URL specific care accepta cereri HTTP si returneaza un raspuns. Echivalent cu o ,,adresa'' a unui serviciu.
   \item[Flexbox] Model de layout uni-dimensional in CSS pentru distribuirea spatiului pe o axa.
+  \item[Font-display] Proprietate \code{@font-face} care controleaza ce vede utilizatorul cat timp fontul se descarca. \code{swap} = arata fallback imediat, evita FOIT.
   \item[Hosting] Servirea fisierelor unui site catre vizitatori. GitHub Pages, Netlify si Vercel sunt servicii de hosting pentru site-uri statice.
   \item[HTTP] \emph{HyperText Transfer Protocol}. Protocolul de baza al webului, prin care browserele cer si primesc resurse.
   \item[INP] \emph{Interaction to Next Paint}. Indicator Core Web Vitals pentru receptivitate; latenta intre interactiune si feedback vizual.
+  \item[IntersectionObserver] API browser care notifica un callback cand un element intra/iese din viewport. Inlocuieste handlerele de scroll pentru anima\textcommabelow{t}ii \textcommabelow{s}i lazy loading.
   \item[JSON-LD] \emph{JSON for Linked Data}. Format de date structurate folosit de motoarele de cautare pentru intelegerea continutului.
   \item[LCP] \emph{Largest Contentful Paint}. Indicator Core Web Vitals; momentul afisarii celui mai mare element vizibil.
   \item[Lighthouse] Tool de audit automatizat dezvoltat de Google; evalueaza Performance, Accessibility, Best Practices, SEO.
   \item[NodeList] Colectie de noduri DOM returnata de \code{querySelectorAll}; iterabila prin \code{forEach}.
   \item[Open Graph (OGP)] Standard initiat de Facebook pentru previzualizarea paginilor pe retele sociale (\code{og:title}, \code{og:image}, etc.).
   \item[PAT] \emph{Personal Access Token}. Token de autentificare pentru GitHub, folosit in locul parolei la operatiunile git.
+  \item[Preconnect] Hint HTML (\code{<link rel="preconnect">}) care instruieste browserul sa stabileasca conexiune (DNS + TCP + TLS) cu un domeniu in avans, reducand latenta pentru prima cerere.
   \item[Pseudo-clasa] Selector CSS care vizeaza o stare a unui element: \code{:hover}, \code{:focus}, \code{:checked}, \code{:first-child}.
   \item[Repository (repo)] Director versionat de git; contine codul, istoricul commit-urilor si configuratia.
+  \item[\texttt{requestAnimationFrame}] API browser care apeleaza un callback inainte de fiecare repaint (\textasciitilde 60 fps). Inlocuieste \code{setTimeout} pentru anima\textcommabelow{t}ii JavaScript fluide.
   \item[Responsive design] Abordare prin care site-ul se adapteaza dimensiunii ecranului utilizatorului.
+  \item[\texttt{robots.txt}] Fisier text in radacina site-ului care indica robotilor de crawl ce pagini sa indexeze \textcommabelow{s}i unde se gase\textcommabelow{s}te sitemap-ul.
   \item[Schema.org] Vocabular standardizat pentru date structurate, suportat de motoarele de cautare majore.
   \item[Selector CSS] Pattern care identifica elementele HTML asupra carora se aplica o regula CSS.
   \item[Semantic HTML] Folosirea tag-urilor care descriu rolul continutului (\code{<header>}, \code{<nav>}) in locul \code{<div>} generic.
+  \item[Service Worker] Script care ruleaza in fundalul browserului, poate intercepta cererile HTTP. Baza pentru PWA \textcommabelow{s}i func\textcommabelow{t}ionalitate offline.
+  \item[\texttt{sitemap.xml}] Fisier XML care listeaza URL-urile importante ale site-ului. Submis in Google Search Console pentru indexare mai rapida.
   \item[Specificitate] Mecanism prin care browserul rezolva conflictele intre reguli CSS care vizeaza acelasi element.
   \item[Static site] Site format din fisiere HTML/CSS/JS pre-generate, servite direct, fara procesare pe server.
+  \item[Throttle] Tehnica JS care permite executia unei func\textcommabelow{t}ii cel mult o data la \emph{N} ms. Folosit pentru \code{scroll}, \code{resize}.
   \item[Viewport] Zona vizibila a paginii in browser. Meta tag-ul \code{viewport} controleaza scalarea pe dispozitive mobile.
   \item[WCAG] \emph{Web Content Accessibility Guidelines}. Standardul international pentru accesibilitatea continutului web.
 \end{description}
@@ -90,6 +100,9 @@ Lista de verificari aplicabila inainte de a considera un site finalizat. Se parc
   \item Cinci tag-uri \code{og:*}: type, title, description, image, url.
   \item \code{og:image} este URL absolut, dimensiune $\geq$1200$\times$630.
   \item \code{<meta name="twitter:card" content="summary\_large\_image">} prezent.
+  \item \code{<link rel="canonical">} catre URL-ul oficial.
+  \item \code{robots.txt} prezent in radacina, cu directiva \code{Sitemap:}.
+  \item \code{sitemap.xml} prezent in radacina; trimis in Google Search Console.
   \item Favicon (\code{<link rel="icon">}) configurat.
 \end{itemize}
 
@@ -98,6 +111,9 @@ Lista de verificari aplicabila inainte de a considera un site finalizat. Se parc
 \begin{itemize}[leftmargin=*, label={$\square$}, itemsep=2pt]
   \item Site accesibil pe URL public (\code{username.github.io/repo}).
   \item \code{.gitignore} prezent in repository.
+  \item Imagini convertite in WebP / AVIF, redimensionate la latimea de afi\textcommabelow{s}are.
+  \item \code{<img>} are \code{width}, \code{height}, \code{loading="lazy"} (excep\textcommabelow{t}ie: hero).
+  \item Fonturi cu \code{font-display: swap}; fontul critic e \code{preload}-at.
   \item Lighthouse Performance $\geq$90.
   \item Lighthouse Accessibility $\geq$95.
   \item Lighthouse Best Practices $\geq$95.

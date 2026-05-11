@@ -45,6 +45,7 @@
 \definecolor{themeSeo}{HTML}{B344C9}       % violet (analog cu blue)
 \definecolor{themeLighthouse}{HTML}{DD4444}% coral red (complementar cu green)
 \definecolor{themeResurse}{HTML}{5C6B7A}   % slate (resurse, neutral)
+\definecolor{themeBonus}{HTML}{7E22CE}     % deep purple (bonus / avansat, self-study only)
 % Aliasuri pentru compatibilitate (folosit in main.tex existent)
 \colorlet{themeIntro}{themeHtml}
 \colorlet{themeExercitiu}{themeLighthouse}
@@ -82,13 +83,13 @@
 \definecolor{exerBg}{HTML}{F3E8FF}        \definecolor{exerFg}{HTML}{7C3AED}
 \definecolor{triviaBg}{HTML}{FCE7F3}      \definecolor{triviaFg}{HTML}{BE185D}
 
-% Culori pentru cod -- ton cald, nu albastru-rece
-\definecolor{codeBg}{HTML}{FAF6EE}
-\definecolor{codeBorder}{HTML}{E8DECF}
-\definecolor{codeComment}{HTML}{64748B}
-\definecolor{codeKeyword}{HTML}{DC2626}
-\definecolor{codeString}{HTML}{0F766E}
-\definecolor{codeTag}{HTML}{166534}
+% Culori pentru cod -- paleta "GitHub Light" (calm, profesional)
+\definecolor{codeBg}{HTML}{F6F8FA}
+\definecolor{codeBorder}{HTML}{D0D7DE}
+\definecolor{codeComment}{HTML}{6E7781}
+\definecolor{codeKeyword}{HTML}{CF222E}
+\definecolor{codeString}{HTML}{0A3069}
+\definecolor{codeTag}{HTML}{116329}
 
 % =========================================================
 %   PAGINA & LIZIBILITATE (warmth)
@@ -336,6 +337,31 @@
   calloutbase,
   colframe=checkFg,
   title={\faTasks\ \uppercase\expandafter{#1}},
+}
+
+% --- Bonus / Avansat (continut auto-studiu, distinct vizual) ----
+% Diferit fata de celelalte callout-uri: fundal usor colorat (nu pageBg),
+% bara stanga mai groasa, icon racheta. Beginners vad clar si pot sari peste.
+\definecolor{bonusBg}{HTML}{F6EEFB}        \definecolor{bonusFg}{HTML}{6B21A8}
+
+\newtcolorbox{bonusbox}[1][BONUS \,\textbullet\, AVANSAT]{
+  enhanced,
+  breakable,
+  sharp corners,
+  boxrule=0pt,
+  leftrule=4pt,
+  arc=0pt,
+  colback=bonusBg,
+  colframe=themeBonus,
+  fonttitle=\sffamily\small\bfseries,
+  coltitle=bonusFg,
+  attach title to upper={\par\vspace{2pt}},
+  title after break={\faRocket\ \textbf{\color{bonusFg}continuare bonus}},
+  before skip=14pt,
+  after skip=14pt,
+  left=14pt, right=6pt, top=6pt, bottom=6pt,
+  fontupper=\small,
+  title={\faRocket\ \uppercase\expandafter{#1}},
 }
 
 % Bridge la finalul fiecarui capitol

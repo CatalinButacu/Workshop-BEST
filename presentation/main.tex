@@ -1,4 +1,4 @@
-% =====================================================================
+﻿% =====================================================================
 %  Training Web -- Prezentare (sharescreen)
 %  BEST Iasi, Mentorat 2026
 %  Aceeasi paleta + acelasi feel ca handout-ul.
@@ -24,6 +24,14 @@
 \useinnertheme{rectangles}
 \setbeamertemplate{navigation symbols}{}
 
+% Hyperref: link-uri vizibil colorate (BEST blue) si subtil subliniate
+\hypersetup{
+  colorlinks=true,
+  urlcolor={[HTML]{0673BA}},
+  linkcolor={[HTML]{0673BA}},
+  pdfborderstyle={/S/U/W 0.5}
+}
+
 % =========================================================
 %   PALETA -- aceeasi ca in handout
 % =========================================================
@@ -33,6 +41,7 @@
 \definecolor{themeDeploy}{HTML}{75C044}
 \definecolor{themeSeo}{HTML}{B344C9}
 \definecolor{themeLighthouse}{HTML}{DD4444}
+\definecolor{themeBonus}{HTML}{7E22CE}
 \definecolor{themeNeutral}{HTML}{1F2937}
 \definecolor{themeText}{HTML}{1A1A1A}
 \definecolor{textDim}{HTML}{64748B}
@@ -42,11 +51,11 @@
 \definecolor{daBg}{HTML}{DCFCE7}        \definecolor{daFg}{HTML}{15803D}
 \definecolor{nuBg}{HTML}{FEE2E2}        \definecolor{nuFg}{HTML}{B91C1C}
 
-\definecolor{codeBg}{HTML}{FAF6EE}
-\definecolor{codeKw}{HTML}{DC2626}
-\definecolor{codeStr}{HTML}{0F766E}
-\definecolor{codeCm}{HTML}{64748B}
-\definecolor{codeTag}{HTML}{166534}
+\definecolor{codeBg}{HTML}{F6F8FA}
+\definecolor{codeKw}{HTML}{CF222E}
+\definecolor{codeStr}{HTML}{0A3069}
+\definecolor{codeCm}{HTML}{6E7781}
+\definecolor{codeTag}{HTML}{116329}
 
 \colorlet{accent}{themeNeutral}
 \newcommand{\setaccent}[1]{\colorlet{accent}{#1}}
@@ -75,15 +84,11 @@
   \end{beamercolorbox}
 }
 
-% Footer minimalist
+% Footer minimalist -- doar numarul slide-ului
 \setbeamertemplate{footline}{%
   \leavevmode%
   \hbox{%
-    \begin{beamercolorbox}[wd=0.6\paperwidth, ht=2.5em, leftskip=0.06\paperwidth]{}
-      \vfill
-      {\footnotesize\color{textDim}Training Web \,\textbullet\, BEST Ia\textcommabelow{s}i 2026}\vskip4pt
-    \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=0.4\paperwidth, ht=2.5em, rightskip=0.06\paperwidth]{}
+    \begin{beamercolorbox}[wd=\paperwidth, ht=2.5em, rightskip=0.06\paperwidth]{}
       \vfill
       \hfill{\footnotesize\color{accent}\bfseries\insertframenumber}\vskip4pt
     \end{beamercolorbox}%
@@ -107,14 +112,60 @@
   morestring=[b]",
 }
 \lstdefinelanguage{CSSLang}{
-  morekeywords={display,flex,justify-content,align-items,gap,
-    color,background,padding,margin,border,width,height,
-    font-family,font-size,media,root,hover,light-dark,color-scheme,
-    var,space-between,center,column,min-width,important,box-sizing,
-    border-box,grid,repeat,minmax,auto-fit},
+  morekeywords={%
+    % display / box
+    display,block,inline,inline-block,flex,grid,none,box-sizing,border-box,
+    width,height,min-width,max-width,min-height,max-height,
+    padding,padding-top,padding-right,padding-bottom,padding-left,
+    margin,margin-top,margin-right,margin-bottom,margin-left,margin-inline,
+    border,border-radius,border-color,border-top,border-bottom,outline,outline-offset,
+    overflow,visible,hidden,auto,scroll,
+    % flexbox / grid
+    justify-content,align-items,align-self,gap,flex-direction,flex-wrap,
+    flex-start,flex-end,space-between,space-around,space-evenly,stretch,baseline,
+    column,row,wrap,nowrap,flex,grid-template-columns,grid-template-rows,
+    repeat,minmax,auto-fit,auto-fill,
+    % position
+    position,static,relative,absolute,fixed,sticky,top,right,bottom,left,z-index,
+    % typography
+    font-family,font-size,font-weight,font-style,font-display,line-height,letter-spacing,
+    text-align,text-decoration,text-transform,white-space,word-break,
+    swap,normal,bold,italic,underline,uppercase,lowercase,capitalize,
+    % color / background
+    color,background,background-color,background-image,opacity,accent-color,
+    % effects
+    box-shadow,transform,translate,translateX,translateY,scale,scaleX,scaleY,rotate,skew,
+    transition,transition-property,transition-duration,transition-timing-function,transition-delay,
+    animation,animation-name,animation-duration,animation-timing-function,
+    animation-delay,animation-iteration-count,animation-fill-mode,animation-direction,
+    keyframes,from,to,forwards,backwards,both,
+    ease,ease-in,ease-out,ease-in-out,linear,step-start,step-end,cubic-bezier,steps,
+    infinite,alternate,reverse,
+    filter,backdrop-filter,blur,brightness,contrast,grayscale,saturate,
+    clip-path,
+    % cursor / pointer
+    cursor,pointer,not-allowed,grab,grabbing,wait,text,crosshair,
+    pointer-events,
+    % pseudo-class / pseudo-element names (after : or ::)
+    hover,active,focus,focus-visible,focus-within,visited,checked,disabled,enabled,
+    invalid,valid,required,optional,placeholder-shown,first-child,last-child,nth-child,
+    not,is,where,has,
+    before,after,placeholder,selection,first-letter,first-line,marker,
+    % responsive / scheme
+    media,prefers-reduced-motion,prefers-color-scheme,light-dark,color-scheme,
+    light,dark,reduce,
+    % misc helpers
+    var,root,important,scroll-behavior,smooth,content,
+    content-visibility,contain-intrinsic-size,
+    loading,lazy,eager,fetchpriority,high,low,
+    % named colors (most common)
+    red,blue,green,orange,white,black,navy,purple,yellow,gray,silver,maroon,olive,aqua,teal,
+    transparent,currentColor
+  },
   sensitive=true,
   morecomment=[s]{/*}{*/},
   morestring=[b]",
+  alsoletter={-},
 }
 \lstdefinelanguage{JSLang}{
   morekeywords={const,let,function,return,if,else,
@@ -188,9 +239,9 @@
   before skip=4pt, after skip=4pt,
 }
 
-% Asa nu / Asa da -- header text + lstlisting cu background colorat
-\newcommand{\snuHeader}{{\color{nuFg}\bfseries\faTimesCircle\ A\textcommabelow{S}A NU}\par\vspace{1pt}}
-\newcommand{\sdaHeader}{{\color{daFg}\bfseries\faCheckCircle\ A\textcommabelow{S}A DA}\par\vspace{1pt}}
+% ASA nu / ASA da -- header text + lstlisting cu background colorat
+\newcommand{\snuHeader}{{\color{nuFg}\bfseries\faTimesCircle\ ASA NU}\par\vspace{1pt}}
+\newcommand{\sdaHeader}{{\color{daFg}\bfseries\faCheckCircle\ ASA DA}\par\vspace{1pt}}
 \newcommand{\snuCaption}[1]{\par\vspace{1pt}{\footnotesize\color{themeText}#1}}
 \newcommand{\sdaCaption}[1]{\par\vspace{1pt}{\footnotesize\color{themeText}#1}}
 
@@ -252,9 +303,9 @@
 % =========================================================
 %   META
 % =========================================================
-\title{Training Web}
+\title{Workshop Web}
 \subtitle{De la zero la site live in 2 ore}
-\author{BEST Ia\textcommabelow{s}i \,\textbullet\, Mentorat 2026}
+\author{BEST Iasi \,\textbullet\, Mentorat 2026}
 \date{}
 
 \begin{document}
@@ -280,13 +331,18 @@
     \fill[white, opacity=0.10]
       ([xshift=0.20\paperwidth, yshift=-0.55\paperheight]current page.north west) circle (0.9cm);
 
-    \node[white, opacity=0.15, anchor=center, font=\fontsize{120}{120}\selectfont]
-      at ([xshift=0.21\paperwidth, yshift=-0.50\paperheight]current page.north west)
+    \node[white, opacity=0.10, anchor=center, font=\fontsize{120}{120}\selectfont]
+      at ([xshift=0.21\paperwidth, yshift=-0.80\paperheight]current page.north west)
       {\faCode};
+
+    % Logo BEST (organizatia care face training-ul)
+    \node[anchor=center]
+      at ([xshift=0.21\paperwidth, yshift=-0.50\paperheight]current page.north west)
+      {\includegraphics[width=0.28\paperwidth]{logab-white.png}};
 
     \node[anchor=north west, white, font=\large\bfseries]
       at ([xshift=0.04\paperwidth, yshift=-0.06\paperheight]current page.north west)
-      {\faSquare\ BEST IA\textcommabelow{S}I};
+      {BEST IASI};
 
     \node[anchor=north west, white, opacity=0.9, font=\small]
       at ([xshift=0.04\paperwidth, yshift=-0.12\paperheight]current page.north west)
@@ -318,7 +374,7 @@
 
     \node[anchor=south east, textDim, font=\small\itshape]
       at ([xshift=-0.06\paperwidth, yshift=0.06\paperheight]current page.south east)
-      {Suport color-coded + 6 aplica\textcommabelow{t}ii practice online};
+      {Suport color-coded + 6 aplicatii practice online};
   \end{tikzpicture}
 \end{frame}
 
@@ -326,7 +382,7 @@
 %  AGENDA
 % =====================================================================
 \setaccent{themeNeutral}
-\begin{frame}{Cele 6 faze ale serii}
+\begin{frame}{Agenda}
   \vspace{6pt}
   \begin{columns}[T,onlytextwidth]
   \column{0.49\textwidth}
@@ -336,8 +392,7 @@
       left=10pt, right=10pt, top=6pt, bottom=6pt,
       before skip=4pt, after skip=4pt,
     ]
-      {\color{themeHtml}\large\faCode}\ \textbf{HTML}\hfill {\footnotesize\color{textDim}10t + 5j}\\
-      {\small\color{textDim}structura, semantica, accesibilitate}
+      {\color{themeHtml}\Large\faCode}\quad \textbf{\large HTML}\hfill {\color{textDim}30 min}
     \end{tcolorbox}
     \begin{tcolorbox}[
       enhanced, colback=themeCss!8, colframe=themeCss, boxrule=0pt, leftrule=4pt,
@@ -345,8 +400,7 @@
       left=10pt, right=10pt, top=6pt, bottom=6pt,
       before skip=4pt, after skip=4pt,
     ]
-      {\color{themeCss}\large\faPaintBrush}\ \textbf{CSS}\hfill {\footnotesize\color{textDim}15t + 5j}\\
-      {\small\color{textDim}stilizare, layout, responsivitate}
+      {\color{themeCss}\Large\faPaintBrush}\quad \textbf{\large CSS}\hfill {\color{textDim}30 min}
     \end{tcolorbox}
     \begin{tcolorbox}[
       enhanced, colback=themeJs!8, colframe=themeJs, boxrule=0pt, leftrule=4pt,
@@ -354,8 +408,7 @@
       left=10pt, right=10pt, top=6pt, bottom=6pt,
       before skip=4pt, after skip=4pt,
     ]
-      {\color{themeJs}\large\faBolt}\ \textbf{JavaScript}\hfill {\footnotesize\color{textDim}15t + 5j}\\
-      {\small\color{textDim}interactivitate, manipulare DOM}
+      {\color{themeJs}\Large\faBolt}\quad \textbf{\large JavaScript}\hfill {\color{textDim}30 min}
     \end{tcolorbox}
 
   \column{0.49\textwidth}
@@ -365,8 +418,7 @@
       left=10pt, right=10pt, top=6pt, bottom=6pt,
       before skip=4pt, after skip=4pt,
     ]
-      {\color{themeDeploy}\large\faRocket}\ \textbf{Deploy}\hfill {\footnotesize\color{textDim}10t + 10j}\\
-      {\small\color{textDim}versionare git, GitHub Pages}
+      {\color{themeDeploy}\Large\faRocket}\quad \textbf{\large Deploy}\hfill {\color{textDim}10 min}
     \end{tcolorbox}
     \begin{tcolorbox}[
       enhanced, colback=themeSeo!8, colframe=themeSeo, boxrule=0pt, leftrule=4pt,
@@ -374,8 +426,7 @@
       left=10pt, right=10pt, top=6pt, bottom=6pt,
       before skip=4pt, after skip=4pt,
     ]
-      {\color{themeSeo}\large\faShareSquare}\ \textbf{SEO}\hfill {\footnotesize\color{textDim}7t + 5j}\\
-      {\small\color{textDim}metadate cautare \& social media}
+      {\color{themeSeo}\Large\faShareSquare}\quad \textbf{\large SEO}\hfill {\color{textDim}10 min}
     \end{tcolorbox}
     \begin{tcolorbox}[
       enhanced, colback=themeLighthouse!8, colframe=themeLighthouse, boxrule=0pt, leftrule=4pt,
@@ -383,51 +434,10 @@
       left=10pt, right=10pt, top=6pt, bottom=6pt,
       before skip=4pt, after skip=4pt,
     ]
-      {\color{themeLighthouse}\large\faChartBar}\ \textbf{Lighthouse}\hfill {\footnotesize\color{textDim}5t + 10j}\\
-      {\small\color{textDim}audit automatizat, Core Web Vitals}
+      {\color{themeLighthouse}\Large\faChartBar}\quad \textbf{\large Lighthouse}\hfill {\color{textDim}10 min}
     \end{tcolorbox}
   \end{columns}
 
-  \vspace{8pt}
-  \begin{center}
-  \footnotesize\color{textDim}\itshape
-  La fiecare faza: scurta teorie + aplica\textcommabelow{t}ie practica online. Suportul PDF detaliaza tot.
-  \end{center}
-\end{frame}
-
-% =====================================================================
-%  CONVENTII VIZUALE
-% =====================================================================
-\begin{frame}[fragile]{Conven\textcommabelow{t}ii vizuale}
-  \vspace{4pt}
-  \begin{columns}[T,onlytextwidth]
-  \column{0.48\textwidth}
-
-  {\small\color{textDim}\textbf{Cod copy-paste}}
-\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize]
-<a href="..." rel="noopener">link</a>
-\end{lstlisting}
-
-  \vspace{4pt}
-  {\small\color{textDim}\textbf{Aplica\textcommabelow{t}ie practica}}
-  \begin{joculet}
-    {\small\color{accent}\faGamepad\ \textbf{Joc / platforma}}\\
-    Sarcina, durata, criterii.
-  \end{joculet}
-
-  \column{0.48\textwidth}
-
-  {\small\color{textDim}\textbf{Compara\textcommabelow{t}ii}}\\[2pt]
-  {\color{nuFg}\bfseries\faTimesCircle\ A\textcommabelow{S}A NU} \quad practica gre\textcommabelow{s}ita -- de evitat.\\[8pt]
-  {\color{daFg}\bfseries\faCheckCircle\ A\textcommabelow{S}A DA} \quad practica corecta -- de aplicat.
-
-  \end{columns}
-
-  \vspace{6pt}
-  \begin{center}
-  \small\color{textDim}\itshape
-  Fiecare faza are propria culoare. Bara verticala stanga a blocurilor de cod arata in ce faza e\textcommabelow{s}ti.
-  \end{center}
 \end{frame}
 
 % =====================================================================
@@ -448,7 +458,7 @@
       at ([yshift=0]current page.center) {#2};
 
     \node[anchor=west, white, opacity=0.85, font=\large\bfseries]
-      at ([xshift=-0.30\paperwidth, yshift=0.10\paperheight]current page.center)
+      at ([xshift=-0.30\paperwidth, yshift=0.16\paperheight]current page.center)
       {\faSquare\ FAZA #3};
 
     \node[anchor=west, white, font=\fontsize{56}{60}\selectfont\bfseries]
@@ -456,7 +466,7 @@
       {#4};
 
     \node[anchor=west, white, opacity=0.85, font=\large\itshape]
-      at ([xshift=-0.30\paperwidth, yshift=-0.08\paperheight]current page.center)
+      at ([xshift=-0.30\paperwidth, yshift=-0.16\paperheight]current page.center)
       {#5};
   \end{tikzpicture}
 \end{frame}%
@@ -466,24 +476,26 @@
 %  FAZA 1 -- HTML
 % =====================================================================
 \setaccent{themeHtml}
-\dividerframe{themeHtml}{\faCode}{1}{HTML}{Structura. Semantica. Accesibilitate.}
+\dividerframe{themeHtml}{\faCode}{1}{HTML}{30 min \,\textbullet\, Structura. Semantica. Accesibilitate.}
 
-\begin{frame}{\textcolor{themeHtml}{\faCode}\ \ Faza 1 -- HTML}
-  \vspace{8pt}
-  \begin{teorie}
-    {\large\color{themeHtml}\textbf{Scheletul paginii}}\\[2pt]
-    {\small\color{textDim}\itshape Cele 6 lucruri de stiut. Tot ce vine dupa se sprijina pe asta.}
-  \end{teorie}
-
-  \vspace{6pt}
-  \begin{itemize}
-    \item Anatomia: \code{<!DOCTYPE>}, \code{<html lang>}, \code{<head>}, \code{<body>}
-    \item 3 must-have din \code{<head>}: charset, viewport, title
-    \item Tag-uri semantice vs \code{<div>} soup
-    \item Heading hierarchy (\code{<h1>} unic, \code{<h2>} per sectiune)
-    \item Forms accesibile: \code{<label for>} + \code{<input id>}
-    \item Atribute esentiale: \code{alt}, \code{lang}, \code{href}
-  \end{itemize}
+\begin{frame}[c]{\textcolor{themeHtml}{\faCode}\ \ HTML -- scheletul paginii}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeHtml}\fontsize{60}{60}\selectfont\faSitemap}\\[16pt]
+    {\Large\bfseries structura}\\[4pt]
+    {\small\color{textDim}DOCTYPE, head, body}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeHtml}\fontsize{60}{60}\selectfont\faTags}\\[16pt]
+    {\Large\bfseries semantica}\\[4pt]
+    {\small\color{textDim}header, main, section}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeHtml}\fontsize{60}{60}\selectfont\faBraille}\\[16pt]
+    {\Large\bfseries accesibilitate}\\[4pt]
+    {\small\color{textDim}alt, lang, label-for}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Anatomia minimala}
@@ -494,15 +506,164 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Numele tau -- Student CS, Iasi</title>
+  <title>Prove it, 6th edition | by BEST Iasi</title>
 </head>
 <body>
   <!-- continutul vizibil -->
 </body>
 </html>
 \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Tag-uri container vs void}
+\vspace{6pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.48\textwidth}
+{\footnotesize\bfseries\color{themeHtml}Container \,\textendash\, au continut}\\[4pt]
+\begin{lstlisting}[style=html, numbers=none]
+<p>text</p>
+<a href="...">link</a>
+<button>click</button>
+<h1>Titlu</h1>
+<div>...</div>
+<span>...</span>
+\end{lstlisting}
+
+\column{0.48\textwidth}
+{\footnotesize\bfseries\color{themeHtml}Void \,\textendash\, nu au continut}\\[4pt]
+\begin{lstlisting}[style=html, numbers=none]
+<img src="..." alt="...">
+<br>   <hr>
+<input type="text">
+<meta charset="UTF-8">
+<link rel="stylesheet">
+\end{lstlisting}
+{\footnotesize\color{textDim}\itshape Un singur tag. Fara \code{</tag>}.}
+\end{columns}
+
+\vspace{10pt}
+\begin{center}
+{\footnotesize\color{textDim}\itshape Slash-ul \code{/} este optional in HTML5: \code{<img>} si \code{<img/>} sunt identice. Lista celor 13 tag-uri void este fixa (detalii in suport, Faza 1).}
+\end{center}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Landmark-uri (1/2): header, nav, main, section}
 \vspace{4pt}
-{\footnotesize\color{textDim}\itshape Boilerplate -- copiaza-l si pleaca de la el.}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+{\footnotesize \code{<header>} \,\textendash\, antet pagina/sectiune}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<header>
+  <a class="logo" href="/">BEST</a>
+  <nav>...</nav>
+</header>
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize \code{<main>} \,\textendash\, unul singur per pagina}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<main>
+  <h1>Salut</h1>
+  <section>...</section>
+</main>
+\end{lstlisting}
+
+\column{0.49\textwidth}
+{\footnotesize \code{<nav>} \,\textendash\, bara de navigare}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<nav>
+  <a href="/">Acasa</a>
+  <a href="/despre">Despre</a>
+</nav>
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize \code{<section>} \,\textendash\, grup tematic, cu \code{<h2>}}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<section>
+  <h2>Despre mine</h2>
+  <p>Sunt voluntar BEST.</p>
+</section>
+\end{lstlisting}
+\end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Landmark-uri (2/2): article, aside, footer, figure}
+\vspace{4pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+{\footnotesize \code{<article>} \,\textendash\, unitate auto-suficienta}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<article>
+  <h2>Cum am invatat HTML</h2>
+  <p>In 2 saptamani...</p>
+</article>
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize \code{<footer>} \,\textendash\, subsol pagina/sectiune}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<footer>
+  <p>&copy; 2026 BEST Iasi</p>
+  <a href="/contact">Contact</a>
+</footer>
+\end{lstlisting}
+
+\column{0.49\textwidth}
+{\footnotesize \code{<aside>} \,\textendash\, continut tangential}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<aside>
+  <h3>Vezi si</h3>
+  <a href="/blog">Blog BEST</a>
+</aside>
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize \code{<figure>} + \code{<figcaption>} \,\textendash\, imagine + legenda}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<figure>
+  <img src="echipa.jpg" alt="...">
+  <figcaption>Echipa BEST</figcaption>
+</figure>
+\end{lstlisting}
+\end{columns}
+
+\vspace{4pt}
+\begin{center}
+{\footnotesize\color{themeHtml}\faBookmark\ \itshape Lista completa (text, forms, media, UI): slide \pageref{slide:html-semantic-ref}}
+\end{center}
+\end{frame}
+
+\begin{frame}{\textcolor{themeHtml}{\faCode}\ \ \texttt{<section>} vs \texttt{<article>} -- testul ,,sta singur?''}
+\vspace{12pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+  {\bfseries\color{themeHtml}\code{<section>}}\\[4pt]
+  {\footnotesize Grup tematic \textbf{intr-un} document mai mare. Are sens doar in context.\\[8pt]
+  \emph{Exemple:}\\[2pt]
+  $\bullet$\ ,,Despre eveniment''\\[2pt]
+  $\bullet$\ ,,Compania'' / ,,Echipa''\\[2pt]
+  $\bullet$\ Capitolele unei pagini lungi
+  }
+
+\column{0.49\textwidth}
+  {\bfseries\color{themeHtml}\code{<article>}}\\[4pt]
+  {\footnotesize Unitate \textbf{auto-suficienta}. Are sens \textbf{singura}, separata de pagina.\\[8pt]
+  \emph{Exemple:}\\[2pt]
+  $\bullet$\ Post de blog\\[2pt]
+  $\bullet$\ Probe / Testimoniale\\[2pt]
+  $\bullet$\ Au sens de sine statator
+  }
+\end{columns}
+
+\vspace{14pt}
+\begin{tcolorbox}[
+  enhanced, colback=accentSoft, colframe=themeHtml, boxrule=0pt, leftrule=4pt,
+  sharp corners, arc=0pt, left=10pt, right=10pt, top=6pt, bottom=6pt,
+]
+{\footnotesize \textbf{Testul:} ,,Ar avea sens daca il scot din pagina si il share-uiesc separat?''\\
+DA $\to$ \code{<article>}. \quad NU $\to$ \code{<section>}.}
+\end{tcolorbox}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Semantic vs <div> soup}
@@ -515,7 +676,7 @@
 </div>
 <div class="content"><div class="hero"><div>Salut</div></div></div>
 \end{lstlisting}
-\snuCaption{Browserul nu \textcommabelow{s}tie ce reprezinta div-urile. Cititoarele nu pot naviga prin landmarks.}
+\snuCaption{Browserul nu stie ce reprezinta div-urile. Screen reader-ele nu pot naviga prin landmarks.}
 
 \vspace{6pt}
 \sdaHeader
@@ -526,63 +687,68 @@
 </header>
 <main><section class="hero"><h1>Salut</h1></section></main>
 \end{lstlisting}
-\sdaCaption{Cititoarele ofera comenzi rapide pentru sarit la \code{<header>}, \code{<main>}, \code{<nav>}.}
+\sdaCaption{Screen reader-ele ofera comenzi rapide pentru sarit la \code{<header>}, \code{<main>}, \code{<nav>}.}
 \end{frame}
 
-\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Forms accesibile}
+\begin{frame}[fragile]{\textcolor{themeHtml}{\faCode}\ \ Formularele de inscriere}
 \vspace{6pt}
 \begin{lstlisting}[style=html]
 <form>
+  <label for="nume">Nume complet</label>
+  <input type="text" id="nume" name="nume" required>
+
   <label for="email">Email</label>
   <input type="email" id="email" name="email" required>
 
-  <label for="mesaj">Mesaj</label>
-  <textarea id="mesaj" name="mesaj" rows="4" required></textarea>
+  <label for="facultate">Facultate</label>
+  <input type="text" id="facultate" name="facultate" required>
 
-  <button type="submit">Trimite</button>
+  <button type="submit">Inscrie-te</button>
 </form>
 \end{lstlisting}
 
 \vspace{4pt}
-{\footnotesize\color{textDim}\itshape Regula: \code{for="X"} pe label = \code{id="X"} pe input. Aceea\textcommabelow{s}i valoare.}
+{\footnotesize\color{textDim}\itshape Regula: \code{for="X"} pe label = \code{id="X"} pe input. Aceeasi valoare.}
 \end{frame}
 
-\begin{frame}{\textcolor{themeHtml}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
+\begin{frame}{\textcolor{themeHtml}{\faGamepad}\ \ Aplicatie practica -- 5 minute}
   \vspace{20pt}
   \begin{joculet}
     {\large\color{themeHtml}\faGamepad\ \textbf{Fix the HTML}}\\[6pt]
-    Pleaca de la un cod cu \code{<div>} soup, \code{alt} lipsa si \code{<label>} deconectate.\\
-    Misiune: transforma in HTML semantic + accesibil.\\[8pt]
-    {\color{themeHtml}\faLink\ \texttt{codepen.io/[user]/pen/[id]}}
+    Pornesti de la \code{<div>} soup, \code{alt} lipsa, \code{<label>} deconectate.\\
+    Misiune: HTML semantic + accesibil.\\[8pt]
+    {\color{themeHtml}\faLink\ \texttt{codepen.io/[trainer]/pen/[id]}\ \ $\to$\ \emph{Fork}}\\[4pt]
+    {\footnotesize\color{textDim}Referinta (solutie completa): \code{kit-starter/codepen-exercises/README.md}}
   \end{joculet}
 
-  \vspace{16pt}
-  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} MDN HTML Reference \,\textbullet\, The Odin Project HTML \,\textbullet\, web.dev/learn/html}
+  \vspace{12pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} \href{https://developer.mozilla.org/en-US/docs/Web/HTML/Element}{MDN HTML Reference} \,\textbullet\, \href{https://www.theodinproject.com/paths/foundations/courses/foundations\#html-foundations}{The Odin Project HTML} \,\textbullet\, \href{https://web.dev/learn/html}{web.dev/learn/html}}
 \end{frame}
 
 % =====================================================================
 %  FAZA 2 -- CSS
 % =====================================================================
 \setaccent{themeCss}
-\dividerframe{themeCss}{\faPaintBrush}{2}{CSS}{Stilizare. Layout. Responsivitate.}
+\dividerframe{themeCss}{\faPaintBrush}{2}{CSS}{30 min \,\textbullet\, Stilizare. Layout. Animatii. Responsivitate.}
 
-\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Faza 2 -- CSS}
-  \vspace{8pt}
-  \begin{teorie}
-    {\large\color{themeCss}\textbf{Cum o imbraci}}\\[2pt]
-    {\small\color{textDim}\itshape Variabile + flex + mobile-first = 80\% din site-urile reale.}
-  \end{teorie}
-
-  \vspace{6pt}
-  \begin{itemize}
-    \item Selectori: tag, \code{.class}, \code{\#id}, descendent, \code{:hover}
-    \item Specificitate: \code{(id, clasa, tag)}; nu \code{!important}
-    \item Box model + \code{box-sizing: border-box}
-    \item Unita\textcommabelow{t}i: \code{rem} (font), \code{px} (border), \code{vw}/\code{vh} (layout)
-    \item Variabile (\code{:root}, \code{var()})
-    \item Flexbox: 6 proprieta\textcommabelow{t}i acopera 80\% din layout
-    \item Mobile-first cu \code{@media (min-width: ...)}
-  \end{itemize}
+\begin{frame}[c]{\textcolor{themeCss}{\faPaintBrush}\ \ CSS -- cum imbraci o pagina}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeCss}\fontsize{60}{60}\selectfont\faMousePointer}\\[16pt]
+    {\Large\bfseries selectori}\\[4pt]
+    {\small\color{textDim}class, id, hover, var()}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeCss}\fontsize{60}{60}\selectfont\faThLarge}\\[16pt]
+    {\Large\bfseries layout}\\[4pt]
+    {\small\color{textDim}flexbox, grid, mobile-first}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeCss}\fontsize{60}{60}\selectfont\faMagic}\\[16pt]
+    {\Large\bfseries animatii}\\[4pt]
+    {\small\color{textDim}transition, keyframes}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Variabile + Flexbox}
@@ -606,6 +772,258 @@ header {
 {\footnotesize\color{textDim}\itshape Schimbi \code{--primary} intr-un singur loc -- tot site-ul se rebranduieste.}
 \end{frame}
 
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Box model -- straturile unei cutii}
+\vspace{2pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.42\textwidth}
+  {\footnotesize
+  Fiecare element e o cutie cu 4 straturi:\\[3pt]
+  \textbf{\color{themeCss}content} \,\textendash\, textul / imaginea\\[2pt]
+  \textbf{\color{themeCss}padding} \,\textendash\, spatiu \emph{intern}\\[2pt]
+  \textbf{\color{themeCss}border} \,\textendash\, chenarul\\[2pt]
+  \textbf{\color{themeCss}margin} \,\textendash\, spatiu \emph{extern}
+  }
+
+\column{0.56\textwidth}
+  \centering
+  \begin{tikzpicture}[scale=0.78, every node/.style={font=\scriptsize\sffamily}]
+    % margin -- outermost
+    \fill[orange!25, rounded corners=4pt] (0,0) rectangle (7.5,5.4);
+    \node[anchor=north west] at (0.15,5.30) {\bfseries\color{orange!70!black} margin};
+
+    % border -- 0.55 unit strip visible all around
+    \fill[gray!40, rounded corners=3pt] (0.6,0.55) rectangle (6.9,4.40);
+    \draw[ultra thick, gray!70!black, rounded corners=3pt] (0.6,0.55) rectangle (6.9,4.40);
+    \node[anchor=north west] at (0.75,4.30) {\bfseries\color{gray!50!black} border};
+
+    % padding -- 0.55 unit strip visible
+    \fill[green!25, rounded corners=2pt] (1.2,1.10) rectangle (6.3,3.80);
+    \node[anchor=north west] at (1.35,3.70) {\bfseries\color{green!50!black} padding};
+
+    % content -- innermost
+    \fill[blue!25, rounded corners=2pt] (1.8,1.65) rectangle (5.7,3.20);
+    \node[anchor=north west] at (1.95,3.10) {\bfseries\color{blue!60!black} content};
+    \node at (3.75,2.40) {\itshape text / imagine};
+  \end{tikzpicture}
+\end{columns}
+
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Mereu primul lucru in CSS: \code{*\,\{\,box-sizing: border-box\,\}}. Sintaxa scurta + capcana \code{content-box} \textendash{} in suport (Faza 2).}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Cheatsheet \,\textendash\, \texttt{display}}
+\vspace{2pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.42\textwidth}
+  \vspace{8pt}
+  {\footnotesize
+  \code{block} \,\textendash\, linie noua, full width\\[6pt]
+  \code{inline} \,\textendash\, in flux text, ignora w/h\\[6pt]
+  \code{inline-block} \,\textendash\, in flux + accepta w/h\\[6pt]
+  \code{flex} \,\textendash\, layout 1D\\[6pt]
+  \code{grid} \,\textendash\, layout 2D\\[6pt]
+  \code{none} \,\textendash\, ascuns complet (cititoarele il sar)
+  }
+
+\column{0.56\textwidth}
+  \centering
+  \begin{tikzpicture}[scale=0.9, every node/.style={font=\tiny\sffamily}]
+    % block - stacked full-width
+    \fill[themeCss!25, rounded corners=2pt] (0,5.0) rectangle (5.0,5.5);
+    \fill[themeCss!25, rounded corners=2pt] (0,4.4) rectangle (5.0,4.9);
+    \node[anchor=west, themeCss, font=\scriptsize\bfseries] at (5.1,5.25) {block};
+    \node[anchor=west, themeCss, font=\scriptsize\bfseries] at (5.1,4.65) {block};
+
+    % inline - flows in text
+    \fill[themeCss!25, rounded corners=2pt] (0,3.5) rectangle (1.0,3.95);
+    \fill[themeCss!25, rounded corners=2pt] (1.1,3.5) rectangle (2.4,3.95);
+    \fill[themeCss!25, rounded corners=2pt] (2.5,3.5) rectangle (3.4,3.95);
+    \fill[themeCss!25, rounded corners=2pt] (3.5,3.5) rectangle (4.7,3.95);
+    \node[anchor=west, themeCss, font=\scriptsize\bfseries] at (5.1,3.725) {inline};
+
+    % flex - row with gap
+    \draw[themeCss, dashed, thick, rounded corners=2pt] (-0.1,2.5) rectangle (5.0,3.05);
+    \fill[themeCss!40, rounded corners=2pt] (0.05,2.55) rectangle (1.45,3.0);
+    \fill[themeCss!40, rounded corners=2pt] (1.65,2.55) rectangle (3.05,3.0);
+    \fill[themeCss!40, rounded corners=2pt] (3.25,2.55) rectangle (4.95,3.0);
+    \node[anchor=west, themeCss, font=\scriptsize\bfseries] at (5.1,2.775) {flex};
+
+    % grid - 2D
+    \draw[themeCss, dashed, thick, rounded corners=2pt] (-0.1,0.6) rectangle (4.4,2.05);
+    \fill[themeCss!40, rounded corners=2pt] (0.05,1.55) rectangle (1.45,2.0);
+    \fill[themeCss!40, rounded corners=2pt] (1.6,1.55) rectangle (2.85,2.0);
+    \fill[themeCss!40, rounded corners=2pt] (3.0,1.55) rectangle (4.35,2.0);
+    \fill[themeCss!40, rounded corners=2pt] (0.05,0.65) rectangle (1.45,1.1);
+    \fill[themeCss!40, rounded corners=2pt] (1.6,0.65) rectangle (2.85,1.1);
+    \fill[themeCss!40, rounded corners=2pt] (3.0,0.65) rectangle (4.35,1.1);
+    \node[anchor=west, themeCss, font=\scriptsize\bfseries] at (5.1,1.325) {grid};
+
+    % none
+    \draw[gray!50, dashed, thick, rounded corners=2pt] (-0.1,-0.05) rectangle (5.0,0.4);
+    \node[gray!70, font=\scriptsize\itshape] at (2.5,0.175) {(invizibil, nu ocupa spatiu)};
+    \node[anchor=west, themeCss, font=\scriptsize\bfseries] at (5.1,0.175) {none};
+  \end{tikzpicture}
+\end{columns}
+
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Alte uzuale: \code{box-sizing: border-box} (always) \,\textbullet\, \code{overflow: visible|hidden|auto} \,\textbullet\, \code{cursor: pointer|not-allowed} \,\textbullet\, \code{text-align: left|center|right}}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Cheatsheet \,\textendash\, Flexbox (axe)}
+\vspace{2pt}
+{\footnotesize\bfseries\color{themeCss}\code{justify-content:}} {\footnotesize\color{textDim}distributie pe axa principala $\rightarrow$}
+
+\vspace{2pt}
+\centering
+\begin{tikzpicture}[scale=0.78, every node/.style={font=\tiny\sffamily}]
+  % flex-start
+  \begin{scope}[xshift=0cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (4.0,0.7);
+    \foreach \x in {0.1,0.85,1.6} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.65,0.6); }
+    \node[themeCss, font=\tiny\bfseries] at (2.0,-0.3) {flex-start};
+  \end{scope}
+  % center
+  \begin{scope}[xshift=4.4cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (4.0,0.7);
+    \foreach \x in {0.85,1.6,2.35} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.65,0.6); }
+    \node[themeCss, font=\tiny\bfseries] at (2.0,-0.3) {center};
+  \end{scope}
+  % flex-end
+  \begin{scope}[xshift=8.8cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (4.0,0.7);
+    \foreach \x in {1.6,2.35,3.1} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.65,0.6); }
+    \node[themeCss, font=\tiny\bfseries] at (2.0,-0.3) {flex-end};
+  \end{scope}
+  % space-between
+  \begin{scope}[xshift=0cm, yshift=-1.2cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (4.0,0.7);
+    \foreach \x in {0.1,1.675,3.25} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.65,0.6); }
+    \node[themeCss, font=\tiny\bfseries] at (2.0,-0.3) {space-between};
+  \end{scope}
+  % space-around
+  \begin{scope}[xshift=4.4cm, yshift=-1.2cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (4.0,0.7);
+    \foreach \x in {0.36,1.675,2.99} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.65,0.6); }
+    \node[themeCss, font=\tiny\bfseries] at (2.0,-0.3) {space-around};
+  \end{scope}
+  % space-evenly
+  \begin{scope}[xshift=8.8cm, yshift=-1.2cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (4.0,0.7);
+    \foreach \x in {0.5,1.675,2.85} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.65,0.6); }
+    \node[themeCss, font=\tiny\bfseries] at (2.0,-0.3) {space-evenly};
+  \end{scope}
+\end{tikzpicture}
+
+\vspace{14pt}
+{\footnotesize\bfseries\color{themeCss}\code{align-items:}} {\footnotesize\color{textDim}aliniere pe axa secundara $\uparrow$}
+
+\vspace{2pt}
+\centering
+\begin{tikzpicture}[scale=0.78, every node/.style={font=\tiny\sffamily}]
+  % stretch
+  \begin{scope}[xshift=0cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (3.0,1.2);
+    \foreach \x in {0.2,1.15,2.1} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.75,1.1); }
+    \node[themeCss, font=\tiny\bfseries] at (1.5,-0.3) {stretch (def)};
+  \end{scope}
+  % center
+  \begin{scope}[xshift=3.4cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (3.0,1.2);
+    \foreach \x in {0.2,1.15,2.1} { \fill[themeCss!50, rounded corners=1pt] (\x,0.4) rectangle (\x+0.75,0.8); }
+    \node[themeCss, font=\tiny\bfseries] at (1.5,-0.3) {center};
+  \end{scope}
+  % flex-start
+  \begin{scope}[xshift=6.8cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (3.0,1.2);
+    \foreach \x in {0.2,1.15,2.1} { \fill[themeCss!50, rounded corners=1pt] (\x,0.75) rectangle (\x+0.75,1.1); }
+    \node[themeCss, font=\tiny\bfseries] at (1.5,-0.3) {flex-start};
+  \end{scope}
+  % flex-end
+  \begin{scope}[xshift=10.2cm]
+    \draw[themeCss!60, thick, rounded corners=2pt] (0,0) rectangle (3.0,1.2);
+    \foreach \x in {0.2,1.15,2.1} { \fill[themeCss!50, rounded corners=1pt] (\x,0.1) rectangle (\x+0.75,0.45); }
+    \node[themeCss, font=\tiny\bfseries] at (1.5,-0.3) {flex-end};
+  \end{scope}
+\end{tikzpicture}
+
+\vspace{8pt}
+{\footnotesize\color{textDim}\itshape Trick uzual: \code{display: flex; justify-content: center; align-items: center;} centreaza orice element in container.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Cheatsheet \,\textendash\, \texttt{position}}
+\vspace{4pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.42\textwidth}
+  \vspace{6pt}
+  {\footnotesize
+  \code{static} (default) \,\textendash\, flux normal\\[8pt]
+  \code{relative} \,\textendash\, ramane in flux; ancora\\[8pt]
+  \code{absolute} \,\textendash\, fata de parinte \code{relative}\\[8pt]
+  \code{fixed} \,\textendash\, fata de viewport\\[8pt]
+  \code{sticky} \,\textendash\, \code{relative} $\to$ \code{fixed} la margine
+  }
+
+\column{0.56\textwidth}
+  \centering
+  \begin{tikzpicture}[scale=0.72, every node/.style={font=\tiny\sffamily}]
+    % viewport frame
+    \draw[themeCss!50, very thick, rounded corners=2pt] (-0.2,-0.2) rectangle (6.6,5.6);
+    \node[themeCss, font=\scriptsize\bfseries, anchor=north east] at (6.5,5.55) {viewport};
+
+    % static & relative offset
+    \fill[gray!30, rounded corners=2pt] (0.2,4.6) rectangle (1.6,5.1);
+    \node[font=\tiny] at (0.9,4.85) {static};
+    \fill[themeCss!50, rounded corners=2pt] (1.9,4.4) rectangle (3.4,4.9);
+    \draw[->,thick,themeCss] (1.7,5.0) -- (1.9,4.7);
+    \node[font=\tiny, themeCss] at (2.65,4.65) {relative (offset)};
+
+    % absolute - bottom right of an explicit container
+    \draw[gray, dashed, thick, rounded corners=2pt] (0.2,2.4) rectangle (3.8,4.0);
+    \node[gray, font=\tiny, anchor=north west] at (0.25,3.95) {parent: relative};
+    \fill[themeCss!50, rounded corners=2pt] (2.5,2.5) rectangle (3.7,3.0);
+    \node[font=\tiny, themeCss] at (3.1,2.75) {absolute};
+
+    % fixed - anchored to viewport (bottom-right)
+    \fill[themeCss!50, rounded corners=2pt] (5.0,0.2) rectangle (6.4,0.7);
+    \node[font=\tiny, themeCss] at (5.7,0.45) {fixed};
+    \draw[->,thick,themeCss!70] (6.4,0.45) -- (6.55,0.45);
+    \node[themeCss, font=\tiny\itshape, anchor=west] at (4.0,1.2) {(ancorat la viewport)};
+
+    % sticky - at top of section
+    \fill[themeCss!50, rounded corners=2pt] (0.2,1.4) rectangle (1.8,1.9);
+    \node[font=\tiny, themeCss] at (1.0,1.65) {sticky};
+    \draw[->,thick,themeCss!70] (1.8,1.65) -- (2.2,1.65);
+    \node[themeCss, font=\tiny\itshape, anchor=west] at (2.25,1.65) {se lipeste la \code{top: 0}};
+  \end{tikzpicture}
+\end{columns}
+
+\vspace{2pt}
+{\footnotesize\color{textDim}\itshape Capcana: \code{absolute} fara parinte \code{relative} cade pana la viewport.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Selectori \,\textendash\, cum tintesti elementul}
+\vspace{6pt}
+\begin{lstlisting}[style=css, basicstyle=\ttfamily\scriptsize]
+/* Tag: TOATE elementele <p> */
+p { color: navy; }
+
+/* Clasa (.): toate cu class="cta" */
+.cta { background: orange; }
+
+/* ID (#): UNICUL cu id="contact" */
+#contact { padding: 2rem; }
+
+/* Combinatii: <a> doar in <nav> */
+nav a { text-decoration: none; }
+
+/* Compunere de clase: ridica specificitatea */
+.btn.btn-danger { background: red; }
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Specificitate \texttt{(id, clasa, tag)}: \code{\#contact}=(1,0,0) $>$ \code{.cta}=(0,1,0) $>$ \code{p}=(0,0,1). ID $>$ clasa $>$ tag.}
+\end{frame}
+
 \begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ \texttt{!important} vs specificitate}
 \vspace{2pt}
 \snuHeader
@@ -622,10 +1040,63 @@ header {
 \end{lstlisting}
 \sdaCaption{Clase modificator (\code{.btn-danger}) ridica specificitatea natural cu \code{(0,2,0)} fata de \code{(0,1,0)}.}
 
+\vspace{4pt}
+{\footnotesize\bfseries\color{themeCss}In HTML:}
+\begin{lstlisting}[style=html, basicstyle=\ttfamily\scriptsize, numbers=none]
+<button class="btn">Salveaza</button>           <!-- albastru -->
+<button class="btn btn-danger">Sterge</button>  <!-- rosu -->
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Cascada \,\textendash\, ordinea de prioritate}
+\vspace{8pt}
+\begin{tcolorbox}[
+  enhanced, breakable, sharp corners, arc=0pt,
+  colback=accentSoft, colframe=themeCss, boxrule=0pt, leftrule=4pt,
+  left=10pt, right=10pt, top=4pt, bottom=4pt, fontupper=\footnotesize,
+]
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}p{0.06\linewidth}@{\hspace{4pt}}p{0.42\linewidth}@{\hspace{4pt}}p{0.46\linewidth}@{}}
+{\bfseries\color{themeCss}\#} & {\bfseries\color{themeCss}Regula} & {\bfseries\color{themeCss}Ignora} \\
+1 & !\code{important} (inline sau extern)   & tot ce e sub \\
+2 & Stil inline \code{style="..."}          & ID, clasa, tag, default \\
+3 & Selector ID \code{\#contact}            & clasa, tag, default \\
+4 & Clasa / atribut / pseudo-clasa          & tag, default \\
+5 & Tag / pseudo-element                    & doar default \\
+6 & Browser default                         & nimic \\
+\end{tabular}
+\end{tcolorbox}
+
 \vspace{6pt}
-\begin{takeaway}
-\code{!important} = arhitectura CSS compromisa. Ridica specificitatea prin compunere de clase.
-\end{takeaway}
+{\footnotesize\color{textDim}\itshape Egalitate $\to$ castiga regula declarata ultima in fisier.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Arhitectura CSS}
+\vspace{16pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+  {\bfseries\color{daFg}\faCheckCircle\ ASA DA}\\[6pt]
+  {\footnotesize
+  $\bullet$\ Variabile in \code{:root} pentru culori si spacing\\[4pt]
+  $\bullet$\ Clase reutilizabile, nume semantice\\[4pt]
+  $\bullet$\ Selectori scurti (max 2 nivele)\\[4pt]
+  $\bullet$\ Reset minimal aplicat o data\\[4pt]
+  $\bullet$\ Mobile-first
+  }
+
+\column{0.49\textwidth}
+  {\bfseries\color{nuFg}\faTimesCircle\ COMPROMITE TOT}\\[6pt]
+  {\footnotesize
+  $\bullet$\ \code{!important} ca solutie\\[4pt]
+  $\bullet$\ ID-uri ca selectori de stil\\[4pt]
+  $\bullet$\ Selectori inlantuiti adanc\\[4pt]
+  $\bullet$\ Magic numbers (\code{margin: 17px})\\[4pt]
+  $\bullet$\ \code{style="..."} inline in HTML
+  }
+\end{columns}
+
+\vspace{14pt}
+{\footnotesize\color{textDim}\itshape Pentru proiecte mari: BEM / ITCSS / Tailwind. Detalii in suport.}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Mobile-first + dark mode}
@@ -648,62 +1119,311 @@ html { color-scheme: light dark; }
 {\footnotesize\color{textDim}\itshape Mobil = default; desktop = adaugare. Schimbi tema OS-ului $\to$ site-ul te urmeaza.}
 \end{frame}
 
-\begin{frame}{\textcolor{themeCss}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Pseudo-clase \,\textendash\, mouse si tastatura}
+\vspace{4pt}
+\begin{lstlisting}[style=css, basicstyle=\ttfamily\scriptsize]
+/* Mouse / pointer */
+.btn:hover         { background: blue; }            /* mouse deasupra */
+.btn:active        { transform: scale(0.97); }      /* apasat (~ clicked) */
+
+/* Tastatura / accesibilitate */
+.btn:focus-visible { outline: 2px solid orange; }   /* focus din Tab */
+.btn:disabled      { opacity: 0.5; cursor: not-allowed; }
+
+/* Linkuri */
+a:visited          { color: purple; }               /* deja vizitat */
+\end{lstlisting}
+
+\vspace{2pt}
+{\footnotesize\color{textDim}\itshape \code{:hover} = mouse; \code{:active} = apasat; \code{:focus-visible} = focus prin tastatura (\textbf{nu} \code{:focus} \textendash{} ultimul declanseaza si pe mouse, urat).}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Pseudo-clase \,\textendash\, forms si text selectat}
+\vspace{6pt}
+\begin{lstlisting}[style=css, basicstyle=\ttfamily\scriptsize]
+/* Forms */
+input:checked   { accent-color: green; }
+input:invalid   { border-color: red; }
+option:checked  { font-weight: bold; }
+
+/* Pseudo-elemente (DOUA puncte) */
+::selection     { background: yellow; }
+.note::before   { content: "Nota: "; font-weight: bold; }
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape \code{:} = stare; \code{::} = parte virtuala inserata.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ \texttt{transform} -- muta, scaleaza, roteste}
+\vspace{6pt}
+\begin{lstlisting}[style=css, basicstyle=\ttfamily\scriptsize]
+.card  { transform: translate(10px, -4px); }   /* mutare X/Y */
+.card  { transform: translateY(-4px); }        /* doar Y */
+.icon  { transform: scale(1.05); }             /* +5% marime */
+.badge { transform: rotate(-8deg); }           /* rotatie */
+.tag   { transform: skew(-10deg); }            /* inclinare */
+
+/* Combinare -- aplicate de la stanga la dreapta */
+.btn { transform: translateY(-2px) scale(1.02); }
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Avantaj: \code{transform} ruleaza pe GPU \textendash{} 60fps si pe mobile. Variante 3D (\code{rotateX}, \code{perspective}) \textendash{} self-study.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ \texttt{transition} -- hover fluent}
+\vspace{6pt}
+\begin{lstlisting}[style=css]
+.cta {
+  background: var(--primary);
+  color: white;
+  padding: 0.5rem 2rem;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.cta:hover {
+  background: var(--accent);
+  transform: translateY(-2px);
+}
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Sintaxa: \code{transition: <proprietate> <durata> <timing-function>}. Sub 150ms se simte abrupt; peste 300ms se simte lent.}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faPaintBrush}\ \ Timing functions -- cum se simte miscarea}
+\begin{columns}[T,onlytextwidth]
+\column{0.55\textwidth}
+{\footnotesize
+\code{linear} \,\textendash\, viteza constanta\\
+{\scriptsize\color{textDim}\quad Pentru spinner, loading bar, lucruri repetitive.}\\[3pt]
+
+\code{ease} \,\textendash\, \emph{(default)} pleaca incet, accelereaza, frana\\
+{\scriptsize\color{textDim}\quad Default-ul natural. 90\% din cazuri.}\\[3pt]
+
+\code{ease-in} \,\textendash\, pleaca incet, termina rapid\\
+{\scriptsize\color{textDim}\quad Pentru iesiri din viewport (\emph{exit}).}\\[3pt]
+
+\code{ease-out} \,\textendash\, pleaca rapid, frana lin la final\\
+{\scriptsize\color{textDim}\quad Pentru intrari, reveal, hover.}\\[3pt]
+
+\code{ease-in-out} \,\textendash\, lent la inceput \textbf{si} la final\\
+{\scriptsize\color{textDim}\quad Pentru tranzitii bidirectionale (toggle).}\\[3pt]
+
+\code{cubic-bezier(.2,.8,.2,1)} \,\textendash\, curba custom\\
+{\scriptsize\color{textDim}\quad Construit pe \href{https://cubic-bezier.com}{cubic-bezier.com}.}
+}
+
+\column{0.42\textwidth}
+\centering
+\begin{tikzpicture}[scale=0.65, every node/.style={font=\tiny\sffamily}]
+  % linear
+  \begin{scope}[yshift=0cm]
+    \draw[gray!40, thin] (0,0) rectangle (1.6,1.0);
+    \draw[themeCss, ultra thick] (0,0) -- (1.6,1.0);
+    \node[themeCss, font=\tiny\bfseries, anchor=west] at (1.75,0.5) {linear};
+  \end{scope}
+  \begin{scope}[yshift=-1.15cm]
+    \draw[gray!40, thin] (0,0) rectangle (1.6,1.0);
+    \draw[themeCss, ultra thick] (0,0) .. controls (0.4,0) and (0.4,1) .. (1.6,1);
+    \node[themeCss, font=\tiny\bfseries, anchor=west] at (1.75,0.5) {ease};
+  \end{scope}
+  \begin{scope}[yshift=-2.30cm]
+    \draw[gray!40, thin] (0,0) rectangle (1.6,1.0);
+    \draw[themeCss, ultra thick] (0,0) .. controls (0.7,0) and (1.0,0.2) .. (1.6,1);
+    \node[themeCss, font=\tiny\bfseries, anchor=west] at (1.75,0.5) {ease-in};
+  \end{scope}
+  \begin{scope}[yshift=-3.45cm]
+    \draw[gray!40, thin] (0,0) rectangle (1.6,1.0);
+    \draw[themeCss, ultra thick] (0,0) .. controls (0.0,0.6) and (0.6,1) .. (1.6,1);
+    \node[themeCss, font=\tiny\bfseries, anchor=west] at (1.75,0.5) {ease-out};
+  \end{scope}
+  \begin{scope}[yshift=-4.60cm]
+    \draw[gray!40, thin] (0,0) rectangle (1.6,1.0);
+    \draw[themeCss, ultra thick] (0,0) .. controls (0.6,0) and (1.0,1) .. (1.6,1);
+    \node[themeCss, font=\tiny\bfseries, anchor=west] at (1.75,0.5) {ease-in-out};
+  \end{scope}
+\end{tikzpicture}
+\end{columns}
+
+\vspace{2pt}
+{\footnotesize\color{textDim}\itshape Axa orizontala = timpul; axa verticala = progresul animatiei. \code{ease-out} = cel mai folosit la hover.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ \texttt{transition} vs \texttt{transform} -- nu confunda!}
+\vspace{4pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+  {\bfseries\color{themeCss}\code{transform} \,\textendash\, CE se schimba}\\[4pt]
+  {\footnotesize Muta / scaleaza / roteste. Singur, schimbarea e \textbf{instant}.}
+\begin{lstlisting}[style=css, basicstyle=\ttfamily\scriptsize, numbers=none]
+.card { transform: scale(1.05); }
+\end{lstlisting}
+
+\column{0.49\textwidth}
+  {\bfseries\color{themeCss}\code{transition} \,\textendash\, CUM se schimba}\\[4pt]
+  {\footnotesize Nu schimba nimic singur. Animeaza \textbf{lin} orice schimbare.}
+\begin{lstlisting}[style=css, basicstyle=\ttfamily\scriptsize, numbers=none]
+.card { transition: transform 0.2s ease; }
+\end{lstlisting}
+\end{columns}
+
+\vspace{6pt}
+{\footnotesize\bfseries\color{themeCss}Impreuna:}
+\begin{lstlisting}[style=css, basicstyle=\ttfamily\scriptsize, numbers=none]
+.card {
+  transform: scale(1);
+  transition: transform 0.2s ease;
+}
+.card:hover { transform: scale(1.05); }
+\end{lstlisting}
+
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape \code{transition} se declara pe regula de baza (NU pe \code{:hover}). Analogie: \code{transform} = ,,muta cutia''; \code{transition} = ,,orice schimbare, alunec-o lin''.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ \texttt{@keyframes} -- fade-in la incarcare}
+\vspace{6pt}
+\begin{lstlisting}[style=css]
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero h1 {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Numele \code{fadeInUp} e arbitrar \textendash{} il alegi tu, dar trebuie identic in \code{@keyframes} si \code{animation}. CSS nu are animatii built-in; pentru gata-facute: \href{https://animate.style}{animate.css}.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeCss}{\faPaintBrush}\ \ Pattern: card cu hover-lift}
+\vspace{6pt}
+\begin{lstlisting}[style=css]
+.card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease-out,
+              box-shadow 0.25s ease-out;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+}
+\end{lstlisting}
+\vspace{4pt}
+\begin{takeaway}
+Doua proprietati animate (\code{transform} + \code{box-shadow}) = senzatia de ,,ridicare''. Pattern-ul standard pe orice landing page modern.
+\end{takeaway}
+\end{frame}
+
+\begin{frame}{\textcolor{themeCss}{\faGamepad}\ \ Aplicatie practica -- 5 minute}
   \vspace{20pt}
   \begin{joculet}
     {\large\color{themeCss}\faGamepad\ \textbf{Flexbox Froggy}}\\[6pt]
-    Pozi\textcommabelow{t}ionezi broa\textcommabelow{s}te pe nuferi cu \code{justify-content} si \code{align-items}.\\
+    Pozitionezi broaste pe nuferi cu \code{justify-content} si \code{align-items}.\\
     Misiune: primele 6 niveluri (acopera tot ce ai vazut).\\[8pt]
-    {\color{themeCss}\faLink\ \texttt{flexboxfroggy.com}}
+    {\color{themeCss}\faLink\ \href{https://flexboxfroggy.com}{\texttt{flexboxfroggy.com}}}
   \end{joculet}
 
   \vspace{16pt}
-  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} MDN CSS \,\textbullet\, web.dev/learn/css \,\textbullet\, CSS-Tricks Flexbox Guide}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} \href{https://developer.mozilla.org/en-US/docs/Web/CSS}{MDN CSS} \,\textbullet\, \href{https://web.dev/learn/css}{web.dev/learn/css} \,\textbullet\, \href{https://css-tricks.com/snippets/css/a-guide-to-flexbox/}{CSS-Tricks Flexbox Guide} \,\textbullet\, \textcolor{themeBonus}{\faRocket\ bonus: scroll-driven animatii, 3D, clip-path in handout}}
 \end{frame}
 
 % =====================================================================
 %  FAZA 3 -- JS
 % =====================================================================
 \setaccent{themeJs}
-\dividerframe{themeJs}{\faBolt}{3}{JavaScript}{Variabile. Pattern-cheie. DOM.}
+\dividerframe{themeJs}{\faBolt}{3}{JavaScript}{30 min \,\textbullet\, Pattern-cheie. DOM. Scroll reveal.}
 
-\begin{frame}{\textcolor{themeJs}{\faBolt}\ \ Faza 3 -- JavaScript}
-  \vspace{8pt}
-  \begin{teorie}
-    {\large\color{themeJs}\textbf{Cum o faci sa raspunda}}\\[2pt]
-    {\small\color{textDim}\itshape Un singur pattern -- restul sunt varia\textcommabelow{t}ii.}
-  \end{teorie}
+\begin{frame}[c]{\textcolor{themeJs}{\faBolt}\ \ JavaScript -- cum o faci sa raspunda}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeJs}\fontsize{60}{60}\selectfont\faTerminal}\\[16pt]
+    {\Large\bfseries sintaxa}\\[4pt]
+    {\small\color{textDim}const, let, ===}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeJs}\fontsize{60}{60}\selectfont\faBullseye}\\[16pt]
+    {\Large\bfseries pattern}\\[4pt]
+    {\small\color{textDim}SELECT $\to$ LISTEN $\to$ CHANGE}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeJs}\fontsize{60}{60}\selectfont\faMousePointer}\\[16pt]
+    {\Large\bfseries DOM}\\[4pt]
+    {\small\color{textDim}querySelector, events, form}
+  \end{columns}
+\end{frame}
 
-  \vspace{6pt}
-  \begin{itemize}
-    \item Conectare: \code{<script src="..." defer>}
-    \item \code{const} default; \code{let} pentru reasignare; nu \code{var}
-    \item Tipuri: string, number, boolean, array, object
-    \item \textbf{Pattern-cheie:} SELECT $\to$ LISTEN $\to$ CHANGE
-    \item DOM: \code{querySelector} (1), \code{querySelectorAll} (NodeList)
-    \item Form: \code{e.preventDefault()} + \code{FormData}
-    \item Compara\textcommabelow{t}ie: exclusiv \code{===}; debug cu \code{F12 → Console}
-  \end{itemize}
+\begin{frame}{\textcolor{themeJs}{\faBolt}\ \ De ce JavaScript?}
+\vspace{14pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+  {\small\bfseries\color{themeJs}\faBolt\ Pe pagina}\\[6pt]
+  {\footnotesize
+  $\bullet$\ Modifici continutul fara reload\\[4pt]
+  $\bullet$\ Reactionezi la click / scroll / tastatura\\[4pt]
+  $\bullet$\ Validezi formulare\\[4pt]
+  $\bullet$\ Apeluri la API (\code{fetch})\\[4pt]
+  $\bullet$\ Date locale (\code{localStorage})
+  }
+
+\column{0.49\textwidth}
+  {\small\bfseries\color{themeJs}\faRocket\ De ce e puternic}\\[6pt]
+  {\footnotesize
+  $\bullet$\ Singurul limbaj nativ in browser\\[4pt]
+  $\bullet$\ Acelasi cod: server (Node), mobile (RN), desktop (Electron)\\[4pt]
+  $\bullet$\ \code{npm}: 2M+ pachete free\\[4pt]
+  $\bullet$\ React, Vue, Svelte \textendash{} toate sunt JS
+  }
+\end{columns}
+
+\vspace{18pt}
+\begin{takeaway}
+Pattern-ul SELECT $\to$ LISTEN $\to$ CHANGE acopera 80\% din JS-ul pe site-uri statice.
+\end{takeaway}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ Variabile si tipuri (5-minute crash course)}
+\vspace{6pt}
+\begin{lstlisting}[style=js, basicstyle=\ttfamily\scriptsize]
+const PI = 3.14;          // imutabil
+let counter = 0;          // mutabil
+
+// Primitive
+const nume     = "Voluntar";  // string
+const varsta   = 21;          // number
+const eStudent = true;        // boolean
+const fara     = null;        // ,,nimic'' explicit
+
+// Compuse
+const limbaje  = ["HTML", "CSS", "JS"];                // array
+const persoana = { nume: "Voluntar", varsta: 21 };     // object
+
+console.log(persoana.nume);   // "Voluntar"
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Default: \code{const}. \code{let} doar cand reasignezi. \code{var} = nu mai folosi.}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ Pattern: SELECT $\to$ LISTEN $\to$ CHANGE}
 \vspace{6pt}
-\begin{lstlisting}[style=js]
+\begin{lstlisting}[style=js, basicstyle=\ttfamily\scriptsize]
 // 1. SELECT
 const btn = document.querySelector('.toggle-theme');
+console.log('Butonul gasit:', btn);  // verificare in DevTools (F12)
 
 // 2. LISTEN
-btn.addEventListener('click', () => {
+btn.addEventListener('click', (event) => {
+  console.log('Click:', event.target);
 
   // 3. CHANGE
   document.body.classList.toggle('dark');
-
 });
 \end{lstlisting}
 \vspace{4pt}
-\begin{takeaway}
-80\% din JS-ul pe site-uri statice e varia\textcommabelow{t}ie pe acest pattern. React, Vue, Svelte ascund acela\textcommabelow{s}i mecanism in spatele unui API declarativ.
-\end{takeaway}
+{\footnotesize\color{textDim}\itshape \code{console.log} = debugging. Apeleaza-l inainte si in listener ca sa verifici ca selectorul a gasit elementul si ca evenimentul se declanseaza.}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ \texttt{==} vs \texttt{===}}
@@ -716,7 +1436,7 @@ btn.addEventListener('click', () => {
 null == undefined    // true
 [] == false          // true
 \end{lstlisting}
-\snuCaption{\code{==} efectueaza coerci\textcommabelow{t}ie de tip. Rezultatul este des contraintuitiv. Bug-uri greu de gasit.}
+\snuCaption{\code{==} efectueaza coercitie de tip. Rezultatul este des contraintuitiv. Bug-uri greu de gasit.}
 
 \vspace{6pt}
 \sdaHeader
@@ -725,64 +1445,117 @@ null == undefined    // true
 0 === ""             // false
 null === undefined   // false
 \end{lstlisting}
-\sdaCaption{\code{===} compara strict valoare \textbf{si} tip. Mereu folose\textcommabelow{s}te asta. Niciodata \code{==}.}
+\sdaCaption{\code{===} compara strict valoare \textbf{si} tip. Mereu foloseste asta. Niciodata \code{==}.}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ Form submit fara reload}
 \vspace{6pt}
-\begin{lstlisting}[style=js]
+\begin{lstlisting}[style=js, basicstyle=\ttfamily\scriptsize]
 const form = document.querySelector('#contact-form');
 
 form.addEventListener('submit', (e) => {
-  e.preventDefault();
+  e.preventDefault();                  // blocheaza reincarcarea
 
   const data = Object.fromEntries(new FormData(form));
   console.log('Date primite:', data);
+
+  if (!data.email.includes('@')) {
+    console.warn('Email invalid:', data.email);
+    return;
+  }
 
   form.reset();
   alert(`Multumesc, ${data.nume}!`);
 });
 \end{lstlisting}
 \vspace{4pt}
-{\footnotesize\color{textDim}\itshape \code{preventDefault} blocheaza reincarcarea; \code{FormData} colecteaza valorile dupa \code{name}.}
+{\footnotesize\color{textDim}\itshape Trei niveluri de debug: \code{console.log} (info), \code{console.warn} (galben), \code{console.error} (rosu).}
 \end{frame}
 
-\begin{frame}{\textcolor{themeJs}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
-  \vspace{20pt}
+\begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ IntersectionObserver -- de ce, nu cum}
+\vspace{4pt}
+\snuHeader
+\begin{lstlisting}[style=jsnu]
+window.addEventListener('scroll', () => {
+  document.querySelectorAll('.reveal').forEach(el => {
+    if (el.getBoundingClientRect().top < window.innerHeight) {
+      el.classList.add('visible');
+    }
+  });
+});
+\end{lstlisting}
+\snuCaption{Ruleaza la fiecare pixel de scroll. Layout thrashing. FPS scade pe mobile.}
+
+\vspace{6pt}
+\begin{takeaway}
+\textbf{IntersectionObserver:} browserul te anunta doar cand starea de vizibilitate se schimba. Zero cost de performance.
+\end{takeaway}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeJs}{\faBolt}\ \ Pattern: fade-in la scroll}
+\vspace{6pt}
+\begin{lstlisting}[style=js]
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal')
+  .forEach((el) => observer.observe(el));
+\end{lstlisting}
+\vspace{4pt}
+{\footnotesize\color{textDim}\itshape Pe CSS: \code{.reveal \{ opacity: 0; transition: all 0.6s ease-out; \}} si \code{.reveal.visible \{ opacity: 1; \}}.}
+\end{frame}
+
+\begin{frame}[fragile]{\textcolor{themeJs}{\faGamepad}\ \ Aplicatie practica -- 5 minute}
+  \vspace{8pt}
   \begin{joculet}
-    {\large\color{themeJs}\faGamepad\ \textbf{Make the button work}}\\[6pt]
-    HTML+CSS gata. Lipse\textcommabelow{s}te JS-ul.\\
-    Misiune: 3 linii care toggle-uiesc dark mode pe \code{<body>}.\\[8pt]
-    {\color{themeJs}\faLink\ \texttt{codepen.io/[user]/pen/[id]}}
+    {\large\color{themeJs}\faGamepad\ \textbf{Make the button work}}\\[8pt]
+
+    {\bfseries\color{themeJs}1.}\ \ Deschide CodePen-ul din chat: {\color{themeJs}\faLink\ \texttt{codepen.io/[trainer]/pen/[id]}}\ \ $\to$\ \ \emph{Fork}.\\[5pt]
+    {\bfseries\color{themeJs}2.}\ \ HTML si CSS sunt deja completate. In panoul \textbf{JS} (gol), adauga la linia 1:\\[3pt]
+    \begin{lstlisting}[style=js, numbers=none, basicstyle=\ttfamily\footnotesize]
+const btn = document.querySelector('.toggle');
+btn.addEventListener('click', () => {
+  document.body.classList.toggle('dark');
+});
+    \end{lstlisting}
+    \vspace{1pt}
+    {\bfseries\color{themeJs}3.}\ \ Apasa butonul \textendash{} pagina trebuie sa comute light/dark mode.
   \end{joculet}
 
-  \vspace{16pt}
-  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} javascript.info \,\textbullet\, MDN JS \,\textbullet\, The Odin Project JS}
+  \vspace{4pt}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} \href{https://javascript.info}{javascript.info} \,\textbullet\, \href{https://developer.mozilla.org/en-US/docs/Web/JavaScript}{MDN JS} \,\textbullet\, \textcolor{themeBonus}{\faRocket\ bonus: debounce/throttle, fetch, array methods in handout}}
 \end{frame}
 
 % =====================================================================
 %  FAZA 4 -- DEPLOY
 % =====================================================================
 \setaccent{themeDeploy}
-\dividerframe{themeDeploy}{\faRocket}{4}{Deploy}{Versionare git. GitHub Pages.}
+\dividerframe{themeDeploy}{\faRocket}{4}{Deploy}{10 min \,\textbullet\, Versionare git. GitHub Pages.}
 
-\begin{frame}{\textcolor{themeDeploy}{\faRocket}\ \ Faza 4 -- Deploy}
-  \vspace{8pt}
-  \begin{teorie}
-    {\large\color{themeDeploy}\textbf{Pune-o pe internet}}\\[2pt]
-    {\small\color{textDim}\itshape La final: URL real, accesibil oricui din lume.}
-  \end{teorie}
-
-  \vspace{6pt}
-  \begin{itemize}
-    \item De ce git: istoric, backup, colaborare, standard industrial
-    \item Modelul mental: working dir $\to$ staging $\to$ repo $\to$ remote
-    \item Cele 5 comenzi: \code{init}, \code{add}, \code{commit}, \code{remote add}, \code{push}
-    \item Inspec\textcommabelow{t}ie: \code{git status}, \code{git diff}, \code{git log}
-    \item GitHub Pages click-by-click
-    \item URL: \code{username.github.io/repo}
-    \item Capcana PAT, capcana 404
-  \end{itemize}
+\begin{frame}[c]{\textcolor{themeDeploy}{\faRocket}\ \ Deploy -- pune-o pe internet}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeDeploy}\fontsize{60}{60}\selectfont\faCodeBranch}\\[16pt]
+    {\Large\bfseries versionare}\\[4pt]
+    {\small\color{textDim}init, add, commit}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeDeploy}\fontsize{60}{60}\selectfont\faUpload}\\[16pt]
+    {\Large\bfseries push}\\[4pt]
+    {\small\color{textDim}remote add, push}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeDeploy}\fontsize{60}{60}\selectfont\faGlobe}\\[16pt]
+    {\Large\bfseries URL public}\\[4pt]
+    {\small\color{textDim}user.github.io/repo}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeDeploy}{\faRocket}\ \ Cele 5 comenzi}
@@ -796,7 +1569,7 @@ git push -u origin main
 \end{lstlisting}
 \vspace{6pt}
 {\small Apoi pe GitHub: \textbf{Settings $\to$ Pages $\to$ Branch: main $\to$ Save}.\\
-A\textcommabelow{s}tep\textcommabelow{t}i 60s. URL-ul apare in cutia verde.}
+Astepti 60s. URL-ul apare in cutia verde.}
 \vspace{4pt}
 \begin{takeaway}
 Modificari ulterioare = doar 3 comenzi: \code{add}, \code{commit}, \code{push}.
@@ -824,59 +1597,60 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
 \sdaCaption{Verb la imperativ + \emph{ce} + \emph{de ce}. Maxim 50--72 caractere.}
 \end{frame}
 
-\begin{frame}{\textcolor{themeDeploy}{\faGamepad}\ \ Aplica\textcommabelow{t}ie LIVE -- 10 minute}
+\begin{frame}{\textcolor{themeDeploy}{\faGamepad}\ \ Aplicatie LIVE -- 10 minute}
   \vspace{20pt}
   \begin{joculet}
-    {\large\color{themeDeploy}\faGamepad\ \textbf{To\textcommabelow{t}i cu URL public}}\\[6pt]
+    {\large\color{themeDeploy}\faGamepad\ \textbf{Toti cu URL public}}\\[6pt]
     Live-along: trainer pe ecran, voi cu el impreuna.\\
     Misiune: la final, fiecare pune URL-ul lui in chat-ul Discord.\\[6pt]
     {\itshape ,,Trimite link-ul pe WhatsApp la cineva. Acela e momentul.''}\\[8pt]
-    {\color{themeDeploy}\faLink\ \texttt{github.com/new}}
+    {\color{themeDeploy}\faLink\ \href{https://github.com/new}{\texttt{github.com/new}}}
   \end{joculet}
 
   \vspace{8pt}
-  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} pages.github.com \,\textbullet\, learngitbranching.js.org \,\textbullet\, Pro Git Book}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} \href{https://pages.github.com}{pages.github.com} \,\textbullet\, \href{https://learngitbranching.js.org}{learngitbranching.js.org} \,\textbullet\, \href{https://git-scm.com/book/en/v2}{Pro Git Book}}
 \end{frame}
 
 % =====================================================================
 %  FAZA 5 -- SEO
 % =====================================================================
 \setaccent{themeSeo}
-\dividerframe{themeSeo}{\faShareSquare}{5}{SEO}{Open Graph. Schema.org.}
+\dividerframe{themeSeo}{\faShareSquare}{5}{SEO}{10 min \,\textbullet\, Open Graph. Schema.org. \texttt{robots.txt}.}
 
-\begin{frame}{\textcolor{themeSeo}{\faShareSquare}\ \ Faza 5 -- SEO + Open Graph}
-  \vspace{8pt}
-  \begin{teorie}
-    {\large\color{themeSeo}\textbf{Cum arata cand o trimi\textcommabelow{t}i}}\\[2pt]
-    {\small\color{textDim}\itshape 5 meta tags + 1 schema = link care arata profesional pe WhatsApp.}
-  \end{teorie}
-
-  \vspace{6pt}
-  \begin{itemize}
-    \item Doua audien\textcommabelow{t}e: Google + re\textcommabelow{t}ele sociale
-    \item Google: \code{<title>} + \code{<meta description>}
-    \item Social: 5 \code{og:*} tags
-    \item Capcana: \code{og:image} \textbf{trebuie} URL absolut, 1200x630
-    \item Twitter Card: \code{summary\_large\_image}
-    \item JSON-LD (Schema.org) pentru rich snippets
-    \item \code{<link rel="canonical">} previne con\textcommabelow{t}inut duplicat
-  \end{itemize}
+\begin{frame}[c]{\textcolor{themeSeo}{\faShareSquare}\ \ SEO -- cum arata cand o trimiti}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeSeo}\fontsize{60}{60}\selectfont\faSearch}\\[16pt]
+    {\Large\bfseries cautare}\\[4pt]
+    {\small\color{textDim}title, description}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeSeo}\fontsize{60}{60}\selectfont\faComments}\\[16pt]
+    {\Large\bfseries social}\\[4pt]
+    {\small\color{textDim}og:title, og:image, og:url}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeSeo}\fontsize{60}{60}\selectfont\faRobot}\\[16pt]
+    {\Large\bfseries roboti}\\[4pt]
+    {\small\color{textDim}sitemap, robots.txt, JSON-LD}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeSeo}{\faShareSquare}\ \ Open Graph -- copy-paste in <head>}
 \vspace{6pt}
 \begin{lstlisting}[style=html]
-<title>Maria Popescu -- Student CS, Iasi</title>
+<title>Voluntar BEST -- Student CS, Iasi</title>
 <meta name="description" content="Pagina personala...">
 
 <meta property="og:type" content="website">
-<meta property="og:title" content="Maria Popescu">
+<meta property="og:title" content="Voluntar BEST">
 <meta property="og:description" content="Web dev, design.">
-<meta property="og:image" content="https://maria.github.io/site/og.png">
-<meta property="og:url" content="https://maria.github.io/site/">
+<meta property="og:image" content="https://voluntar-best.github.io/site/og.png">
+<meta property="og:url" content="https://voluntar-best.github.io/site/">
 \end{lstlisting}
 \vspace{4pt}
-{\footnotesize\color{textDim}\itshape \code{og:image} \textbf{trebuie} URL absolut. Cu URL relativ, WhatsApp nu \textcommabelow{s}tie de unde sa-l ia.}
+{\footnotesize\color{textDim}\itshape \code{og:image} \textbf{trebuie} URL absolut. Cu URL relativ, WhatsApp nu stie de unde sa-l ia.}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeSeo}{\faShareSquare}\ \ Calitatea \texttt{<title>}}
@@ -892,48 +1666,50 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
 \vspace{6pt}
 \sdaHeader
 \begin{lstlisting}[style=htmlda]
-<title>Maria Popescu -- Portofoliu Web Developer, Iasi</title>
+<title>Voluntar BEST -- Portofoliu Web Developer, Iasi</title>
 <title>Despre BEST Iasi -- Asociatie studenteasca tehnica</title>
 \end{lstlisting}
 \sdaCaption{50--60 caractere. Specific paginii. Structura ,,Subiect -- Context''.}
 \end{frame}
 
-\begin{frame}{\textcolor{themeSeo}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 5 minute}
+\begin{frame}{\textcolor{themeSeo}{\faGamepad}\ \ Aplicatie practica -- 5 minute}
   \vspace{20pt}
   \begin{joculet}
     {\large\color{themeSeo}\faGamepad\ \textbf{opengraph.xyz}}\\[6pt]
     Adauga cele 5 \code{og:*} in \code{<head>}, \code{git push}.\\
     Apoi paste URL-ul tau pe opengraph.xyz.\\
     Misiune: vezi cum arata pe Facebook / Twitter / LinkedIn / WhatsApp.\\[8pt]
-    {\color{themeSeo}\faLink\ \texttt{opengraph.xyz}}
+    {\color{themeSeo}\faLink\ \href{https://opengraph.xyz}{\texttt{opengraph.xyz}}}
   \end{joculet}
 
   \vspace{8pt}
-  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} ogp.me \,\textbullet\, metatags.io \,\textbullet\, schema.org}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} \href{https://ogp.me}{ogp.me} \,\textbullet\, \href{https://metatags.io}{metatags.io} \,\textbullet\, \href{https://schema.org}{schema.org}}
 \end{frame}
 
 % =====================================================================
 %  FAZA 6 -- LIGHTHOUSE
 % =====================================================================
 \setaccent{themeLighthouse}
-\dividerframe{themeLighthouse}{\faChartBar}{6}{Lighthouse}{Audit. Core Web Vitals.}
+\dividerframe{themeLighthouse}{\faChartBar}{6}{Lighthouse}{10 min \,\textbullet\, Audit. Core Web Vitals. Optimizari.}
 
-\begin{frame}{\textcolor{themeLighthouse}{\faChartBar}\ \ Faza 6 -- Lighthouse}
-  \vspace{8pt}
-  \begin{teorie}
-    {\large\color{themeLighthouse}\textbf{Audit profesional}}\\[2pt]
-    {\small\color{textDim}\itshape Scor masurabil pe 4 axe. Acela\textcommabelow{s}i tool il folose\textcommabelow{s}te \textcommabelow{s}i firma ta viitoare.}
-  \end{teorie}
-
-  \vspace{6pt}
-  \begin{itemize}
-    \item Tool gratis Google -- noteaza orice site
-    \item \textbf{Performance \,\textbullet\, Accessibility \,\textbullet\, Best Practices \,\textbullet\, SEO}
-    \item Score: 90+ acceptabil, 95+ profesional
-    \item Lab data (lab) vs field data (CrUX, real users)
-    \item Executie: PageSpeed Insights (web) sau DevTools (local)
-    \item Core Web Vitals: LCP $<$2.5s, INP $<$200ms, CLS $<$0.1
-  \end{itemize}
+\begin{frame}[c]{\textcolor{themeLighthouse}{\faChartBar}\ \ Lighthouse -- audit profesional}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeLighthouse}\fontsize{60}{60}\selectfont\faClipboardCheck}\\[16pt]
+    {\Large\bfseries 4 categorii}\\[4pt]
+    {\small\color{textDim}Perf, A11y, BP, SEO}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeLighthouse}\fontsize{60}{60}\selectfont\faStopwatch}\\[16pt]
+    {\Large\bfseries Core Web Vitals}\\[4pt]
+    {\small\color{textDim}LCP, INP, CLS}
+  \column{0.33\textwidth}
+    \centering
+    {\color{themeLighthouse}\fontsize{60}{60}\selectfont\faWrench}\\[16pt]
+    {\Large\bfseries fix}\\[4pt]
+    {\small\color{textDim}alt, defer, srcset, lazy}
+  \end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{\textcolor{themeLighthouse}{\faChartBar}\ \ Imagini optimizate}
@@ -942,7 +1718,7 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
 \begin{lstlisting}[style=htmlnu]
 <img src="hero.jpg">
 \end{lstlisting}
-\snuCaption{Lipse\textcommabelow{s}te \code{alt} (a11y), \code{width}/\code{height} (CLS), \code{srcset} (mobil), \code{loading} (eager).}
+\snuCaption{Lipseste \code{alt} (a11y), \code{width}/\code{height} (CLS), \code{srcset} (mobil), \code{loading} (eager).}
 
 \vspace{6pt}
 \sdaHeader
@@ -954,21 +1730,21 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
      loading="lazy"
      alt="Echipa BEST Iasi in fata sediului UAIC">
 \end{lstlisting}
-\sdaCaption{Browserul alege rezolu\textcommabelow{t}ia; lazy loading sub fold; rezerva spa\textcommabelow{t}iu prin \code{width}/\code{height}.}
+\sdaCaption{Browserul alege rezolutia; lazy loading sub fold; rezerva spatiu prin \code{width}/\code{height}.}
 \end{frame}
 
-\begin{frame}{\textcolor{themeLighthouse}{\faGamepad}\ \ Aplica\textcommabelow{t}ie practica -- 10 minute}
+\begin{frame}{\textcolor{themeLighthouse}{\faGamepad}\ \ Aplicatie practica -- 10 minute}
   \vspace{20pt}
   \begin{joculet}
     {\large\color{themeLighthouse}\faGamepad\ \textbf{Audit + fix pe site-ul tau}}\\[6pt]
     Pas 1: ruleaza pe URL-ul tau. Vezi scorul.\\
     Pas 2: fix 1-2 probleme. \code{git push}. Re-run.\\
-    Pas 3: ruleaza pe \code{01-broken/}. Vezi diferen\textcommabelow{t}a.\\[8pt]
-    {\color{themeLighthouse}\faLink\ \texttt{pagespeed.web.dev}}
+    Pas 3: ruleaza pe \code{01-broken/}. Vezi diferenta.\\[8pt]
+    {\color{themeLighthouse}\faLink\ \href{https://pagespeed.web.dev}{\texttt{pagespeed.web.dev}}}
   \end{joculet}
 
   \vspace{8pt}
-  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} web.dev/learn/performance \,\textbullet\, Core Web Vitals \,\textbullet\, Lighthouse docs}
+  {\footnotesize\color{textDim}\faGraduationCap\ \ \textbf{Aprofundare:} \href{https://web.dev/learn/performance}{web.dev/learn/performance} \,\textbullet\, \href{https://web.dev/articles/vitals}{Core Web Vitals} \,\textbullet\, \href{https://developer.chrome.com/docs/lighthouse/overview}{Lighthouse docs}}
 \end{frame}
 
 % =====================================================================
@@ -990,11 +1766,11 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
     {\small\color{textDim}3 demo-uri: blank, broken, reference}\\
 
   \column{0.5\textwidth}
-    {\color{themeJs}\faGamepad}\ \ \textbf{6 aplica\textcommabelow{t}ii practice online}\\
+    {\color{themeJs}\faGamepad}\ \ \textbf{6 aplicatii practice online}\\
     {\small\color{textDim}Flexbox Froggy, opengraph.xyz, PageSpeed, etc.}\\[8pt]
 
     {\color{themeSeo}\faMap}\ \ \textbf{Roadmap pentru 4 saptamani}\\
-    {\small\color{textDim}in capitolul \emph{Resurse \& urmatorii pa\textcommabelow{s}i}}\\[8pt]
+    {\small\color{textDim}in capitolul \emph{Resurse \& urmatorii pasi}}\\[8pt]
 
     {\color{themeLighthouse}\faUsers}\ \ \textbf{Pe cine sa intrebi}\\
     {\small\color{textDim}canalele Discord BEST + comunitatea wider}
@@ -1003,10 +1779,119 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
   \vspace{16pt}
   \begin{center}
   \begin{takeaway}
-  Diferen\textcommabelow{t}a intre tine astazi \textcommabelow{s}i tine in 2 saptamani e doar practica.
+  Diferenta intre tine astazi si tine in 2 saptamani e doar practica.
   \end{takeaway}
   \end{center}
 \end{frame}
+
+\setaccent{themeBonus}
+
+\begin{frame}{\textcolor{themeBonus}{\faRocket}\ \ Bonus -- ce mai e in handout}
+  \vspace{10pt}
+  \begin{center}
+  {\small\color{textDim}\itshape Sectiunile mov din PDF, pentru self-study.}
+  \end{center}
+
+  \vspace{8pt}
+  \begin{columns}[T,onlytextwidth]
+  \column{0.5\textwidth}
+    {\color{themeHtml}\faCode}\ \ \textbf{HTML} \,\textendash\, \code{<picture>}, ARIA, \code{loading="lazy"}\\[6pt]
+    {\color{themeCss}\faPaintBrush}\ \ \textbf{CSS} \,\textendash\, 3D transforms, scroll-driven animatii, \code{clip-path}, container queries\\[6pt]
+    {\color{themeJs}\faBolt}\ \ \textbf{JavaScript} \,\textendash\, debounce/throttle, \code{fetch}, \code{map}/\code{filter}, \code{localStorage}, event delegation
+  \column{0.5\textwidth}
+    {\color{themeDeploy}\faRocket}\ \ \textbf{Deploy} \,\textendash\, GitHub Actions, branch strategies\\[6pt]
+    {\color{themeSeo}\faShareSquare}\ \ \textbf{SEO} \,\textendash\, Schema.org (Article, FAQ, Event), \code{preconnect}, mobile-first\\[6pt]
+    {\color{themeLighthouse}\faChartBar}\ \ \textbf{Lighthouse} \,\textendash\, minification, fonturi, third-party scripts, Service Worker (PWA), Lighthouse CI
+  \end{columns}
+
+  \vspace{14pt}
+  \begin{center}
+  {\small\color{themeBonus}\itshape Aprox. 8\textendash{}10 ore de exersat in plus, daca esti curios.}
+  \end{center}
+\end{frame}
+
+\setaccent{themeHtml}
+
+\begin{frame}{\textcolor{themeHtml}{\faBookmark}\ \ Referinta -- structura, text, linkuri}
+\label{slide:html-semantic-ref}
+\vspace{10pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.42\textwidth}
+{\footnotesize\bfseries\color{themeHtml}Landmark-uri}\\[2pt]
+{\footnotesize \code{<header>}, \code{<nav>}, \code{<main>},\\\code{<section>}, \code{<article>}, \code{<aside>},\\\code{<footer>}}\\[10pt]
+
+{\footnotesize\bfseries\color{themeHtml}Titluri}\\[2pt]
+{\footnotesize \code{<h1>} \textendash{} \code{<h6>}}\\[10pt]
+
+{\footnotesize\bfseries\color{themeHtml}Liste}\\[2pt]
+{\footnotesize \code{<ul>}, \code{<ol>}, \code{<li>}\\\code{<dl>}, \code{<dt>}, \code{<dd>}}
+
+\column{0.55\textwidth}
+{\footnotesize\bfseries\color{themeHtml}Text \& semnificatie}\\[2pt]
+{\footnotesize
+\code{<p>} \,\textendash\, paragraf \quad \code{<em>} \,\textendash\, accent\\
+\code{<strong>} \,\textendash\, importanta \quad \code{<mark>} \,\textendash\, evidentiat\\
+\code{<small>} \,\textendash\, secundar\\
+\code{<cite>}, \code{<q>}, \code{<blockquote>}\\
+\code{<time>}, \code{<address>}\\
+\code{<code>}, \code{<kbd>}, \code{<samp>}
+}\\[10pt]
+
+{\footnotesize\bfseries\color{themeHtml}Linkuri \& actiuni}\\[2pt]
+{\footnotesize \code{<a href>} \,\textendash\, navigare \quad \code{<button>} \,\textendash\, actiune}\\[8pt]
+
+{\footnotesize\bfseries\color{themeHtml}Generice (ne-semantice)}\\[2pt]
+{\footnotesize \code{<div>} \,\textendash\, bloc \quad \code{<span>} \,\textendash\, inline}
+\end{columns}
+
+\vspace{10pt}
+\begin{center}
+{\scriptsize\color{textDim}\itshape Continuare (forms, media, UI, tabele) $\to$ slide urmator.}
+\end{center}
+\end{frame}
+
+\begin{frame}{\textcolor{themeHtml}{\faBookmark}\ \ Referinta -- forms, media, UI, tabele}
+\vspace{10pt}
+\begin{columns}[T,onlytextwidth]
+\column{0.49\textwidth}
+{\footnotesize\bfseries\color{themeHtml}Forms}\\[2pt]
+{\footnotesize
+\code{<form>}, \code{<label>}, \code{<input>}\\
+\code{<textarea>}, \code{<select>}, \code{<option>}\\
+\code{<fieldset>}, \code{<legend>}\\
+\code{<button type="submit">}
+}\\[14pt]
+
+{\footnotesize\bfseries\color{themeHtml}Tabele}\\[2pt]
+{\footnotesize
+\code{<table>}, \code{<caption>}\\
+\code{<thead>}, \code{<tbody>}, \code{<tfoot>}\\
+\code{<tr>}, \code{<th>}, \code{<td>}
+}
+
+\column{0.49\textwidth}
+{\footnotesize\bfseries\color{themeHtml}Media}\\[2pt]
+{\footnotesize
+\code{<img>}, \code{<picture>}\\
+\code{<video>}, \code{<audio>}\\
+\code{<figure>} + \code{<figcaption>}\\
+\code{<canvas>}
+}\\[14pt]
+
+{\footnotesize\bfseries\color{themeHtml}UI native}\\[2pt]
+{\footnotesize
+\code{<details>} + \code{<summary>}\\
+\code{<dialog>}, \code{<progress>}, \code{<meter>}
+}
+\end{columns}
+
+\vspace{14pt}
+\begin{center}
+{\scriptsize\color{textDim}\itshape Referinta exhaustiva: MDN \,\textbullet\, \href{https://developer.mozilla.org/en-US/docs/Web/HTML/Element}{\texttt{developer.mozilla.org/en-US/docs/Web/HTML/Element}}}
+\end{center}
+\end{frame}
+
+\setaccent{themeNeutral}
 
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture, overlay]
@@ -1027,7 +1912,7 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
 
     \node[anchor=center, themeNeutral, font=\Large, align=center]
       at ([yshift=0]current page.center)
-      {Slide-urile astea sunt \textcommabelow{s}i ele HTML/CSS/JS.};
+      {Slide-urile astea sunt si ele HTML/CSS/JS.};
 
     \node[anchor=center, themeNeutral, font=\Large\bfseries, align=center]
       at ([yshift=-0.08\paperheight]current page.center)
@@ -1035,11 +1920,16 @@ git commit -m "Reduce dimensiunea hero.jpg de la 2.4MB la 180KB"
 
     \node[anchor=center, textDim, font=\large\itshape, align=center]
       at ([yshift=-0.20\paperheight]current page.center)
-      {Acum \textcommabelow{s}tii cum sa cite\textcommabelow{s}ti acel cod.};
+      {Acum stii cum sa citesti acel cod.};
 
     \node[anchor=south, textDim, font=\small]
-      at ([yshift=0.06\paperheight]current page.south) {%
+      at ([yshift=0.13\paperheight]current page.south) {%
       \color{themeHtml}\faCode\ \color{themeCss}\faPaintBrush\ \color{themeJs}\faBolt\ \color{themeDeploy}\faRocket\ \color{themeSeo}\faShareSquare\ \color{themeLighthouse}\faChartBar};
+
+    % Logo BEST jos
+    \node[anchor=south]
+      at ([yshift=0.03\paperheight]current page.south)
+      {\includegraphics[width=0.10\paperwidth]{logab-dark.png}};
   \end{tikzpicture}
 \end{frame}
 

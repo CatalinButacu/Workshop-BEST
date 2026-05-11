@@ -17,7 +17,9 @@ Dupa capitolul asta vei \textcommabelow{s}ti:
   \item Adauga cele 5 tag-uri \code{og:*} pentru previzualizare in re\textcommabelow{t}ele sociale.
   \item Genereaza \textcommabelow{s}i valideaza imaginea \code{og:image} la dimensiunile \textcommabelow{s}i formatul corect.
   \item Adauga date structurate (JSON-LD) pentru rich snippets in Google.
+  \item Genereaza \code{robots.txt} \textcommabelow{s}i \code{sitemap.xml} pentru a ghida crawler-ele.
   \item Distinge mit-urile SEO de practica actuala.
+  \item \faRocket\ \emph{Bonus self-study:} tipuri Schema.org (Article, BreadcrumbList, FAQ), \code{preconnect}/\code{dns-prefetch}, linking intern, mobile-first indexing.
 \end{itemize}
 \end{outcomes}
 
@@ -43,8 +45,8 @@ Capitolul presupune un site deployat (Faza 4) cu URL public accesibil. Tag-urile
 Doua elemente determina aspectul paginii in rezultatele cautarii:
 
 \begin{lstlisting}[style=html, caption={Plasare in <head>}]
-<title>Maria Popescu -- Student CS, Iasi</title>
-<meta name="description" content="Pagina personala a Mariei Popescu, studenta la CS, pasionata de web development.">
+<title>Voluntar BEST -- Student CS, Iasi</title>
+<meta name="description" content="Pagina personala a Voluntarului BEST, studenta la CS, pasionata de web development.">
 \end{lstlisting}
 
 \subsection{Calitatea \texttt{<title>}}
@@ -62,7 +64,7 @@ Doua elemente determina aspectul paginii in rezultatele cautarii:
 
 \begin{dado}[Asa da]
 \begin{lstlisting}[style=html, numbers=none]
-<title>Maria Popescu -- Portofoliu Web Developer, Iasi</title>
+<title>Voluntar BEST -- Portofoliu Web Developer, Iasi</title>
 <title>Despre BEST Iasi -- Asociatie studenteasca tehnica</title>
 \end{lstlisting}
 \textbf{Reguli.} 50\textendash{}60 caractere; specific paginii (nu site-ului); structura ,,Subiect \textendash{} Context''.
@@ -70,16 +72,11 @@ Doua elemente determina aspectul paginii in rezultatele cautarii:
 
 \subsection{Calitatea \texttt{<meta description>}}
 
-\begin{dano}[Asa nu]
-\code{<meta name="description" content="Pagina mea">}\\
-\code{<meta name="description" content="Bine ati venit pe site-ul meu! Aici puteti vedea cele mai noi informatii despre activitatea mea! Va invit sa exploratati! Multumesc!">}\\
-\textbf{Probleme.} Prea scurt sau plin de fraze de umplutura.
-\end{dano}
+Aceleasi reguli ca pentru \code{<title>}, doar lungimea difera: \textbf{150\textendash{}160 caractere}, descrie con\textcommabelow{t}inutul concret (proiecte, CV, sec\textcommabelow{t}iuni), fara fraze de umplutura tip \emph{,,Bine a\textcommabelow{t}i venit''}.
 
-\begin{dado}[Asa da]
-\code{<meta name="description" content="Portofoliul Mariei Popescu: proiecte web (HTML, CSS, JavaScript, React), CV, contact. Studenta in anul III la UAIC.">}\\
-\textbf{Reguli.} 150\textendash{}160 caractere; expresii cheie (proiecte, CV, contact); descriere a continutului concret.
-\end{dado}
+\begin{lstlisting}[style=html, numbers=none]
+<meta name="description" content="Portofoliul Voluntarului BEST: proiecte web (HTML, CSS, JS), CV, contact. Voluntar BEST Iasi si student CS la UAIC.">
+\end{lstlisting}
 
 % =========================================================
 \section{Protocolul Open Graph}
@@ -88,10 +85,10 @@ Open Graph Protocol (OGP), specificat de Facebook in 2010, este standardul de fa
 
 \begin{lstlisting}[style=html, caption={Tag-uri OGP minimale}]
 <meta property="og:type" content="website">
-<meta property="og:title" content="Maria Popescu -- Student CS, Iasi">
+<meta property="og:title" content="Voluntar BEST -- Student CS, Iasi">
 <meta property="og:description" content="Pagina personala. Web dev, design, open source.">
-<meta property="og:image" content="https://maria.github.io/site/og.png">
-<meta property="og:url" content="https://maria.github.io/site/">
+<meta property="og:image" content="https://voluntar-best.github.io/site/og.png">
+<meta property="og:url" content="https://voluntar-best.github.io/site/">
 \end{lstlisting}
 
 \begin{itemize}
@@ -110,7 +107,7 @@ Open Graph Protocol (OGP), specificat de Facebook in 2010, este standardul de fa
 \end{dano}
 
 \begin{dado}[Asa da \textendash{} URL absolut]
-\code{<meta property="og:image" content="https://maria.github.io/site/og.png">}\\
+\code{<meta property="og:image" content="https://voluntar-best.github.io/site/og.png">}\\
 \textbf{Beneficiu.} Imaginea este accesibila direct prin URL si poate fi cache-uita de Facebook, Slack, Discord.
 \end{dado}
 
@@ -144,13 +141,13 @@ Schema.org defineste un vocabular standardizat pentru descrierea entitatilor (pe
 {
   "@context": "https://schema.org",
   "@type": "Person",
-  "name": "Maria Popescu",
-  "url": "https://maria.github.io/site/",
+  "name": "Voluntar BEST",
+  "url": "https://voluntar-best.github.io/site/",
   "jobTitle": "Student CS",
   "alumniOf": "Universitatea Alexandru Ioan Cuza",
   "sameAs": [
-    "https://github.com/maria",
-    "https://www.linkedin.com/in/maria"
+    "https://github.com/voluntar-best",
+    "https://www.linkedin.com/in/voluntar-best"
   ]
 }
 </script>
@@ -168,7 +165,7 @@ Pentru un eveniment, foloseste \code{"@type": "Event"} cu campurile \code{startD
 Cand acelasi continut este accesibil prin mai multe URL-uri (cu si fara \code{www}, cu si fara slash final, cu parametri UTM, etc.), Google trebuie sa stie care URL este versiunea ,,oficiala''. Tag-ul canonical previne penalizarea pentru continut duplicat:
 
 \begin{lstlisting}[style=html]
-<link rel="canonical" href="https://maria.github.io/site/">
+<link rel="canonical" href="https://voluntar-best.github.io/site/">
 \end{lstlisting}
 
 Indicatie: pe paginile de proiect, URL-ul canonic este URL-ul ,,curat'' al paginii, fara parametri de tracking.
@@ -192,6 +189,81 @@ Indicatie: pe paginile de proiect, URL-ul canonic este URL-ul ,,curat'' al pagin
 \end{itemize}
 
 % =========================================================
+\section{\texttt{robots.txt} \textendash{} ghideaza crawler-ele}
+
+\code{robots.txt} este un fisier text plasat in radacina site-ului (\code{https://voluntar-best.github.io/robots.txt}) care indica robotilor de crawl ce pagini sa indexeze si unde sa caute sitemap-ul. Format strict, dar simplu:
+
+\begin{lstlisting}[caption={\texttt{robots.txt} minimal pentru GitHub Pages}, basicstyle=\ttfamily\small, backgroundcolor=\color{codeBg}, frame=leftline, framerule=2.5pt, rulecolor=\color{partcolor}, framexleftmargin=4pt, xleftmargin=14pt]
+User-agent: *
+Allow: /
+
+Sitemap: https://voluntar-best.github.io/sitemap.xml
+\end{lstlisting}
+
+Cum se cite\textcommabelow{s}te:
+\begin{itemize}[itemsep=1pt]
+  \item \code{User-agent: *} \textendash{} regulile se aplica oricarui robot (Googlebot, Bingbot, etc.).
+  \item \code{Allow: /} \textendash{} permite accesul la intreg site-ul.
+  \item \code{Disallow: /admin/} (alternativ) \textendash{} interzice anumite cai. Util pentru pagini in lucru, dashboard-uri private.
+  \item \code{Sitemap: ...} \textendash{} URL absolut catre sitemap-ul XML (vezi sectiunea urmatoare).
+\end{itemize}
+
+\begin{atentie}
+\code{robots.txt} este o \emph{conventie}, nu un mecanism de securitate. Crawler-ele rau-voitoare il ignora. Daca ai date sensibile, foloseste autentificare reala, nu \code{Disallow}.
+\end{atentie}
+
+\begin{ponturi}
+Verificare: deschide direct in browser \code{https://<site>/robots.txt}. Daca se afiseaza textul, e plasat corect.
+\end{ponturi}
+
+% =========================================================
+\section{\texttt{sitemap.xml} \textendash{} ce pagini exista}
+
+Sitemap-ul este un fisier XML care listeaza toate paginile importante ale site-ului. Google il foloseste pentru indexare mai rapida si completa, in special pentru site-urile noi sau cu structura adanca.
+
+\begin{lstlisting}[caption={\texttt{sitemap.xml} scris manual pentru un portofoliu mic}, basicstyle=\ttfamily\small, backgroundcolor=\color{codeBg}, frame=leftline, framerule=2.5pt, rulecolor=\color{partcolor}, framexleftmargin=4pt, xleftmargin=14pt]
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://voluntar-best.github.io/</loc>
+    <lastmod>2026-05-11</lastmod>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://voluntar-best.github.io/projects.html</loc>
+    <lastmod>2026-05-08</lastmod>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://voluntar-best.github.io/contact.html</loc>
+    <lastmod>2026-04-22</lastmod>
+    <priority>0.5</priority>
+  </url>
+</urlset>
+\end{lstlisting}
+
+Reguli:
+\begin{itemize}[itemsep=1pt]
+  \item \code{<loc>} \textendash{} URL absolut (obligatoriu).
+  \item \code{<lastmod>} \textendash{} data ultimei modificari, format ISO \code{YYYY-MM-DD} (op\textcommabelow{t}ional, recomandat).
+  \item \code{<priority>} \textendash{} 0.0 \textendash{} 1.0, relativ in cadrul site-ului. Home = 1.0, pagini interne = 0.5\textendash{}0.8.
+  \item Pentru site-uri mici (\textless{}50 pagini), scrierea manuala este OK. Pentru site-uri mari, foloseste generatoare automate.
+\end{itemize}
+
+\subsection{Submisie in Google Search Console}
+
+\begin{enumerate}[itemsep=1pt]
+  \item Deschide \url{https://search.google.com/search-console}, adauga proprietatea (URL prefix: \code{https://voluntar-best.github.io/}).
+  \item Verifica posesiunea \textendash{} pentru GitHub Pages, metoda recomandata e meta tag in \code{<head>}.
+  \item Sec\textcommabelow{t}iunea ,,Sitemaps'' $\to$ adauga \code{sitemap.xml} $\to$ Submit.
+  \item In 1\textendash{}7 zile, Google va incepe sa indexeze toate URL-urile listate.
+\end{enumerate}
+
+\begin{ponturi}
+\emph{Beneficiul real:} fara sitemap, Google poate descoperi pagini doar prin link-uri. Cu sitemap, le \textbf{declari explicit}. Pentru un site nou (fara backlink-uri inca), diferen\textcommabelow{t}a e intre indexare in 7 zile vs in 1\textendash{}2 zile.
+\end{ponturi}
+
+% =========================================================
 \section{Favicon}
 
 Favicon-ul (iconita afisata in tab-ul browserului si in bookmark-uri) se declara prin elementul \code{<link>}:
@@ -204,6 +276,138 @@ Favicon-ul (iconita afisata in tab-ul browserului si in bookmark-uri) se declara
 Generarea unui favicon simplu se poate face cu serviciul \url{https://favicon.io/favicon-generator/}, care produce fisierele necesare pornind de la o singura litera si o culoare. Pentru un favicon profesional din SVG, conversia automata in toate dimensiunile necesare se face cu \url{https://realfavicongenerator.net}.
 
 % =========================================================
+\begin{bonusbox}
+\textbf{Acest box e optional.} Daca esti la inceput, treci direct la \emph{Verificare}. Mai jos sunt pattern-urile pe care le folosesc site-urile cu trafic real.
+
+\medskip
+
+\textbf{\faSitemap\ Tipuri Schema.org dincolo de Person}
+
+Vocabularul Schema.org are sute de \code{@type}-uri. Cele mai utile in practica:
+
+\medskip
+
+\emph{Article \textendash{} pentru blog/posts:}
+\begin{lstlisting}[style=html, numbers=none]
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Cum am invatat web development in 2 saptamani",
+  "author": { "@type": "Person", "name": "Voluntar BEST" },
+  "datePublished": "2026-05-11",
+  "dateModified": "2026-05-11",
+  "image": "https://voluntar-best.github.io/blog/learning/cover.jpg"
+}
+\end{lstlisting}
+
+\emph{BreadcrumbList \textendash{} navigare ierarhic\u a in rezultate:}
+\begin{lstlisting}[style=html, numbers=none]
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Acasa",     "item": "https://voluntar-best.github.io/" },
+    { "@type": "ListItem", "position": 2, "name": "Proiecte",  "item": "https://voluntar-best.github.io/projects/" },
+    { "@type": "ListItem", "position": 3, "name": "Portfolio Web" }
+  ]
+}
+\end{lstlisting}
+Google afi\textcommabelow{s}eaza aceasta ierarhie direct in rezultatele de cautare \textendash{} click rate semnificativ mai bun.
+
+\emph{FAQPage \textendash{} intreb\u ari frecvente, afi\textcommabelow{s}ate ca rich snippet:}
+\begin{lstlisting}[style=html, numbers=none]
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "Cum aplic la BEST Iasi?",
+    "acceptedAnswer": { "@type": "Answer", "text": "Inscrie-te la recrutarea din toamna pe best.org.ro." }
+  }]
+}
+\end{lstlisting}
+
+\emph{Event \textendash{} cu datele cheie indexate:}
+\begin{lstlisting}[style=html, numbers=none]
+{
+  "@context": "https://schema.org",
+  "@type": "Event",
+  "name": "BEST Training Web 2026",
+  "startDate": "2026-11-15T10:00:00+02:00",
+  "location": { "@type": "Place", "name": "TUIASI" },
+  "organizer": { "@type": "Organization", "name": "BEST Iasi" }
+}
+\end{lstlisting}
+
+\medskip
+
+\textbf{\faPlug\ \texttt{preconnect} \textcommabelow{s}i \texttt{dns-prefetch} \textendash{} performance + SEO signal}
+
+Cand pagina ta foloseste resurse de pe alt domeniu (Google Fonts, CDN, Analytics), DNS lookup + TCP handshake adauga 100\textendash{}300ms inainte ca resursa sa inceapa sa se descarce. \code{preconnect} face acest setup in paralel cu HTML parsing, in fundal:
+
+\begin{lstlisting}[style=html, numbers=none]
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://www.google-analytics.com">
+\end{lstlisting}
+
+\code{preconnect} \textendash{} DNS + TCP + TLS (cost mai mare, dar resursa e gata sa fie descarcata).\\
+\code{dns-prefetch} \textendash{} doar DNS (mai ieftin, foloseste pentru \textgreater 3 domenii).
+
+Impact: imbunata\textcommabelow{t}e\textcommabelow{s}te LCP (Core Web Vitals) cu 100\textendash{}500ms cand pagina depinde de un CDN.
+
+\medskip
+
+\textbf{\faLink\ Linking intern \textendash{} arhitectur\u a, nu trick}
+
+Google urmare\textcommabelow{s}te link-urile interne pentru a in\textcommabelow{t}elege relevan\textcommabelow{t}a relativa a paginilor. Pagini cu mai multe link-uri intrand sunt considerate ,,mai importante''.
+
+\begin{itemize}[itemsep=1pt]
+  \item Folose\textcommabelow{s}te \textbf{anchor text descriptiv} (\code{<a href="/projects">proiectele mele web</a>}), nu \code{click aici}.
+  \item Conecteaza paginile inrudite: pe pagina de proiect, link spre alte proiecte. Pe blog post, link catre articole inrudite.
+  \item Evita \textbf{orphan pages} (pagini fara niciun link intrand). Google le indexeaza tarziu sau deloc.
+\end{itemize}
+
+\medskip
+
+\textbf{\faMobile*\ Mobile-first indexing}
+
+Din 2023, Google indexeaza \textbf{varianta mobila} a paginii, nu desktop. Pagini care arata bine pe desktop dar sunt rupte pe mobile sunt penalizate masiv. Verifica:
+
+\begin{itemize}[itemsep=1pt]
+  \item \code{<meta name="viewport" content="width=device-width, initial-scale=1">} \textendash{} obligatoriu.
+  \item Textul lizibil fara zoom (\code{font-size} \textgreater{} 14px pe mobil).
+  \item Butoane clic\u abile (\textgreater 44x44px, conform Apple HIG).
+  \item Con\textcommabelow{t}inutul important \textbf{nu este ascuns} pe mobil (Google considera continutul vizibil ca cel canonic).
+  \item Aceea\textcommabelow{s}i pagina pe mobil \textcommabelow{s}i desktop \textendash{} nu varianta separata \code{m.site.ro}.
+\end{itemize}
+
+\medskip
+
+\textbf{\faChartBar\ Performance ca semnal de ranking}
+
+Din 2021, Core Web Vitals (LCP, INP, CLS \textendash{} vezi Faza 6) sunt \textbf{semnal de ranking}. Doua pagini cu con\textcommabelow{t}inut similar: cea mai rapida castiga. Nu vei concura cu site-uri lente.
+
+Recap rapid:
+\begin{itemize}[itemsep=1pt]
+  \item \textbf{LCP} \textless 2.5s \textendash{} cea mai mare imagine/text apare repede.
+  \item \textbf{INP} \textless 200ms \textendash{} pagina raspunde rapid la click/tap.
+  \item \textbf{CLS} \textless 0.1 \textendash{} layout-ul nu ,,sare'' dupa incarcare.
+\end{itemize}
+
+\medskip
+
+\textbf{\faRoute\ Unde mergi de aici}
+
+\begin{itemize}[itemsep=1pt]
+  \item \emph{Schema.org vocabular complet:} \url{https://schema.org/docs/full.html}
+  \item \emph{Generator JSON-LD vizual:} \url{https://technicalseo.com/tools/schema-markup-generator/}
+  \item \emph{Google Mobile-Friendly Test:} \url{https://search.google.com/test/mobile-friendly}
+  \item \emph{Sitemap generator pentru site-uri statice:} \url{https://www.xml-sitemaps.com}
+\end{itemize}
+\end{bonusbox}
+
+% =========================================================
 \section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
 
 \begin{selfcheck}
@@ -213,6 +417,8 @@ Generarea unui favicon simplu se poate face cu serviciul \url{https://favicon.io
   \item \emph{Spot the issue:} \code{<title>Document</title>}.
   \item Care este diferen\textcommabelow{t}a func\textcommabelow{t}ionala intre \code{<title>} si \code{og:title}?
   \item De ce \code{<meta name="keywords">} este considerat depasit?
+  \item Ce reprezinta directiva \code{Sitemap:} in \code{robots.txt}?
+  \item De ce \code{<lastmod>} in \code{sitemap.xml} este util pentru Google?
 \end{enumerate}
 \end{selfcheck}
 
@@ -228,7 +434,10 @@ Generarea unui favicon simplu se poate face cu serviciul \url{https://favicon.io
   \item \code{<meta name="twitter:card" content="summary\_large\_image">} activeaza cardul mare pe X.
   \item JSON-LD (Schema.org) descrie entitati: Person, Organization, Article, Event.
   \item \code{<link rel="canonical">} previne penalizarea pentru continut duplicat.
+  \item \code{robots.txt} ghideaza crawler-ele \textcommabelow{s}i declara sitemap-ul. \code{sitemap.xml} listeaza URL-urile importante.
+  \item Submisia in Google Search Console accelereaza indexarea pentru site-uri noi.
   \item \code{<meta name="keywords">} este ignorat de Google din 2009 \textendash{} \textbf{a nu se folosi}.
+  \item \faRocket\ Bonus: tipuri Schema.org (Article, BreadcrumbList, FAQ, Event), \code{preconnect}/\code{dns-prefetch}, linking intern, mobile-first indexing.
 \end{itemize}
 \end{recap}
 

@@ -201,7 +201,7 @@ Fisierul se commit-eaza ca orice alt fisier. Toate caile listate sunt ignorate l
 \section{Probleme frecvente}
 
 \begin{atentie}
-\textbf{Autentificare prin parola.} GitHub a renuntat la autentificarea prin parola pentru operatiunile git (din 2021). Solutia recomandata este generarea unui \emph{Personal Access Token} (PAT) la \url{https://github.com/settings/tokens} cu scope-ul \code{repo}, folosit ulterior in locul parolei. Browserul memoreaza tokenul pentru sesiunile viitoare.
+\textbf{Autentificare prin parola.} GitHub a renuntat la autentificarea prin parola pentru operatiunile git (din 2021). Solutia recomandata este generarea unui \emph{Personal Access Token} (PAT) la \url{https://github.com/settings/tokens} cu scope-ul \code{repo}, folosit ulterior in locul parolei. Tokenul este memorat de \emph{Git Credential Manager} (Windows) sau \emph{Keychain} (macOS), nu de browser \textendash{} la urmatorul \code{git push} nu va mai fi cerut.
 \end{atentie}
 
 \begin{atentie}
@@ -217,7 +217,7 @@ Fisierul se commit-eaza ca orice alt fisier. Toate caile listate sunt ignorate l
   \item De ce GitHub a renun\textcommabelow{t}at la autentificarea prin parola? Care este alternativa?
   \item \emph{Spot the issue:} \code{git commit -m "update"}.
   \item Diferen\textcommabelow{t}a intre \code{git status} \textcommabelow{s}i \code{git diff}?
-  \item Pentru un repository numit \code{portfolio} al utilizatorului \code{maria}, care este URL-ul GitHub Pages rezultat?
+  \item Pentru un repository numit \code{portfolio} al utilizatorului \code{voluntar-best}, care este URL-ul GitHub Pages rezultat?
 \end{enumerate}
 \end{selfcheck}
 

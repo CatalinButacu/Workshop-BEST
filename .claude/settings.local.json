@@ -19,7 +19,19 @@
       "Bash(./build.sh)",
       "Bash(./build.sh 01-html)",
       "Bash(./build.sh 05-seo)",
-      "Bash(mktexpk --mfmode=ljfour --bdpi=600 --mag=1+87/600 --dpi=525 ecsx0800)"
+      "Bash(mktexpk --mfmode=ljfour --bdpi=600 --mag=1+87/600 --dpi=525 ecsx0800)",
+      "PowerShell(Get-Command *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(.\\\\build.ps1)",
+      "PowerShell(.\\\\build.ps1 presentation)",
+      "PowerShell(Test-Path *)",
+      "PowerShell($lines = Get-Content support\\\\src\\\\05-seo.tex; for \\($i=76; $i -le 82; $i++\\) { $bytes = [System.Text.Encoding]::UTF8.GetBytes\\($lines[$i]\\); Write-Output \\(\"L{0,3}: {1}\" -f \\($i+1\\), $lines[$i]\\); Write-Output \\(\"        bytes: \" + \\(\\($bytes | ForEach-Object { '{0:X2}' -f $_ }\\) -join ' '\\)\\) })",
+      "PowerShell(.\\\\build.ps1 support)",
+      "PowerShell(New-Item *)",
+      "PowerShell(pdftoppm *)",
+      "PowerShell(.\\\\build.ps1 presentation 2>&1 | Select-Object -Last 4)",
+      "PowerShell($files = Get-ChildItem preview -Force; \"$\\($files.Count\\) files\"; $files | ForEach-Object { $_.Name })",
+      "PowerShell($f = Get-ChildItem preview -Force; \"$\\($f.Count\\) files\"; $f | ForEach-Object { \"$\\($_.Name\\) $\\($_.Length\\)\" })"
     ]
   }
 }

@@ -34,7 +34,22 @@ document.querySelectorAll('a[href^="#"]').forEach((link) => {
 });
 
 
-// 3. FORM SUBMIT — interceptez submit-ul, afisez confirmare
+// 3. SCROLL REVEAL — sectiunile fade-in cand intra in viewport
+//    IntersectionObserver e mai performant decat un scroll listener:
+//    callback-ul ruleaza doar cand starea de vizibilitate se schimba.
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target); // o singura data per element
+    }
+  });
+}, { threshold: 0.15 });
+
+document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+
+
+// 4. FORM SUBMIT — interceptez submit-ul, afisez confirmare
 const form = document.querySelector('#contact-form');
 
 form.addEventListener('submit', (e) => {

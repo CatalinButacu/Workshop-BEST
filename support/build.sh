@@ -19,11 +19,8 @@ SRC_DIR="src"
 OUT_DIR="pdf"
 
 # Files to compile, in display order. preamble.tex is included by these,
-# not compiled directly.
-# Doar main.tex (manualul complet -- 30+ pagini, un singur fisier) si
-# 00-inainte.tex (standalone, distribuit cu 24h inainte de training).
+# not compiled directly. Doar main.tex (manualul complet, un singur fisier).
 FILES=(
-  00-inainte
   main
 )
 

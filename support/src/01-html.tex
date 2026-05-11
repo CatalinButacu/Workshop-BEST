@@ -28,6 +28,7 @@ Dupa capitolul asta vei \textcommabelow{s}ti:
   \item Construie\textcommabelow{s}te formulare accesibile cu \code{<label for>} \textcommabelow{s}i \code{<input id>}.
   \item Aplica atributele \code{alt}, \code{lang}, \code{href} cu valori corecte conform WCAG.
   \item Recunoa\textcommabelow{s}te pattern-urile pentru linkuri externe sigure (\code{rel="noopener"}).
+  \item \faRocket\ \emph{Bonus self-study:} \code{<picture>} cu fallback de format, \code{loading="lazy"} + \code{decoding="async"}, ARIA (\code{aria-label}, \code{aria-current}).
 \end{itemize}
 \end{outcomes}
 
@@ -153,7 +154,7 @@ Tag-urile semantice descriu \emph{rolul} continutului, nu doar aspectul vizual. 
 Specificatia HTML5 defineste sase niveluri de titluri, de la \code{<h1>} la \code{<h6>}. Cititoarele de ecran genereaza un \emph{outline} al paginii pe baza acestei ierarhii; un utilizator nevazator parcurge documentul saltand intre titluri exact ca un cititor obisnuit cand parcurge un cuprins.
 
 \begin{itemize}
-  \item Un singur \code{<h1>} per pagina, descriind tema centrala.
+  \item Un singur \code{<h1>} per pagina (conven\textcommabelow{t}ia industriala pentru accesibilitate \textcommabelow{s}i SEO; HTML Living Standard permite tehnic mai multe, dar Lighthouse \textcommabelow{s}i cititoarele de ecran a\textcommabelow{s}teapta unul singur), descriind tema centrala.
   \item Subsectiunile principale folosesc \code{<h2>}; sub-subsectiunile, \code{<h3>}.
   \item Nivelurile nu se sar (\code{<h1>} urmat direct de \code{<h3>} este o eroare structurala).
   \item Marimea vizuala se controleaza prin CSS, nu prin alegerea unui nivel diferit.
@@ -199,17 +200,13 @@ Elementul \code{<a>} (anchor) creeaza un hyperlink. Atributul \code{href} accept
 
 \subsection{Linkuri externe \textendash{} target si rel}
 
-Deschiderea unui link extern intr-un tab nou se face cu \code{target="\_blank"}. Atributul aduce un risc de securitate: pagina destinatie poate manipula tab-ul sursa prin \code{window.opener}. Combinatia \code{rel="noopener noreferrer"} elimina riscul.
+Deschiderea unui link extern intr-un tab nou se face cu \code{target="\_blank"}. Fara protectie, pagina destinatie poate manipula tab-ul sursa prin \code{window.opener} (tabnabbing $\to$ phishing). Adauga mereu \code{rel="noopener noreferrer"}:
 
-\begin{dano}[Asa nu]
-\code{<a href="https://extern.ro" target="\_blank">Extern</a>}\\
-\textbf{Problema:} pagina externa poate redirectiona tab-ul tau initial catre o pagina de phishing.
-\end{dano}
+\begin{lstlisting}[style=html, numbers=none]
+<a href="https://extern.ro" target="_blank" rel="noopener noreferrer">Extern</a>
+\end{lstlisting}
 
-\begin{dado}[Asa da]
-\code{<a href="https://extern.ro" target="\_blank" rel="noopener noreferrer">Extern</a>}\\
-\textbf{Beneficiu:} \code{noopener} blocheaza accesul la \code{window.opener}; \code{noreferrer} ascunde URL-ul sursa.
-\end{dado}
+\code{noopener} blocheaza accesul la \code{window.opener}; \code{noreferrer} ascunde URL-ul sursa.
 
 % =========================================================
 \section{Formulare accesibile}
@@ -249,6 +246,44 @@ Atributul \code{type} controleaza interfata oferita de browser si validarea. Pe 
 \begin{ponturi}
 Browserul valideaza nativ inputurile: campurile cu atributul \code{required} blocheaza submit-ul daca sunt goale; \code{type="email"} respinge valori care nu contin \code{@}. Aceasta validare \textbf{nu inlocuieste} validarea pe server, dar imbunatateste experienta utilizatorului inainte de a trimite cererea.
 \end{ponturi}
+
+\subsection{Element HTML \textendash{} rol UI generic}
+
+Daca ai mai folosit o interfata grafica (QtCreator, Figma, Visual Studio, Android Studio), recunosti aceste pattern-uri sub alte nume. Tabelul de mai jos pune in oglinda terminologia:
+
+\begin{tcolorbox}[
+  enhanced, breakable, sharp corners, arc=0pt,
+  colback=accentSoft, colframe=partcolor, boxrule=0pt, leftrule=3pt,
+  left=12pt, right=12pt, top=8pt, bottom=8pt,
+  fontupper=\small,
+]
+\renewcommand{\arraystretch}{1.35}
+\begin{tabular}{@{}p{0.42\linewidth}@{\hspace{8pt}}p{0.52\linewidth}@{}}
+{\sffamily\bfseries\color{partcolor} Element HTML} & {\sffamily\bfseries\color{partcolor} Rolul UI generic} \\
+\code{<label>}                       & text static (eticheta unui camp) \\
+\code{<input type="text">}           & lineedit -- input pentru text scurt \\
+\code{<input type="email">}          & lineedit cu validare email \\
+\code{<input type="password">}       & lineedit ascuns (parola) \\
+\code{<input type="number">}         & spinbox -- numar cu sageti \\
+\code{<input type="date">}           & date picker \\
+\code{<input type="range">}          & slider -- valoare pe interval \\
+\code{<textarea>}                    & text multi-linie \\
+\code{<select>} + \code{<option>}    & combobox -- o alegere dintr-o lista \\
+\code{<input type="radio">}          & radio button -- o singura alegere dintr-un grup \\
+\code{<input type="checkbox">}       & checkbox -- alegeri multiple (sau pornit/oprit) \\
+\code{<input type="file">}           & file dialog -- selectie fisier \\
+\code{<input type="color">}          & color picker \\
+\code{<button>}                      & buton de actiune \\
+\code{<a href="...">}                & link -- navigare catre URL \\
+\code{<img>}                         & imagine statica \\
+\code{<video>} / \code{<audio>}      & player media nativ \\
+\code{<details>} + \code{<summary>}  & accordeon -- arata/ascunde \\
+\code{<dialog>}                      & modal -- fereastra suprapusa \\
+\code{<progress>}                    & bara de progres \\
+\end{tabular}
+\end{tcolorbox}
+
+Regula: cand alegi un element, te intrebi mai intai ,,ce rol UI joaca?'' \textendash{} nu ,,cum ar arata cu CSS''. Tag-ul corect rezolva accesibilitatea, validarea \textcommabelow{s}i comportamentul nativ \emph{gratis}.
 
 % =========================================================
 \section{Atribute esentiale}
@@ -314,6 +349,83 @@ Caracterele rezervate (\code{<}, \code{>}, \code{\&}) trebuie scrise prin entita
 \end{itemize}
 
 % =========================================================
+\begin{bonusbox}
+\textbf{Acest box e optional.} Daca esti la inceput, treci direct la \emph{Verificare}. Pattern-urile de mai jos preg\u atesc terenul pentru Lighthouse \textcommabelow{s}i accesibilitate avansata.
+
+\medskip
+
+\textbf{\faImage\ \texttt{<picture>} \textendash{} imagini responsive cu fallback}
+
+\code{<img>} obi\textcommabelow{s}nuit serve\textcommabelow{s}te o singura sursa. \code{<picture>} alege intre mai multe surse: format modern (AVIF $\to$ WebP $\to$ JPEG fallback) sau dimensiune (mobil vs desktop):
+
+\begin{lstlisting}[style=html, numbers=none]
+<picture>
+  <source srcset="hero.avif" type="image/avif">
+  <source srcset="hero.webp" type="image/webp">
+  <img src="hero.jpg" alt="Sediul BEST Iasi" width="800" height="450">
+</picture>
+\end{lstlisting}
+
+Browserul incarca \textbf{prima sursa pe care o sus\textcommabelow{t}ine}. Chrome modern $\to$ AVIF (cel mai mic), Safari vechi $\to$ JPEG. Zero JavaScript, zero detec\textcommabelow{t}ie de feature.
+
+\medskip
+
+\textbf{\faBolt\ \texttt{loading="lazy"} \textcommabelow{s}i \texttt{decoding="async"}}
+
+Doua atribute care imbunata\textcommabelow{t}esc semnificativ Lighthouse fara cost:
+
+\begin{lstlisting}[style=html, numbers=none]
+<img src="profile.jpg" alt="Voluntar BEST"
+     loading="lazy"           <!-- amana download pana cand intra in viewport -->
+     decoding="async"         <!-- decodifica pe alt thread, nu blocheaza UI -->
+     width="200" height="200">
+\end{lstlisting}
+
+\textbf{Excep\textcommabelow{t}ie:} imaginea hero (prima vizibila) \textbf{nu} primeste \code{loading="lazy"} \textendash{} ar intarzia LCP. Pentru ea: \code{fetchpriority="high"}.
+
+\medskip
+
+\textbf{\faUniversalAccess\ ARIA \textendash{} c\u and semantica nu e suficienta}
+
+ARIA (\emph{Accessible Rich Internet Applications}) adauga semnificatie pentru cititoarele de ecran cand HTML-ul semantic nu acopera contextul. \textbf{Regula de aur:} prima alegere e mereu un tag semantic. ARIA il completeaza.
+
+Cele 3 atribute pe care le folose\textcommabelow{s}ti des:
+
+\begin{itemize}[itemsep=2pt]
+  \item \code{aria-label="..."} \textendash{} eticheta accesibila cand textul vizibil lipseste sau e ambiguu. Exemplu clasic: butonul hamburger.
+\begin{lstlisting}[style=html, numbers=none]
+<button class="menu-toggle" aria-label="Deschide meniul">
+  <svg>...</svg>
+</button>
+\end{lstlisting}
+
+  \item \code{aria-current="page"} \textendash{} indica link-ul activ in navigare:
+\begin{lstlisting}[style=html, numbers=none]
+<nav>
+  <a href="/" aria-current="page">Acasa</a>
+  <a href="/projects">Proiecte</a>
+</nav>
+\end{lstlisting}
+
+  \item \code{role="..."} \textendash{} \textbf{rar necesar}. Folose\textcommabelow{s}te-l doar cand transformi un \code{<div>} in ceva semantic (ce \textbf{nu ar trebui sa faci}). Excep\textcommabelow{t}ie utila: \code{role="alert"} pentru notificari live.
+\end{itemize}
+
+\begin{atentie}
+NU adauga \code{role="button"} pe un \code{<button>}, sau \code{role="navigation"} pe un \code{<nav>}. Tag-ul semantic are deja rolul corect. ARIA duplicat = bruiaj pentru cititoarele de ecran.
+\end{atentie}
+
+\medskip
+
+\textbf{\faRoute\ Unde mergi de aici}
+
+\begin{itemize}[itemsep=1pt]
+  \item \emph{MDN \texttt{<picture>} reference:} \url{https://developer.mozilla.org/en-US/docs/Web/HTML/Element/picture}
+  \item \emph{web.dev Lazy load images:} \url{https://web.dev/articles/browser-level-image-lazy-loading}
+  \item \emph{WAI-ARIA Authoring Practices:} \url{https://www.w3.org/WAI/ARIA/apg/}
+\end{itemize}
+\end{bonusbox}
+
+% =========================================================
 \section*{Verificare cuno\textcommabelow{s}tin\textcommabelow{t}e}
 
 \begin{selfcheck}
@@ -321,7 +433,7 @@ Caracterele rezervate (\code{<}, \code{>}, \code{\&}) trebuie scrise prin entita
   \item Care este diferen\textcommabelow{t}a func\textcommabelow{t}ionala intre \code{<div class="header">} \textcommabelow{s}i \code{<header>}?
   \item De ce este nevoie de \code{<meta name="viewport">} pentru afi\textcommabelow{s}area pe mobil?
   \item \emph{Spot the issue:} \code{<input type="email" placeholder="Email">}.
-  \item Cate elemente \code{<h1>} pot exista intr-o pagina conform specifica\textcommabelow{t}iei HTML5?
+  \item Cate elemente \code{<h1>} recomanda conven\textcommabelow{t}ia industriala (accesibilitate + SEO) sa existe intr-o pagina?
   \item Care sunt cele doua atribute necesare cand un link extern se deschide intr-un tab nou?
 \end{enumerate}
 \end{selfcheck}
@@ -338,6 +450,7 @@ Caracterele rezervate (\code{<}, \code{>}, \code{\&}) trebuie scrise prin entita
   \item Forms accesibile: \code{<label for="X">} corespunde cu \code{<input id="X">}.
   \item Atribute obligatorii pentru accesibilitate: \code{alt} pe \code{<img>}, \code{lang} pe \code{<html>}.
   \item Linkuri externe in tab nou: combinatia \code{target="\_blank"} + \code{rel="noopener noreferrer"}.
+  \item \faRocket\ Bonus: \code{<picture>} pentru fallback AVIF/WebP/JPEG, \code{loading="lazy"} + \code{decoding="async"} pe imagini, ARIA (\code{aria-label}, \code{aria-current}).
 \end{itemize}
 \end{recap}
 
